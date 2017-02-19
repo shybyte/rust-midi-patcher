@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["shybyte <ein@volloeko.de>"]
 
 [dependencies]
+portmidi = "^0.2.4"
