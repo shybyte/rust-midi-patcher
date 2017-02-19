@@ -1,0 +1,6 @@
+[package]
+name = "rust_midi_patcher"
+version = "0.1.0"
+authors = ["shybyte <ein@volloeko.de>"]
+
+[dependencies]
