@@ -1,17 +1,25 @@
 extern crate portmidi as pm;
 
+mod patch;
+
 use std::time::Duration;
 use std::sync::mpsc;
 use std::thread;
+use patch::Patch;
+use pm::{PortMidi};
 
-fn print_devices(pm: &pm::PortMidi) {
+fn print_devices(pm: &PortMidi) {
     for dev in pm.devices().unwrap() {
         println!("{}", dev);
     }
 }
 
+
 fn main() {
     let context = pm::PortMidi::new().unwrap();
+    let mut patch = Patch::new(&context);
+    println!("patch.output_port.device() = {:?}", patch.output_port.device());
+
     print_devices(&context);
 
     let timeout = Duration::from_millis(10);
@@ -43,7 +51,7 @@ fn main() {
     loop {
         let (device, events) = rx.recv().unwrap();
         for event in events {
-            println!("[{}] {:?}", device, event);
+            patch.on_midi_event(&device, event.message);
         }
     }
 }
