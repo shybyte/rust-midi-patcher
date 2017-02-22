@@ -18,7 +18,7 @@ fn print_devices(pm: &PortMidi) {
 fn main() {
     let context = pm::PortMidi::new().unwrap();
     let mut patch = Patch::new(&context);
-    println!("patch.output_port.device() = {:?}", patch.output_port.device());
+    // println!("patch.output_port.device() = {:?}", patch.output_port.device());
 
     print_devices(&context);
 
