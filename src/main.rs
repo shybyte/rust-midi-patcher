@@ -3,6 +3,7 @@ extern crate portmidi as pm;
 mod patch;
 mod trigger;
 mod effect;
+mod midi_devices;
 
 use std::time::Duration;
 use std::sync::mpsc;
@@ -18,9 +19,11 @@ fn print_devices(pm: &PortMidi) {
 
 
 fn main() {
+    println!("Started");
     let context = pm::PortMidi::new().unwrap();
     let mut patch = Patch::new(&context);
-    // println!("patch.output_port.device() = {:?}", patch.output_port.device());
+
+    println!("got patch");
 
     print_devices(&context);
 

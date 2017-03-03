@@ -1,4 +1,4 @@
-use pm::{MidiMessage, DeviceInfo, OutputPort, PortMidi};
+use pm::{MidiMessage, OutputPort, PortMidi};
 
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
@@ -6,7 +6,6 @@ use std::time::Duration;
 
 use std::thread;
 
-const BUF_LEN: usize = 1024;
 
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -22,19 +21,18 @@ pub trait Effect {
 
 pub struct NoteSequencer {
     output_port: Arc<Mutex<OutputPort>>,
-    notes: Vec<u8>,
+    notes: Arc<Vec<u8>>,
+    time_per_note: Duration,
     sender: Option<Sender<ThreadCommand>>
 }
 
 impl NoteSequencer {
-    pub fn new(context: &PortMidi, notes: Vec<u8>) -> NoteSequencer {
-        let first_out_device = context.devices().unwrap().into_iter()
-            .find(|dev| dev.is_output())
-            .unwrap();
-        let output_port = context.output_port(first_out_device, BUF_LEN).unwrap();
+    pub fn new(output_port: Arc<Mutex<OutputPort>>, notes: Vec<u8>, time_per_note: Duration) -> NoteSequencer {
+        println!("notes = {:?}", notes);
         NoteSequencer {
-            output_port: Arc::new(Mutex::new(output_port)),
-            notes: notes,
+            output_port: output_port,
+            notes: Arc::new(notes),
+            time_per_note: time_per_note,
             sender: None
         }
     }
@@ -48,26 +46,28 @@ impl Effect for NoteSequencer {
         let mut output_port_mutex: Arc<Mutex<OutputPort>> = self.output_port.clone();
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
+        let notes = self.notes.clone();
+        let time_per_note = self.time_per_note;
         thread::spawn(move || {
-            println!("midi_message = {:?}", midi_message);
+            println!("start sequence = {:?}", midi_message);
 
-            for i in 0..8 {
-                println!("loop midi_message = {:?}", i);
+            for &note in notes.iter() {
+                println!("play note = {:?}", note);
 
                 let note_on = MidiMessage {
                     status: 0x90,
-                    data1: midi_message.data1,
-                    data2: 100,
+                    data1: note,
+                    data2: 0x7f,
                 };
 
                 send_midi(&mut output_port_mutex, note_on);
 
-                thread::sleep(Duration::from_millis(1 as u64 * 100));
+                thread::sleep(time_per_note / 2);
 
                 let note_off = MidiMessage {
                     status: 0x80,
-                    data1: midi_message.data1,
-                    data2: 100,
+                    data1: note,
+                    data2: 0x40,
                 };
 
                 send_midi(&mut output_port_mutex, note_off);
@@ -78,7 +78,7 @@ impl Effect for NoteSequencer {
                     break;
                 }
 
-                thread::sleep(Duration::from_millis(1 as u64 * 100));
+                thread::sleep(time_per_note / 2);
 
                 let r = rx.try_recv();
                 if let Ok(ThreadCommand::Stop) = r {

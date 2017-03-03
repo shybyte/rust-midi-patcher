@@ -1,3 +1,21 @@
-pub trait Trigger {
-    fn is_triggered(&self) -> bool;
+use pm::{MidiMessage, DeviceInfo};
+
+
+pub struct Trigger {
+    device: String,
+    note: u8
+}
+
+
+impl Trigger {
+    pub fn new(device: &str, note: u8) -> Trigger {
+        Trigger { device: device.to_string(), note: note }
+    }
+
+    pub fn is_triggered(&self, device: &DeviceInfo, midi_message: MidiMessage) -> bool {
+        println!("is_triggered self.device, self.note = {:?}, {:?}", self.device, self.note);
+        device.name().contains(&self.device) &&
+            midi_message.status == 0x90 &&
+            midi_message.data1 == self.note
+    }
 }
