@@ -4,6 +4,7 @@ mod patch;
 mod trigger;
 mod effect;
 mod midi_devices;
+//mod spike;
 
 use std::time::Duration;
 use std::sync::mpsc;

@@ -1,4 +1,4 @@
-use pm::{MidiMessage, OutputPort, PortMidi};
+use pm::{MidiMessage, OutputPort};
 
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
@@ -63,6 +63,7 @@ impl Effect for NoteSequencer {
                 send_midi(&mut output_port_mutex, note_on);
 
                 thread::sleep(time_per_note / 2);
+
 
                 let note_off = MidiMessage {
                     status: 0x80,

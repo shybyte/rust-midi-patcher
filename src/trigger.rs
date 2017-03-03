@@ -13,7 +13,6 @@ impl Trigger {
     }
 
     pub fn is_triggered(&self, device: &DeviceInfo, midi_message: MidiMessage) -> bool {
-        println!("is_triggered self.device, self.note = {:?}, {:?}", self.device, self.note);
         device.name().contains(&self.device) &&
             midi_message.status == 0x90 &&
             midi_message.data1 == self.note
