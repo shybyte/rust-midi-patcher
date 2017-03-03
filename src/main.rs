@@ -1,6 +1,8 @@
 extern crate portmidi as pm;
 
 mod patch;
+mod trigger;
+mod effect;
 
 use std::time::Duration;
 use std::sync::mpsc;
