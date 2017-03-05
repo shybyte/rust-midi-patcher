@@ -35,14 +35,13 @@ impl Patch {
         let wild_notes = repeated(&[45, 47, 53, 57, 60, 67, 60, 57, 53, 47], 50);
 
         let note_seq = |notes: Vec<u8>| {
-            NoteSequencer::new(output_port_arc.clone(), notes, Duration::from_millis(200))
+            NoteSequencer::new(output_port_arc.clone(), notes, Duration::from_millis(200), 0x7f)
         };
 
         Patch {
             effects: vec![
                 (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(note_seq(chorus_notes.clone()))),
-                //                (Box::new(Trigger::new(VMPK, 43)), Box::new(note_seq(add(wild_notes.clone(), 12)))),
-                (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(NoteSequencer::new(output_port_arc.clone(), add(wild_notes.clone(), 12), Duration::from_millis(100)))),
+                (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(NoteSequencer::new(output_port_arc.clone(), add(wild_notes.clone(), 24), Duration::from_millis(100), 0x7f))),
                 (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes))),
                 (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 36)), Box::new(note_seq(wild_notes))),
                 (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![])))

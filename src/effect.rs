@@ -22,18 +22,20 @@ pub trait Effect {
 pub struct NoteSequencer {
     output_port: Arc<Mutex<OutputPort>>,
     notes: Arc<Vec<u8>>,
+    velocity: u8,
     time_per_note: Duration,
     sender: Option<Sender<ThreadCommand>>
 }
 
 impl NoteSequencer {
-    pub fn new(output_port: Arc<Mutex<OutputPort>>, notes: Vec<u8>, time_per_note: Duration) -> NoteSequencer {
+    pub fn new(output_port: Arc<Mutex<OutputPort>>, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
         println!("notes = {:?}", notes);
         NoteSequencer {
             output_port: output_port,
             notes: Arc::new(notes),
+            velocity: velocity,
             time_per_note: time_per_note,
-            sender: None
+            sender: None,
         }
     }
 }
@@ -47,17 +49,18 @@ impl Effect for NoteSequencer {
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let notes = self.notes.clone();
+        let velocity = self.velocity;
         let time_per_note = self.time_per_note;
         thread::spawn(move || {
             println!("start sequence = {:?}", midi_message);
 
             for &note in notes.iter() {
-                println!("play note = {:?}", note);
+//                println!("play note = {:?}", note);
 
                 let note_on = MidiMessage {
                     status: 0x90,
                     data1: note,
-                    data2: 0x7f,
+                    data2: velocity,
                 };
 
                 send_midi(&mut output_port_mutex, note_on);
