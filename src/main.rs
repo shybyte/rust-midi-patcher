@@ -57,6 +57,9 @@ fn main() {
     loop {
         let (device, events) = rx.recv().unwrap();
         for event in events {
+            if event.message.status == 248 {
+                continue
+            }
             patch.on_midi_event(&device, event.message);
         }
     }
