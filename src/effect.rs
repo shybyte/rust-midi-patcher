@@ -7,7 +7,6 @@ use std::time::Duration;
 use std::thread;
 
 
-
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 enum ThreadCommand {
     Stop
@@ -17,6 +16,7 @@ enum ThreadCommand {
 pub trait Effect {
     fn start(&mut self, midi_message: MidiMessage);
     fn stop(&mut self);
+    fn is_running(&self) -> bool;
 }
 
 pub struct NoteSequencer {
@@ -95,6 +95,10 @@ impl Effect for NoteSequencer {
             tx.send(ThreadCommand::Stop).ok();
         }
         self.sender = None;
+    }
+
+    fn is_running(&self) -> bool {
+        self.sender.is_some()
     }
 }
 
