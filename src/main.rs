@@ -22,11 +22,9 @@ fn print_devices(pm: &PortMidi) {
 fn main() {
     println!("Started");
     let context = pm::PortMidi::new().unwrap();
-    let mut patch = Patch::new(&context);
-
-    println!("got patch");
-
     print_devices(&context);
+
+    let mut patch = Patch::new(&context);
 
     let timeout = Duration::from_millis(10);
     const BUF_LEN: usize = 1024;
