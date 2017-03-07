@@ -4,7 +4,7 @@ mod patch;
 mod trigger;
 mod effect;
 mod midi_devices;
-//mod spike;
+mod absolute_sleep;
 
 use std::time::Duration;
 use std::sync::mpsc;
