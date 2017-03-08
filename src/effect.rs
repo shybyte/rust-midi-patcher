@@ -3,9 +3,8 @@ use pm::{MidiMessage, OutputPort};
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
 use std::time::Duration;
-
 use std::thread;
-
+use absolute_sleep::AbsoluteSleep;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 enum ThreadCommand {
@@ -14,7 +13,7 @@ enum ThreadCommand {
 
 
 pub trait Effect {
-    fn start(&mut self, midi_message: MidiMessage);
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep);
     fn stop(&mut self);
     fn is_running(&self) -> bool;
 }
@@ -41,7 +40,7 @@ impl NoteSequencer {
 }
 
 impl Effect for NoteSequencer {
-    fn start(&mut self, midi_message: MidiMessage) {
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep) {
         if self.sender.is_some() {
             self.stop();
         }
@@ -51,6 +50,7 @@ impl Effect for NoteSequencer {
         let notes = self.notes.clone();
         let velocity = self.velocity;
         let time_per_note = self.time_per_note;
+        let mut absolute_sleep = absolute_sleep;
         thread::spawn(move || {
             println!("start sequence = {:?}", midi_message);
 
@@ -65,8 +65,7 @@ impl Effect for NoteSequencer {
 
                 send_midi(&mut output_port_mutex, note_on);
 
-                thread::sleep(time_per_note / 2);
-
+                absolute_sleep.sleep(time_per_note / 2);
 
                 let note_off = MidiMessage {
                     status: 0x80,
@@ -82,7 +81,7 @@ impl Effect for NoteSequencer {
                     break;
                 }
 
-                thread::sleep(time_per_note / 2);
+                absolute_sleep.sleep(time_per_note / 2);
 
                 let r = rx.try_recv();
                 if let Ok(ThreadCommand::Stop) = r {

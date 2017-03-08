@@ -9,6 +9,8 @@ use effect::{Effect, NoteSequencer};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use std::time::Duration;
 use std::iter;
+use absolute_sleep::AbsoluteSleep;
+
 
 const BUF_LEN: usize = 1024;
 
@@ -55,9 +57,10 @@ impl Patch {
         println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         let triggered_effect_indices: Vec<_> = (0..self.effects.len()).filter(|&i| self.effects[i].0.is_triggered(device, midi_message)).collect();
         if triggered_effect_indices.len() > 0 {
+            let absolute_sleep = AbsoluteSleep::new();
             self.stop_running_effects();
             for triggered_index in triggered_effect_indices {
-                self.effects.get_mut(triggered_index).unwrap().1.start(midi_message);
+                self.effects.get_mut(triggered_index).unwrap().1.start(midi_message, absolute_sleep);
             }
         }
     }

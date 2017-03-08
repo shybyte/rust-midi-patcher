@@ -2,13 +2,14 @@ use std::time::{Duration, Instant};
 use std::thread;
 
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub struct AbsoluteSleep {
     start_time: Instant,
     duration_sum: Duration
 }
 
 impl AbsoluteSleep {
-    fn new() -> AbsoluteSleep {
+    pub fn new() -> AbsoluteSleep {
         AbsoluteSleep { start_time: Instant::now(), duration_sum: Duration::new(0, 0) }
     }
     pub fn sleep(&mut self, duration: Duration) {
