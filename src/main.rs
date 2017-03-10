@@ -1,4 +1,8 @@
+#[macro_use]
+extern crate chan;
 extern crate portmidi as pm;
+extern crate chan_signal;
+
 
 mod patch;
 mod trigger;
@@ -11,15 +15,13 @@ mod songs {
     pub mod amazon;
 }
 
+use chan_signal::Signal;
 use std::time::Duration;
-use std::sync::mpsc;
 use std::thread;
 use pm::{PortMidi};
 
 
 use songs::amazon::create_amazon;
-
-
 
 
 fn print_devices(pm: &PortMidi) {
@@ -38,7 +40,8 @@ fn main() {
     let mut patch = create_amazon(&context);
 
     const BUF_LEN: usize = 1024;
-    let (tx, rx) = mpsc::channel();
+    let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
+    let (tx, rx) = chan::sync(0);
 
     let in_devices: Vec<pm::DeviceInfo> = context.devices()
         .unwrap()
@@ -57,7 +60,7 @@ fn main() {
         loop {
             for port in &in_ports {
                 if let Ok(Some(events)) = port.read_n(BUF_LEN) {
-                    tx.send((port.device(), events)).unwrap();
+                    tx.send((port.device(), events));
                 }
             }
             thread::sleep(timeout);
@@ -65,12 +68,22 @@ fn main() {
     });
 
     loop {
-        let (device, events) = rx.recv().unwrap();
-        for event in events {
-            if event.message.status == 248 {
-                continue
+        chan_select! {
+            rx.recv() -> midi_events => {
+                let (device, events) = midi_events.unwrap();
+                for event in events {
+                    if event.message.status == 248 {
+                        continue
+                    }
+                    patch.on_midi_event(&device, event.message);
+                }
+            },
+            os_signal.recv() -> os_sig => {
+                println!("received signal: {:?}", os_sig);
+                if os_sig == Some(Signal::INT) {
+                    break;
+                }
             }
-            patch.on_midi_event(&device, event.message);
         }
     }
 }
