@@ -5,12 +5,22 @@ mod trigger;
 mod effect;
 mod midi_devices;
 mod absolute_sleep;
+mod utils;
+
+mod songs {
+    pub mod amazon;
+}
 
 use std::time::Duration;
 use std::sync::mpsc;
 use std::thread;
-use patch::Patch;
 use pm::{PortMidi};
+
+
+use songs::amazon::create_amazon;
+
+
+
 
 fn print_devices(pm: &PortMidi) {
     for dev in pm.devices().unwrap() {
@@ -24,9 +34,9 @@ fn main() {
     let context = pm::PortMidi::new().unwrap();
     print_devices(&context);
 
-    let mut patch = Patch::new(&context);
 
-    let timeout = Duration::from_millis(10);
+    let mut patch = create_amazon(&context);
+
     const BUF_LEN: usize = 1024;
     let (tx, rx) = mpsc::channel();
 
@@ -41,7 +51,9 @@ fn main() {
                 .ok()
         })
         .collect();
+
     thread::spawn(move || {
+        let timeout = Duration::from_millis(10);
         loop {
             for port in &in_ports {
                 if let Ok(Some(events)) = port.read_n(BUF_LEN) {
