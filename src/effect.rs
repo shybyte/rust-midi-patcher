@@ -28,7 +28,7 @@ pub struct NoteSequencer {
 
 impl NoteSequencer {
     pub fn new(output_port: Arc<Mutex<OutputPort>>, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
-        println!("notes = {:?}", notes);
+        // println!("notes = {:?}", notes);
         NoteSequencer {
             output_port: output_port,
             notes: Arc::new(notes),
