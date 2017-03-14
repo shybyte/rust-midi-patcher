@@ -14,40 +14,43 @@ enum ThreadCommand {
 
 
 pub trait Effect {
-    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep);
+    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep);
     fn stop(&mut self);
     fn is_running(&self) -> bool;
 }
 
 pub struct NoteSequencer {
-    output_port: Arc<Mutex<OutputPort>>,
+    output_device: String,
     notes: Arc<Vec<u8>>,
     velocity: u8,
     time_per_note: Duration,
     sender: Option<Sender<ThreadCommand>>,
+    output_port: Option<Arc<Mutex<OutputPort>>>,
     playing_notes: Arc<Mutex<HashSet<u8>>>,
 }
 
 impl NoteSequencer {
-    pub fn new(output_port: Arc<Mutex<OutputPort>>, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
-        // println!("notes = {:?}", notes);
+    pub fn new(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
         NoteSequencer {
-            output_port: output_port,
+            output_device: output_device.to_string(),
             notes: Arc::new(notes),
             velocity: velocity,
             time_per_note: time_per_note,
             sender: None,
+            output_port: None,
             playing_notes: Arc::new(Mutex::new(HashSet::new()))
         }
     }
 }
 
 impl Effect for NoteSequencer {
-    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep) {
+    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep) {
         if self.sender.is_some() {
             self.stop();
         }
-        let mut output_port_mutex: Arc<Mutex<OutputPort>> = self.output_port.clone();
+        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
+            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
+        self.output_port = Some(output_port_mutex.clone());
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let notes = self.notes.clone();
@@ -101,8 +104,10 @@ impl Effect for NoteSequencer {
 
 impl Drop for NoteSequencer {
     fn drop(&mut self) {
-        for &note in self.playing_notes.lock().unwrap().iter() {
-            play_note_off(&mut self.output_port, note);
+        if let Some(ref mut output_port) = self.output_port {
+            for &note in self.playing_notes.lock().unwrap().iter() {
+                play_note_off(output_port, note);
+            }
         }
     }
 }
