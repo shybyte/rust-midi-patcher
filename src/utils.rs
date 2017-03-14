@@ -3,7 +3,7 @@ use std::ops::Add;
 
 
 pub fn repeated<T: Clone>(pattern: &[T], times: usize) -> Vec<T> {
-    concat(iter::repeat(pattern.iter().cloned().collect()).take(times).collect())
+    concat(iter::repeat(pattern.to_vec()).take(times).collect())
 }
 
 pub fn add<T>(mut xs: Vec<T>, y: T) -> Vec<T>
@@ -15,6 +15,6 @@ pub fn add<T>(mut xs: Vec<T>, y: T) -> Vec<T>
 }
 
 pub fn concat<T: Clone>(input: Vec<Vec<T>>) -> Vec<T> {
-    input.iter().cloned().flat_map(|x| x).collect()
+    input.into_iter().flat_map(|x| x).collect()
 }
 
