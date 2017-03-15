@@ -3,7 +3,7 @@ extern crate portmidi as pm;
 use pm::{MidiMessage, DeviceInfo, OutputPort};
 
 use trigger::Trigger;
-use effect::{Effect};
+use effects::effect::{Effect};
 use absolute_sleep::AbsoluteSleep;
 use std::sync::{Arc, Mutex};
 

@@ -1,23 +1,12 @@
 use pm::{MidiMessage, OutputPort};
-
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
 use std::time::Duration;
 use std::thread;
 use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
+use effects::effect::{Effect, ThreadCommand};
 
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
-enum ThreadCommand {
-    Stop
-}
-
-
-pub trait Effect {
-    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep);
-    fn stop(&mut self);
-    fn is_running(&self) -> bool;
-}
 
 pub struct NoteSequencer {
     output_device: String,

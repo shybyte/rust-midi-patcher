@@ -6,7 +6,10 @@ extern crate chan_signal;
 
 mod patch;
 mod trigger;
-mod effect;
+mod effects {
+    pub mod effect;
+    pub mod note_sequencer;
+}
 mod midi_devices;
 mod absolute_sleep;
 mod utils;

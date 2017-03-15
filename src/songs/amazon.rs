@@ -1,7 +1,7 @@
 use std::time::Duration;
 use patch::Patch;
 use trigger::Trigger;
-use effect::{NoteSequencer};
+use effects::note_sequencer::{NoteSequencer};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use utils::{add, concat, repeated};
 
