@@ -1,5 +1,9 @@
 use std::iter;
 use std::ops::Add;
+use std::sync::{Arc, Mutex};
+use pm::{MidiMessage, OutputPort};
+
+
 
 
 pub fn repeated<T: Clone>(pattern: &[T], times: usize) -> Vec<T> {
@@ -18,3 +22,7 @@ pub fn concat<T: Clone>(input: Vec<Vec<T>>) -> Vec<T> {
     input.into_iter().flat_map(|x| x).collect()
 }
 
+pub fn send_midi(output_port_mutex: &mut Arc<Mutex<OutputPort>>, m: MidiMessage) {
+    let mut output_port = output_port_mutex.lock().unwrap();
+    output_port.write_message(m).unwrap();
+}

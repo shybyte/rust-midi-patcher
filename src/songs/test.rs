@@ -2,6 +2,7 @@ use std::time::Duration;
 use patch::Patch;
 use trigger::Trigger;
 use effects::note_sequencer::{NoteSequencer};
+use effects::sweep_down::{SweepDown};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use utils::{add, concat, repeated};
 
@@ -27,6 +28,7 @@ pub fn create_test_song() -> Patch {
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(NoteSequencer::new(DEFAULT_OUT_DEVICE, add(wild_notes.clone(), 24), Duration::from_millis(speed / 2), 0x7f))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 36)), Box::new(note_seq(wild_notes))),
-        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![])))
+        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![]))),
+        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 50)), Box::new(SweepDown::new(DEFAULT_OUT_DEVICE, 30, 74)))
     ], 0)
 }

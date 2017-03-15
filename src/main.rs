@@ -9,6 +9,7 @@ mod trigger;
 mod effects {
     pub mod effect;
     pub mod note_sequencer;
+    pub mod sweep_down;
 }
 mod midi_devices;
 mod absolute_sleep;

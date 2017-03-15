@@ -7,9 +7,16 @@ pub enum ThreadCommand {
     Stop
 }
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+pub enum MonoGroup {
+    Note,
+    ControlIndex(u8)
+}
+
 pub trait Effect {
     fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep);
     fn stop(&mut self);
     fn is_running(&self) -> bool;
+    fn mono_group(&self) -> MonoGroup;
 }
 

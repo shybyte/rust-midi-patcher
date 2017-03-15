@@ -5,7 +5,8 @@ use std::time::Duration;
 use std::thread;
 use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
-use effects::effect::{Effect, ThreadCommand};
+use utils::send_midi;
+use effects::effect::{Effect, MonoGroup, ThreadCommand};
 
 
 pub struct NoteSequencer {
@@ -89,6 +90,10 @@ impl Effect for NoteSequencer {
     fn is_running(&self) -> bool {
         self.sender.is_some()
     }
+
+    fn mono_group(&self) -> MonoGroup {
+        MonoGroup::Note
+    }
 }
 
 impl Drop for NoteSequencer {
@@ -120,9 +125,4 @@ fn play_note_off(output_port_mutex: &mut Arc<Mutex<OutputPort>>, note: u8) {
     };
 
     send_midi(output_port_mutex, note_off);
-}
-
-fn send_midi(output_port_mutex2: &mut Arc<Mutex<OutputPort>>, m: MidiMessage) {
-    let mut output_port = output_port_mutex2.lock().unwrap();
-    output_port.write_message(m).unwrap();
 }
