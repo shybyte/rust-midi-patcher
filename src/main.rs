@@ -10,6 +10,7 @@ mod effects {
     pub mod effect;
     pub mod note_sequencer;
     pub mod sweep_down;
+    pub mod control_sequencer;
 }
 mod midi_devices;
 mod absolute_sleep;

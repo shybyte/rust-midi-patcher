@@ -3,9 +3,12 @@ use patch::Patch;
 use trigger::Trigger;
 use effects::note_sequencer::{NoteSequencer};
 use effects::sweep_down::{SweepDown};
+use effects::control_sequencer::{ControlSequencer};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use utils::{add, concat, repeated};
 
+
+const CUTOFF: u8 = 74;
 
 pub fn create_test_song() -> Patch {
     let chorus_notes = repeated(&concat(vec![
@@ -29,6 +32,10 @@ pub fn create_test_song() -> Patch {
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 36)), Box::new(note_seq(wild_notes))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![]))),
-        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 50)), Box::new(SweepDown::new(DEFAULT_OUT_DEVICE, 30, 74)))
+        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 50)), Box::new(SweepDown::new(DEFAULT_OUT_DEVICE, 30, CUTOFF))),
+        (
+            Box::new(Trigger::new(DEFAULT_IN_DEVICE, 48)),
+            Box::new(ControlSequencer::new(DEFAULT_OUT_DEVICE, CUTOFF, vec![30, 100, 30, 100], 30, Duration::from_millis(500)))
+        )
     ], 0)
 }

@@ -26,3 +26,14 @@ pub fn send_midi(output_port_mutex: &mut Arc<Mutex<OutputPort>>, m: MidiMessage)
     let mut output_port = output_port_mutex.lock().unwrap();
     output_port.write_message(m).unwrap();
 }
+
+pub fn control_change(output_port_mutex: &mut Arc<Mutex<OutputPort>>, control_index: u8, value: u8) {
+    let note_on = MidiMessage {
+        status: 0xB0,
+        data1: control_index,
+        data2: value,
+    };
+
+    send_midi(output_port_mutex, note_on);
+}
+

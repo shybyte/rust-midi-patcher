@@ -7,29 +7,34 @@ use absolute_sleep::AbsoluteSleep;
 use utils::{control_change};
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
 
-pub struct SweepDown {
+
+pub struct ControlSequencer {
     output_device: String,
-    min_value: u8,
     control_index: u8,
+    values: Arc<Vec<u8>>,
+    stop_value: u8,
     mono_group: MonoGroup,
+    time_per_note: Duration,
     sender: Option<Sender<ThreadCommand>>,
     output_port: Option<Arc<Mutex<OutputPort>>>,
 }
 
-impl SweepDown {
-    pub fn new(output_device: &str, min_value: u8, control_index: u8) -> SweepDown {
-        SweepDown {
+impl ControlSequencer {
+    pub fn new(output_device: &str,control_index: u8, values: Vec<u8>, stop_value: u8, time_per_note: Duration) -> ControlSequencer {
+        ControlSequencer {
             output_device: output_device.to_string(),
-            min_value: min_value,
             control_index: control_index,
-            mono_group: MonoGroup::ControlIndex(control_index),
+            values: Arc::new(values),
+            stop_value: stop_value,
+            time_per_note: time_per_note,
             sender: None,
-            output_port: None
+            output_port: None,
+            mono_group: MonoGroup::ControlIndex(control_index)
         }
     }
 }
 
-impl Effect for SweepDown {
+impl Effect for ControlSequencer {
     fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep) {
         if self.sender.is_some() {
             self.stop();
@@ -39,25 +44,24 @@ impl Effect for SweepDown {
         self.output_port = Some(output_port_mutex.clone());
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
-        let velocity: f32 = midi_message.data2 as f32;
-        let mut control_value: f32 = velocity;
+        let values = self.values.clone();
         let control_index = self.control_index;
-        let min_value: f32 = self.min_value as f32;
+        let time_per_note = self.time_per_note;
+        let stop_value = self.stop_value;
         let mut absolute_sleep = absolute_sleep;
         thread::spawn(move || {
             println!("start sequence = {:?}", midi_message);
+            for &value in values.iter() {
+                control_change(&mut output_port_mutex, control_index, value);
+                absolute_sleep.sleep(time_per_note);
 
-            while control_value >= min_value {
-                control_change(&mut output_port_mutex, control_index, control_value as u8);
-                println!("sweep = {:?}", control_value);
-                control_value = control_value - 1.0 - (velocity / 50.0);
-                absolute_sleep.sleep(Duration::from_millis(20));
                 let r = rx.try_recv();
                 if let Ok(ThreadCommand::Stop) = r {
                     println!("got stop command = {:?}", midi_message.data1);
                     break;
                 }
             }
+            control_change(&mut output_port_mutex, control_index, stop_value);
         });
     }
 
@@ -74,6 +78,14 @@ impl Effect for SweepDown {
 
     fn mono_group(&self) -> MonoGroup {
         self.mono_group
+    }
+}
+
+impl Drop for ControlSequencer {
+    fn drop(&mut self) {
+        if let Some(ref mut output_port) = self.output_port {
+            control_change(output_port, self.control_index, self.stop_value);
+        }
     }
 }
 
