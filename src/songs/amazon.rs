@@ -3,7 +3,7 @@ use patch::Patch;
 use trigger::Trigger;
 use effects::note_sequencer::{NoteSequencer};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
-use utils::{concat, repeated};
+use utils::{concat,concatenated, repeated};
 
 pub fn create_amazon() -> Patch {
     let chorus_notes = repeated(&concat(vec![
@@ -13,7 +13,7 @@ pub fn create_amazon() -> Patch {
         repeated(&[38, 50], 4)
     ]), 6);
 
-    let chorus_notes1 = concat(vec![vec![38, 50, 38, 50], chorus_notes.clone()]);
+    let chorus_notes_with_intro = concatenated(&[&[38, 50, 38, 50], &chorus_notes]);
 
     let wild_notes = repeated(&[45, 47, 53, 57, 60, 67, 60, 57, 53, 47], 50);
 
@@ -25,7 +25,7 @@ pub fn create_amazon() -> Patch {
 
     Patch::new(vec![
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(note_seq(chorus_notes.clone()))),
-        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes1))),
+        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes_with_intro))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 36)), Box::new(note_seq(wild_notes))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![])))
     ], 1)

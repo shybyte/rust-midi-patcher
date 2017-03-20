@@ -3,9 +3,6 @@ use std::ops::Add;
 use std::sync::{Arc, Mutex};
 use pm::{MidiMessage, OutputPort};
 
-
-
-
 pub fn repeated<T: Clone>(pattern: &[T], times: usize) -> Vec<T> {
     concat(iter::repeat(pattern.to_vec()).take(times).collect())
 }
@@ -20,6 +17,10 @@ pub fn add<T>(mut xs: Vec<T>, y: T) -> Vec<T>
 
 pub fn concat<T: Clone>(input: Vec<Vec<T>>) -> Vec<T> {
     input.into_iter().flat_map(|x| x).collect()
+}
+
+pub fn concatenated<T: Clone>(input: &[&[T]]) -> Vec<T> {
+    input.iter().flat_map(|x| x.iter()).cloned().collect()
 }
 
 pub fn send_midi(output_port_mutex: &mut Arc<Mutex<OutputPort>>, m: MidiMessage) {
