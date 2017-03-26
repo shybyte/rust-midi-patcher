@@ -19,8 +19,8 @@ pub fn create_kirschblueten() -> Patch {
         //
         repeated(&[50, 65], 4),
         repeated(&[45, 64], 4),
-        repeated(&[41, 67], 4),
-        repeated(&[43, 69], 4),
+        repeated(&[41, 69], 4),
+        repeated(&[43, 71], 4),
         //
         repeated(&[50, 65], 4),
         repeated(&[48, 67], 4),
