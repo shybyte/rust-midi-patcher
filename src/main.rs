@@ -6,18 +6,21 @@ extern crate chan_signal;
 
 mod patch;
 mod trigger;
+
 mod effects {
     pub mod effect;
     pub mod note_sequencer;
     pub mod sweep_down;
     pub mod control_sequencer;
 }
+
 mod midi_devices;
 mod absolute_sleep;
 mod utils;
 
 mod songs {
     pub mod amazon;
+    pub mod kirschblueten;
     pub mod test;
 }
 
@@ -30,6 +33,7 @@ use pm::{OutputPort};
 
 
 use songs::amazon::create_amazon;
+use songs::kirschblueten::create_kirschblueten;
 use songs::test::create_test_song;
 
 
@@ -51,8 +55,8 @@ fn main() {
         .map(|dev| Arc::new(Mutex::new(context.output_port(dev, BUF_LEN).unwrap())))
         .collect();
 
-    let mut patches = [create_test_song(), create_amazon()];
-    let mut selected_patch = 0;
+    let mut patches = [create_test_song(), create_amazon(), create_kirschblueten()];
+    let mut selected_patch = 2;
 
     const BUF_LEN: usize = 1024;
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
