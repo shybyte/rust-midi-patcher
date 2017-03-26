@@ -24,6 +24,12 @@ mod songs {
     pub mod test;
 }
 
+mod view {
+    pub mod main_view;
+}
+
+use view::main_view::start_view;
+
 use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
@@ -56,11 +62,13 @@ fn main() {
         .collect();
 
     let mut patches = [create_test_song(), create_amazon(), create_kirschblueten()];
-    let mut selected_patch = 2;
+    let mut selected_patch = 1;
 
     const BUF_LEN: usize = 1024;
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
     let (tx, rx) = chan::sync(0);
+    let (from_view_tx, from_view_rx) = chan::sync(0);
+    let (to_view_tx, to_view_rx) = chan::sync(0);
 
     let in_devices: Vec<pm::DeviceInfo> = context.devices()
         .unwrap()
@@ -86,6 +94,8 @@ fn main() {
         }
     });
 
+    start_view(from_view_tx, to_view_rx);
+
     loop {
         chan_select! {
             rx.recv() -> midi_events => {
@@ -104,7 +114,7 @@ fn main() {
 
                         },
                         _ => {
-                            patches.get_mut(selected_patch).unwrap().on_midi_event(&output_ports, &device, event.message);
+                            patches.get_mut(selected_patch).unwrap().on_midi_event(&output_ports, &device, event.message, &to_view_tx);
                         }
                     }
                 }
@@ -114,6 +124,9 @@ fn main() {
                 if os_sig == Some(Signal::INT) {
                     break;
                 }
+            },
+            from_view_rx.recv() -> _ => {
+                break;
             }
         }
     }

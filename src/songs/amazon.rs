@@ -25,7 +25,7 @@ pub fn create_amazon() -> Patch {
 
     Patch::new(vec![
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 43)), Box::new(note_seq(chorus_notes.clone()))),
-        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(note_seq(chorus_notes_with_intro))),
+        (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 45)), Box::new(NoteSequencer::new_with_beat_offset(DEFAULT_OUT_DEVICE, chorus_notes_with_intro, Duration::from_millis(speed), 0x7f, 4))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 36)), Box::new(note_seq(wild_notes))),
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 52)), Box::new(note_seq(vec![])))
     ], 1)

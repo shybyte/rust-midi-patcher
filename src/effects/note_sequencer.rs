@@ -7,13 +7,15 @@ use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
 use utils::send_midi;
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
-
+use chan;
+use view::main_view::ToViewEvents;
 
 pub struct NoteSequencer {
     output_device: String,
     notes: Arc<Vec<u8>>,
     velocity: u8,
     time_per_note: Duration,
+    beat_offset: usize,
     sender: Option<Sender<ThreadCommand>>,
     output_port: Option<Arc<Mutex<OutputPort>>>,
     playing_notes: Arc<Mutex<HashSet<u8>>>,
@@ -26,6 +28,20 @@ impl NoteSequencer {
             notes: Arc::new(notes),
             velocity: velocity,
             time_per_note: time_per_note,
+            beat_offset: 0,
+            sender: None,
+            output_port: None,
+            playing_notes: Arc::new(Mutex::new(HashSet::new()))
+        }
+    }
+
+    pub fn new_with_beat_offset(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8, beat_offset: usize) -> NoteSequencer {
+        NoteSequencer {
+            output_device: output_device.to_string(),
+            notes: Arc::new(notes),
+            velocity: velocity,
+            time_per_note: time_per_note,
+            beat_offset: beat_offset,
             sender: None,
             output_port: None,
             playing_notes: Arc::new(Mutex::new(HashSet::new()))
@@ -34,7 +50,7 @@ impl NoteSequencer {
 }
 
 impl Effect for NoteSequencer {
-    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep) {
+    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, to_view_tx: &chan::Sender<ToViewEvents>) {
         if self.sender.is_some() {
             self.stop();
         }
@@ -46,16 +62,21 @@ impl Effect for NoteSequencer {
         let notes = self.notes.clone();
         let playing_notes = self.playing_notes.clone();
         let velocity = self.velocity;
+        let beat_offset = self.beat_offset;
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
+        let to_view_tx = to_view_tx.clone();
         thread::spawn(move || {
             println!("start sequence = {:?}", midi_message);
 
-            for &note in notes.iter() {
+            for (index, &note) in notes.iter().enumerate() {
                 //                println!("play note = {:?}", note);
 
                 playing_notes.lock().unwrap().insert(note);
                 play_note_on(&mut output_port_mutex, note, velocity);
+                if index % 2 == 0 {
+                    to_view_tx.send(ToViewEvents::BEAT(((index + beat_offset) / 2 % 4) as u8));
+                }
 
 
                 absolute_sleep.sleep(time_per_note / 2);

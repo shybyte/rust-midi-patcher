@@ -6,6 +6,8 @@ use trigger::Trigger;
 use effects::effect::{Effect, MonoGroup};
 use absolute_sleep::AbsoluteSleep;
 use std::sync::{Arc, Mutex};
+use chan::{Sender};
+use view::main_view::ToViewEvents;
 
 pub struct Patch {
     effects: Vec<(Box<Trigger>, Box<Effect>)>,
@@ -20,7 +22,7 @@ impl Patch {
         }
     }
 
-    pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage) {
+    pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         let triggered_effect_indices: Vec<usize> = (0..self.effects.len()).filter(|&i| self.effects[i].0.is_triggered(device, midi_message)).collect();
         if !triggered_effect_indices.is_empty() {
@@ -30,7 +32,7 @@ impl Patch {
             }
             let absolute_sleep = AbsoluteSleep::new();
             for triggered_index in triggered_effect_indices {
-                self.effects[triggered_index].1.start(output_ports, midi_message, absolute_sleep);
+                self.effects[triggered_index].1.start(output_ports, midi_message, absolute_sleep, to_view_tx);
             }
         }
     }
