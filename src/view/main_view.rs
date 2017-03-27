@@ -47,6 +47,7 @@ pub fn start_view(from_view_tx: Sender<FromViewEvents>, to_view_rx: Receiver<ToV
                                 color[0] = new_color[0];
                                 color[1] = new_color[1];
                                 color[2] = new_color[2];
+                                color[3] = 1.1;
                             },
                             None => {}
                         }
@@ -60,19 +61,24 @@ pub fn start_view(from_view_tx: Sender<FromViewEvents>, to_view_rx: Receiver<ToV
                 Input::Render(r) => {
                     window.draw_2d(&e, |c, g| {
                         let quadrant: i32 = *quadrant_mutex.lock().unwrap() as i32;
-                        let color = color_mutex.lock().unwrap();
+                        let color: [f32; 4] = *color_mutex.lock().unwrap();
                         clear([0.0, 0.0, 0.0, 0.0], g);
+                        let zoom = color[3] as f64;
                         let quadrant_width = r.width as f64 / 2.0;
                         let quadrant_height = r.height as f64 / 2.0;
-                        let rect = [((quadrant % 2) as f64) * quadrant_width, (quadrant / 2) as f64 * quadrant_height, quadrant_width, quadrant_height];
-                        rectangle(*color, rect, c.transform, g);
+                        let zoomed_width = quadrant_width * zoom;
+                        let zoomed_height = quadrant_height * zoom;
+                        let rect = [
+                            ((quadrant % 2) as f64) * quadrant_width + ((quadrant_width - zoomed_width) / 2.0),
+                            (quadrant / 2) as f64 * quadrant_height + ((quadrant_height - zoomed_height) / 2.0),
+                            zoomed_width, zoomed_height
+                        ];
+                        rectangle(color, rect, c.transform, g);
                     });
                 }
                 Input::Update(_) => {
                     let mut color = color_mutex.lock().unwrap();
-                    color[0] -=  0.01;
-                    color[1] -=  0.01;
-                    color[2] -=  0.01;
+                    color[3] -= 0.02;
                 }
                 _ => {}
             }
