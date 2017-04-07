@@ -17,10 +17,12 @@ mod effects {
 mod midi_devices;
 mod absolute_sleep;
 mod utils;
+mod microkorg;
 
 mod songs {
     pub mod amazon;
     pub mod kirschblueten;
+    pub mod polly;
     pub mod test;
 }
 
@@ -41,6 +43,7 @@ use pm::{OutputPort};
 use songs::amazon::create_amazon;
 use songs::kirschblueten::create_kirschblueten;
 use songs::test::create_test_song;
+use songs::polly::create_polly;
 
 
 fn print_devices(pm: &PortMidi) {
@@ -55,14 +58,13 @@ fn main() {
     let context = pm::PortMidi::new().unwrap();
     print_devices(&context);
 
-
     let output_ports: Vec<Arc<Mutex<OutputPort>>> = context.devices().unwrap().into_iter()
         .filter(|dev| dev.is_output())
         .map(|dev| Arc::new(Mutex::new(context.output_port(dev, BUF_LEN).unwrap())))
         .collect();
 
-    let mut patches = [create_test_song(), create_amazon(), create_kirschblueten()];
-    let mut selected_patch = 1;
+    let mut patches = [create_test_song(), create_amazon(), create_kirschblueten(), create_polly()];
+    let mut selected_patch = 3;
 
     const BUF_LEN: usize = 1024;
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
