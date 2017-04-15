@@ -20,7 +20,7 @@ pub fn start_view(from_view_tx: Sender<FromViewEvents>, to_view_rx: Receiver<ToV
         let mut window: PistonWindow =
             WindowSettings::new("Rust Midi Patcher", [1600, 900])
                 .vsync(true)
-                .fullscreen(true)
+                .fullscreen(false)
                 .exit_on_esc(true).build().unwrap();
 
         let color_mutex = Arc::new(Mutex::new([1.0, 0.0, 0.0, 1.0]));

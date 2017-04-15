@@ -2,6 +2,7 @@
 extern crate chan;
 extern crate portmidi as pm;
 extern crate chan_signal;
+extern crate risp;
 
 
 mod patch;
@@ -32,6 +33,8 @@ mod view {
 
 use view::main_view::start_view;
 
+use std::fs::File;
+use std::io::prelude::*;
 use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
@@ -39,6 +42,10 @@ use std::sync::{Arc, Mutex};
 use pm::{PortMidi};
 use pm::{OutputPort};
 
+use risp::eval_risp_script;
+use risp::core::create_core_environment;
+
+use patch::Patch;
 
 use songs::amazon::create_amazon;
 use songs::kirschblueten::create_kirschblueten;
@@ -63,7 +70,7 @@ fn main() {
         .map(|dev| Arc::new(Mutex::new(context.output_port(dev, BUF_LEN).unwrap())))
         .collect();
 
-    let mut patches = [create_test_song(), create_amazon(), create_kirschblueten(), create_polly()];
+    let mut patches = load_patches();
     let mut selected_patch = 3;
 
     const BUF_LEN: usize = 1024;
@@ -132,4 +139,17 @@ fn main() {
             }
         }
     }
+}
+
+fn load_patches() -> Vec<Patch> {
+    let mut file = File::open("src/songs/amazon.risp").unwrap();
+    let mut risp_code = String::new();
+    file.read_to_string(&mut risp_code).unwrap();
+
+    let mut env = create_core_environment();
+    let result = eval_risp_script(&risp_code, &mut env);
+    // println!("amazon = {:?}", result);
+    assert!(result.is_ok());
+
+    vec![create_test_song(), create_amazon(), create_kirschblueten(), create_polly()]
 }
