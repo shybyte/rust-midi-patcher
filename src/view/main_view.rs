@@ -32,24 +32,21 @@ pub fn start_view(from_view_tx: Sender<FromViewEvents>, to_view_rx: Receiver<ToV
             loop {
                 chan_select! {
                     to_view_rx.recv() -> to_view_event => {
-                        match to_view_event {
-                            Some(ToViewEvents::BEAT(quadrant)) => {
-                                let mut quadrant_mutex = quadrant_mutex_thread.lock().unwrap();
-                                let mut color = color_mutex_thread.lock().unwrap();
-                                *quadrant_mutex = quadrant;
-                                let new_color = match quadrant {
-                                    0 => [1.0, 1.0, 0.0],
-                                    1 => [1.0, 0.0, 0.0],
-                                    2 => [0.0, 1.0, 0.0],
-                                    3 => [0.0, 0.0, 1.0],
-                                    _ => [0.0, 0.0, 0.0]
-                                };
-                                color[0] = new_color[0];
-                                color[1] = new_color[1];
-                                color[2] = new_color[2];
-                                color[3] = 1.1;
-                            },
-                            None => {}
+                        if let Some(ToViewEvents::BEAT(quadrant)) =  to_view_event {
+                            let mut quadrant_mutex = quadrant_mutex_thread.lock().unwrap();
+                            let mut color = color_mutex_thread.lock().unwrap();
+                            *quadrant_mutex = quadrant;
+                            let new_color = match quadrant {
+                                0 => [1.0, 1.0, 0.0],
+                                1 => [1.0, 0.0, 0.0],
+                                2 => [0.0, 1.0, 0.0],
+                                3 => [0.0, 0.0, 1.0],
+                                _ => [0.0, 0.0, 0.0]
+                            };
+                            color[0] = new_color[0];
+                            color[1] = new_color[1];
+                            color[2] = new_color[2];
+                            color[3] = 1.1;
                         }
                     }
                 }

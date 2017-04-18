@@ -105,16 +105,16 @@ fn main() {
                         248 => continue,
                         192 => {
                             println!("program change {:?}", event.message);
-                            let new_patch_i_option = patches.iter().position(|ref p|  p.program() == event.message.data1);
+                            let new_patch_i_option = patches.iter().position(|p|  p.program() == event.message.data1);
                             if let Some(new_patch_i) = new_patch_i_option {
-                                patches.get_mut(selected_patch).unwrap().stop_running_effects();
+                                patches[selected_patch].stop_running_effects();
                                 selected_patch = new_patch_i;
                                 println!("selected_patch = {:?}", selected_patch);
                             }
 
                         },
                         _ => {
-                            patches.get_mut(selected_patch).unwrap().on_midi_event(&output_ports, &device, event.message, &to_view_tx);
+                            patches[selected_patch].on_midi_event(&output_ports, &device, event.message, &to_view_tx);
                         }
                     }
                 }
