@@ -1,2 +1,2 @@
-# Rust Midi Patcher
+# Rust Midi Patcher [![Build Status](https://travis-ci.org/shybyte/rust-midi-patcher.svg?branch=master)](https://travis-ci.org/shybyte/rust-midi-patcher)
 Control (the effects of) one midi instrument with another one. Rust version.
