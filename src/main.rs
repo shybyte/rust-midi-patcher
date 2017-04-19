@@ -62,7 +62,7 @@ fn main() {
         .collect();
 
     let mut patches = load_patches();
-    let mut selected_patch = 3;
+    let mut selected_patch = patches.len() - 1;
 
     const BUF_LEN: usize = 1024;
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);

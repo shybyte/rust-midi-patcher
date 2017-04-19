@@ -5,6 +5,7 @@ use effects::note_sequencer::{NoteSequencer};
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use utils::{concat,concatenated, repeated};
 
+#[allow(dead_code)]
 pub fn create_amazon() -> Patch {
     let chorus_notes = repeated(&concat(vec![
         repeated(&[45, 57], 4),
