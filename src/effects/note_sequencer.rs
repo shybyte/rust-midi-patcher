@@ -23,17 +23,9 @@ pub struct NoteSequencer {
 
 impl NoteSequencer {
     pub fn new(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
-        NoteSequencer {
-            output_device: output_device.to_string(),
-            notes: Arc::new(notes),
-            velocity: velocity,
-            time_per_note: time_per_note,
-            beat_offset: 0,
-            sender: None,
-            output_port: None,
-            playing_notes: Arc::new(Mutex::new(HashSet::new()))
-        }
+        NoteSequencer::new_with_beat_offset(output_device, notes, time_per_note, velocity, 0)
     }
+
 
     pub fn new_with_beat_offset(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8, beat_offset: usize) -> NoteSequencer {
         NoteSequencer {
