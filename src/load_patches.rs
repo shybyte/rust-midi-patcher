@@ -86,6 +86,7 @@ fn to_map(risp_map: RispType) -> Result<HashMap<String, RispType>, LoadError> {
     }
 }
 
+#[allow(unknown_lints)]
 #[allow(needless_pass_by_value)]
 fn to_int(risp_int: RispType) -> Result<i64, LoadError> {
     match risp_int {
@@ -94,6 +95,7 @@ fn to_int(risp_int: RispType) -> Result<i64, LoadError> {
     }
 }
 
+#[allow(unknown_lints)]
 #[allow(needless_pass_by_value)]
 fn to_u8(risp_int: RispType) -> Result<u8, LoadError> {
     match risp_int {
