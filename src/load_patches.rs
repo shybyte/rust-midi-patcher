@@ -45,14 +45,14 @@ fn load_patch(file_name: &str) -> Result<Patch, RispError> {
         .and_then(|patch_risp| {
             let program = patch_risp.get("program")?.unwrap_or(0);
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);
-            let effects_risp = patch_risp.get("effects")?.unwrap_or(vec![]);
-            let effects: Result<_, _> = effects_risp.iter().cloned().map(|e| to_trigger_effect_pair(e, time_per_note)).collect();
+            let effects_risp: Vec<RispType> = patch_risp.get("effects")?.ok_or_else(|| error("Missing effects"))?;
+            let effects: Result<_, _> = effects_risp.into_iter().map(|e| to_trigger_effect_pair(&e, time_per_note)).collect();
             Ok(Patch::new(effects?, program as u8))
         })
 }
 
 // {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}
-fn to_trigger_effect_pair(input: RispType, default_time_per_note: i64) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
+fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
     let trigger_note = input.get("trigger")?.unwrap_or(0);
     let trigger = Box::new(Trigger::new(DEFAULT_IN_DEVICE, trigger_note as u8));
 
