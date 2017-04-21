@@ -15,6 +15,7 @@ mod effects {
     pub mod control_sequencer;
 }
 
+mod config;
 mod midi_devices;
 mod load_patches;
 mod absolute_sleep;
@@ -34,6 +35,7 @@ mod view {
 
 use view::main_view::start_view;
 
+use config::Config;
 use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
@@ -67,8 +69,8 @@ fn main() {
     const BUF_LEN: usize = 1024;
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
     let (tx, rx) = chan::sync(0);
-    let (from_view_tx, from_view_rx) = chan::sync(0);
-    let (to_view_tx, to_view_rx) = chan::sync(0);
+    let (from_view_tx, from_view_rx) = chan::async();
+    let (to_view_tx, to_view_rx) = chan::async();
 
     let in_devices: Vec<pm::DeviceInfo> = context.devices()
         .unwrap()
@@ -94,7 +96,9 @@ fn main() {
         }
     });
 
-    start_view(from_view_tx, to_view_rx);
+    if Config::get().view {
+        start_view(from_view_tx, to_view_rx);
+    }
 
     loop {
         chan_select! {
