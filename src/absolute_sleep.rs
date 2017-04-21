@@ -56,6 +56,6 @@ mod tests {
         let time1 = Instant::now();
         abs_sleep.sleep(Duration::from_millis(100));
         let sleep_time: i64 = (Instant::now() - time1).subsec_nanos() as i64 - 25 * 1000_000;
-        assert!(sleep_time.abs() < 1000_000, format!("sleep right time {}", sleep_time));
+        assert!(sleep_time.abs() < 2000_000, format!("sleep right time {}", sleep_time));
     }
 }
