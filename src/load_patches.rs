@@ -1,7 +1,4 @@
-use std::fs::File;
-use std::io::prelude::*;
 use std::time::Duration;
-
 
 use risp::eval_risp_script;
 use risp::types::{RispType, RispError, error};
@@ -9,6 +6,7 @@ use risp::core::create_core_environment;
 use risp::convert::flatten_into;
 
 use patch::Patch;
+use utils::read_file;
 use trigger::Trigger;
 use effects::effect::Effect;
 use effects::note_sequencer::{NoteSequencer};
@@ -36,9 +34,7 @@ pub fn load_patches() -> Vec<Patch> {
 }
 
 fn load_patch(file_name: &str) -> Result<Patch, RispError> {
-    let mut file = File::open(file_name).unwrap();
-    let mut risp_code = String::new();
-    file.read_to_string(&mut risp_code).map_err(|_| error(format!("Can't read file {:?}", file_name)))?;
+    let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name)))?;
 
     let mut env = create_core_environment();
     eval_risp_script(&risp_code, &mut env)

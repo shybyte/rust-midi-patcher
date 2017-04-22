@@ -35,7 +35,7 @@ mod view {
 
 use view::main_view::start_view;
 
-use config::Config;
+use config::load_config;
 use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
@@ -96,7 +96,8 @@ fn main() {
         }
     });
 
-    if Config::get().view {
+    let config = load_config("config/config.risp").unwrap();
+    if config.view {
         start_view(from_view_tx, to_view_rx);
     }
 

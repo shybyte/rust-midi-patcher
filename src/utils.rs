@@ -1,3 +1,6 @@
+use std::fs::File;
+use std::io::prelude::*;
+use std::io;
 use std::iter;
 use std::ops::Add;
 use std::sync::{Arc, Mutex};
@@ -38,3 +41,9 @@ pub fn control_change(output_port_mutex: &mut Arc<Mutex<OutputPort>>, control_in
     send_midi(output_port_mutex, note_on);
 }
 
+pub fn read_file(file_name: &str) -> Result<String, io::Error> {
+    let mut file = File::open(file_name).unwrap();
+    let mut content = String::new();
+    file.read_to_string(&mut content)?;
+    Ok(content)
+}

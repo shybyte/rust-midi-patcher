@@ -762,10 +762,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "risp"
 version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "regex 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "risp"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+replace = "risp 0.3.0"
 
 [[package]]
 name = "rustc-serialize"
