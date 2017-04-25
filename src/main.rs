@@ -3,6 +3,7 @@ extern crate chan;
 extern crate portmidi as pm;
 extern crate chan_signal;
 extern crate risp;
+extern crate notify;
 
 
 mod patch;
@@ -21,6 +22,7 @@ mod load_patches;
 mod absolute_sleep;
 mod utils;
 mod microkorg;
+mod watch;
 
 mod songs {
     pub mod amazon;
@@ -42,6 +44,7 @@ use std::thread;
 use std::sync::{Arc, Mutex};
 use pm::{PortMidi};
 use pm::{OutputPort};
+use watch::*;
 
 use load_patches::load_patches;
 
@@ -67,7 +70,10 @@ fn main() {
     let mut selected_patch = patches.len() - 1;
 
     const BUF_LEN: usize = 1024;
+
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
+    let tick = chan::tick_ms(100);
+    let (_watch_tx, watch_rx) = watch_patches();
     let (tx, rx) = chan::sync(0);
     let (from_view_tx, from_view_rx) = chan::async();
     let (to_view_tx, to_view_rx) = chan::async();
@@ -103,6 +109,11 @@ fn main() {
 
     loop {
         chan_select! {
+            tick.recv() -> _tick_events => {
+                for file in get_changed_files(watch_rx.try_iter()) {
+                    println!("changed file = {:?}", file);
+                }
+            },
             rx.recv() -> midi_events => {
                 let (device, events) = midi_events.unwrap();
                 for event in events {
@@ -125,7 +136,7 @@ fn main() {
                 }
             },
             os_signal.recv() -> os_sig => {
-                println!("received signal: {:?}", os_sig);
+                println!("received os signal: {:?}", os_sig);
                 if os_sig == Some(Signal::INT) {
                     break;
                 }
