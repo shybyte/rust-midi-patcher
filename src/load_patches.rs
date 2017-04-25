@@ -1,4 +1,6 @@
 use std::time::Duration;
+use std::fs;
+use std::path::Path;
 
 use risp::eval_risp_script;
 use risp::types::{RispType, RispError, error};
@@ -13,28 +15,33 @@ use effects::note_sequencer::{NoteSequencer};
 
 use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 
-use songs::kirschblueten::create_kirschblueten;
 use songs::test::create_test_song;
 use songs::polly::create_polly;
 
 pub fn load_patches() -> Vec<Patch> {
-    let mut patches = vec![create_test_song(), create_kirschblueten(), create_polly()];
+    let mut patches = vec![create_test_song(), create_polly()];
 
-    match load_patch("src/songs/amazon.risp") {
-        Ok(amazon) => {
-            println!("Loaded amazon");
-            patches.push(amazon);
-        }
-        Err(error) => {
-            println!("Error while loading amazon = {:?}", error);
+    let paths = fs::read_dir("patches").unwrap();
+
+    for path in paths {
+        let patch_path = path.unwrap().path();
+        println!("Loading Patch {:?}", patch_path.display());
+        match load_patch(&patch_path) {
+            Ok(amazon) => {
+                println!("Loaded Patch {:?}", patch_path.display());
+                patches.push(amazon);
+            }
+            Err(error) => {
+                println!("Error while loading: {:?}", error);
+            }
         }
     }
 
     patches
 }
 
-fn load_patch(file_name: &str) -> Result<Patch, RispError> {
-    let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name)))?;
+fn load_patch(file_name: &Path) -> Result<Patch, RispError> {
+    let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name.display())))?;
 
     let mut env = create_core_environment();
     eval_risp_script(&risp_code, &mut env)

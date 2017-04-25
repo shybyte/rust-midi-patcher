@@ -25,8 +25,6 @@ mod microkorg;
 mod watch;
 
 mod songs {
-    pub mod amazon;
-    pub mod kirschblueten;
     pub mod polly;
     pub mod test;
 }

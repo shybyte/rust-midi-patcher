@@ -1,0 +1,27 @@
+(def chorus_notes
+  [(rep 4 50 65)
+   (rep 4 48 67)
+   (rep 4 46 62)
+   (rep 4 46 62)
+
+   (rep 4 50 65)
+   (rep 4 48 67)
+   (rep 4 46 62)
+   (rep 4 46 62)
+
+   (rep 4 50 65)
+   (rep 4 45 64)
+   (rep 4 41 69)
+   (rep 4 43 71)
+
+   (rep 4 50 65)
+   (rep 4 48 67)
+   (rep 4 46 62)
+   (rep 4 46 62)])
+
+
+{:name          "Kirschblüten"
+ :program       53
+ :time_per_note 210
+ :effects       [{:trigger 38 :noteSequencer {:notes chorus_notes}}
+                 {:trigger 36 :noteSequencer {:notes []}}]}

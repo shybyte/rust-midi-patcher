@@ -1,4 +1,5 @@
 use std::fs::File;
+use std::path::Path;
 use std::io::prelude::*;
 use std::io;
 use std::iter;
@@ -22,10 +23,6 @@ pub fn concat<T: Clone>(input: Vec<Vec<T>>) -> Vec<T> {
     input.into_iter().flat_map(|x| x).collect()
 }
 
-pub fn concatenated<T: Clone>(input: &[&[T]]) -> Vec<T> {
-    input.iter().flat_map(|x| x.iter()).cloned().collect()
-}
-
 pub fn send_midi(output_port_mutex: &mut Arc<Mutex<OutputPort>>, m: MidiMessage) {
     let mut output_port = output_port_mutex.lock().unwrap();
     output_port.write_message(m).unwrap();
@@ -41,7 +38,7 @@ pub fn control_change(output_port_mutex: &mut Arc<Mutex<OutputPort>>, control_in
     send_midi(output_port_mutex, note_on);
 }
 
-pub fn read_file(file_name: &str) -> Result<String, io::Error> {
+pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String, io::Error> {
     let mut file = File::open(file_name).unwrap();
     let mut content = String::new();
     file.read_to_string(&mut content)?;
