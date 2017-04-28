@@ -66,7 +66,7 @@ fn main() {
         .map(|dev| Arc::new(Mutex::new(context.output_port(dev, BUF_LEN).unwrap())))
         .collect();
 
-    let mut patches = load_patches();
+    let mut patches = load_patches(&config);
     let mut selected_patch  = patches.iter().position(|p|  p.name() == config.selected_patch).unwrap_or(0);
 
     const BUF_LEN: usize = 1024;

@@ -16,13 +16,14 @@ use effects::note_sequencer::{NoteSequencer};
 use effects::sweep_down::{SweepDown};
 use effects::control_sequencer::{ControlSequencer};
 
-use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use microkorg::CUTOFF;
+
+use config::Config;
 
 use songs::test::create_test_song;
 use songs::polly::create_polly;
 
-pub fn load_patches() -> Vec<Patch> {
+pub fn load_patches(config: &Config) -> Vec<Patch> {
     let mut patches = vec![create_test_song(), create_polly()];
 
     let paths = fs::read_dir("patches").unwrap();
@@ -30,7 +31,7 @@ pub fn load_patches() -> Vec<Patch> {
     for path in paths {
         let patch_path = path.unwrap().path();
         println!("Loading Patch {:?}", patch_path.display());
-        match load_patch(&patch_path) {
+        match load_patch(&patch_path, config) {
             Ok(amazon) => {
                 println!("Loaded Patch {:?}", patch_path.display());
                 patches.push(amazon);
@@ -44,7 +45,7 @@ pub fn load_patches() -> Vec<Patch> {
     patches
 }
 
-fn load_patch(file_name: &Path) -> Result<Patch, RispError> {
+fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
     let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name.display())))?;
 
     let mut env = create_core_environment();
@@ -56,15 +57,15 @@ fn load_patch(file_name: &Path) -> Result<Patch, RispError> {
             let name: String = patch_risp.get("name")?.ok_or_else(|| error("Missing Name"))?;
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);
             let effects_risp: Vec<RispType> = patch_risp.get("effects")?.ok_or_else(|| error("Missing effects"))?;
-            let effects: Result<_, _> = effects_risp.into_iter().map(|e| to_trigger_effect_pair(&e, time_per_note)).collect();
+            let effects: Result<_, _> = effects_risp.into_iter().map(|e| to_trigger_effect_pair(&e, time_per_note, config)).collect();
             Ok(Patch::new(name, effects?, program as u8))
         })
 }
 
 // {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}
-fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
+fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64, config: &Config) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
     let trigger_note = input.get("trigger")?.unwrap_or(0);
-    let trigger = Box::new(Trigger::new(DEFAULT_IN_DEVICE, trigger_note as u8));
+    let trigger = Box::new(Trigger::new(&config.default_in_device, trigger_note as u8));
 
     let note_sequencer_risp_option: Option<RispType> = input.get("noteSequencer")?;
     if let Some(note_sequencer_risp) = note_sequencer_risp_option {
@@ -73,7 +74,7 @@ fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64) -> Resul
 
         let notes_risp = note_sequencer_risp.get("notes")?.ok_or_else(|| error("Missing notes"))?;
         let notes = flatten_into(notes_risp)?.iter().map(|&x: &i64| x as u8).collect();
-        let effect = Box::new(NoteSequencer::new_with_beat_offset(DEFAULT_OUT_DEVICE, notes, Duration::from_millis(time_per_note), 0x7f, beat_offset));
+        let effect = Box::new(NoteSequencer::new_with_beat_offset(&config.default_out_device, notes, Duration::from_millis(time_per_note), 0x7f, beat_offset));
         return Ok((trigger, effect));
     }
 
@@ -81,7 +82,7 @@ fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64) -> Resul
     if let Some(sweep_down) = sweep_down_risp_option {
         let min_value = sweep_down.get("min_value")?.unwrap_or(30) as u8;
         let control_index: i64 = sweep_down.get("control_index")?.ok_or_else(|| error("Missing control_index"))?;
-        let effect = Box::new(SweepDown::new(DEFAULT_OUT_DEVICE, min_value, control_index as u8));
+        let effect = Box::new(SweepDown::new(&config.default_out_device, min_value, control_index as u8));
         return Ok((trigger, effect));
     }
 
@@ -93,7 +94,7 @@ fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64) -> Resul
 
         let values_risp = control_sequencer_risp.get("values")?.ok_or_else(|| error("Missing notes"))?;
         let values = flatten_into(values_risp)?.iter().map(|&x: &i64| x as u8).collect();
-        let effect = Box::new(ControlSequencer::new(DEFAULT_OUT_DEVICE, control_index as u8, values,
+        let effect = Box::new(ControlSequencer::new(&config.default_out_device, control_index as u8, values,
                                                     stop_value as u8, Duration::from_millis(time_per_note)));
         return Ok((trigger, effect));
     }
