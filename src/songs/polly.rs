@@ -13,7 +13,7 @@ pub fn create_polly() -> Patch {
     let arp = ControlSequencer::new(DEFAULT_OUT_DEVICE, OSC2_SEMITONE, arp_seq, 64, Duration::from_millis(30));
     let sweep_down = SweepDown::new(DEFAULT_OUT_DEVICE, 30, CUTOFF);
 
-    Patch::new(vec![
+    Patch::new("Polly", vec![
         (Box::new(Trigger::new(SAMPLE_PAD, 41)), Box::new(sweep_down)),
         (Box::new(Trigger::new(SAMPLE_PAD, 40)), Box::new(arp))
     ], 10)

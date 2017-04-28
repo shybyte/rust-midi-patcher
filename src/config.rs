@@ -4,12 +4,13 @@ use risp::core::create_core_environment;
 use utils::read_file;
 
 pub struct Config {
-    pub view: bool
+    pub view: bool,
+    pub selected_patch: String
 }
 
 impl Config {
     pub fn get_default() -> Self {
-        Config { view: true }
+        Config { view: true , selected_patch: "".to_string()}
     }
 }
 
@@ -21,7 +22,8 @@ pub fn load_config(file_name: &str) -> Result<Config, RispError> {
 
     Ok(
         Config {
-            view: evaluated_config.get("view")?.unwrap_or(default_config.view)
+            view: evaluated_config.get("view")?.unwrap_or(default_config.view),
+            selected_patch: evaluated_config.get("selected_patch")?.unwrap_or(default_config.selected_patch)
         }
     )
 }

@@ -56,6 +56,8 @@ fn print_devices(pm: &PortMidi) {
 
 fn main() {
     println!("Started");
+    let config = load_config("config/config.risp").unwrap();
+
     let context = pm::PortMidi::new().unwrap();
     print_devices(&context);
 
@@ -65,7 +67,7 @@ fn main() {
         .collect();
 
     let mut patches = load_patches();
-    let mut selected_patch = patches.len() - 1;
+    let mut selected_patch  = patches.iter().position(|p|  p.name() == config.selected_patch).unwrap_or(0);
 
     const BUF_LEN: usize = 1024;
 
@@ -100,10 +102,11 @@ fn main() {
         }
     });
 
-    let config = load_config("config/config.risp").unwrap();
     if config.view {
         start_view(from_view_tx, to_view_rx);
     }
+
+    println!("Selected Patch = {:?}", patches[selected_patch].name());
 
     loop {
         chan_select! {

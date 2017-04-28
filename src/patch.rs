@@ -10,13 +10,15 @@ use chan::{Sender};
 use view::main_view::ToViewEvents;
 
 pub struct Patch {
+    name: String,
     effects: Vec<(Box<Trigger>, Box<Effect>)>,
     program: u8,
 }
 
 impl Patch {
-    pub fn new(effects: Vec<(Box<Trigger>, Box<Effect>)>, program: u8) -> Patch {
+    pub fn new<S: Into<String>>(name: S, effects: Vec<(Box<Trigger>, Box<Effect>)>, program: u8) -> Patch {
         Patch {
+            name: name.into(),
             effects: effects,
             program: program
         }
@@ -55,5 +57,9 @@ impl Patch {
 
     pub fn program(&self) -> u8 {
         self.program
+    }
+
+    pub fn name(&self) -> &str {
+        &self.name[..]
     }
 }

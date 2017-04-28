@@ -47,10 +47,11 @@ fn load_patch(file_name: &Path) -> Result<Patch, RispError> {
     eval_risp_script(&risp_code, &mut env)
         .and_then(|patch_risp| {
             let program = patch_risp.get("program")?.unwrap_or(0);
+            let name: String = patch_risp.get("name")?.ok_or_else(|| error("Missing Name"))?;
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);
             let effects_risp: Vec<RispType> = patch_risp.get("effects")?.ok_or_else(|| error("Missing effects"))?;
             let effects: Result<_, _> = effects_risp.into_iter().map(|e| to_trigger_effect_pair(&e, time_per_note)).collect();
-            Ok(Patch::new(effects?, program as u8))
+            Ok(Patch::new(name, effects?, program as u8))
         })
 }
 
