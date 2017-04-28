@@ -1,0 +1,26 @@
+(def chorus_notes
+  (rep 6
+       (rep 4 45 57)
+       (rep 4 48 60)
+       (rep 4 43 55)
+       (rep 4 38 50)))
+
+(def wild_notes (rep 50 45 47 53 57 60 67 60 57 53 47))
+
+(def time_per_note 220)
+
+{:name          "Kitchensink"
+ :program       42
+ :time_per_note time_per_note
+ :effects       [{:trigger 43 :noteSequencer {:notes chorus_notes}}
+                 {:trigger       43
+                  :noteSequencer {:notes (+ 24 wild_notes) :time_per_note (/ time_per_note 2)}}
+                 {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}}
+                 {:trigger 36 :noteSequencer {:notes wild_notes}}
+                 {:trigger 52 :noteSequencer {:notes []}}
+                 {:trigger   48
+                  :controlSequencer {:control_index CUTOFF
+                              :values        [30 100 30 100]
+                              :stop_value    30
+                              :time_per_note 500}}
+                 {:trigger 50 :sweepDown {:control_index CUTOFF :min_value 30}}]}
