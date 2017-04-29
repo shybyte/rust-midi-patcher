@@ -18,9 +18,18 @@
                  {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}}
                  {:trigger 36 :noteSequencer {:notes wild_notes}}
                  {:trigger 52 :noteSequencer {:notes []}}
-                 {:trigger   48
+
+                 {:trigger ["SamplePad" 41] :sweepDown {:control_index CUTOFF :min_value 30}}
+
+                 {:trigger          ["SamplePad" 40]
+                  :controlSequencer {:control_index OSC2_SEMITONE
+                                     :stop_value    64
+                                     :time_per_note 30
+                                     :values     (rep 2 78 96 114 126)}}
+
+                 {:trigger          48
                   :controlSequencer {:control_index CUTOFF
-                              :values        [30 100 30 100]
-                              :stop_value    30
-                              :time_per_note 500}}
+                                     :values        [30 100 30 100]
+                                     :stop_value    30
+                                     :time_per_note 500}}
                  {:trigger 50 :sweepDown {:control_index CUTOFF :min_value 30}}]}

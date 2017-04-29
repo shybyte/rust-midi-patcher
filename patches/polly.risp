@@ -1,0 +1,9 @@
+{:name          "Polly"
+ :program       10
+ :effects       [{:trigger ["SamplePad" 41] :sweepDown {:control_index CUTOFF :min_value 30}}
+
+                 {:trigger          ["SamplePad" 40]
+                  :controlSequencer {:control_index OSC2_SEMITONE
+                                     :stop_value    64
+                                     :time_per_note 30
+                                     :values        (rep 2 78 96 114 126)}}]}

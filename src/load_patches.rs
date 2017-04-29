@@ -16,15 +16,14 @@ use effects::note_sequencer::{NoteSequencer};
 use effects::sweep_down::{SweepDown};
 use effects::control_sequencer::{ControlSequencer};
 
-use microkorg::CUTOFF;
+use microkorg::*;
 
 use config::Config;
 
 use songs::test::create_test_song;
-use songs::polly::create_polly;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
-    let mut patches = vec![create_test_song(), create_polly()];
+    let mut patches = vec![create_test_song()];
 
     let paths = fs::read_dir("patches").unwrap();
 
@@ -50,6 +49,7 @@ fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
 
     let mut env = create_core_environment();
     env.set("CUTOFF", Int(CUTOFF as i64));
+    env.set("OSC2_SEMITONE", Int(OSC2_SEMITONE as i64));
 
     eval_risp_script(&risp_code, &mut env)
         .and_then(|patch_risp| {
@@ -64,8 +64,16 @@ fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
 
 // {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}
 fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64, config: &Config) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
-    let trigger_note = input.get("trigger")?.unwrap_or(0);
-    let trigger = Box::new(Trigger::new(&config.default_in_device, trigger_note as u8));
+    let trigger_risp: RispType = input.get("trigger")?.ok_or_else(|| error("Missing trigger"))?;
+    let trigger = match trigger_risp {
+        Int(trigger_note) => Box::new(Trigger::new(&config.default_in_device, trigger_note as u8)),
+        Vector(ref args) if args.len() == 2 => {
+            let device: Result<String, _> = args[0].clone().into();
+            let note: Result<i64, _> = args[1].clone().into();
+            Box::new(Trigger::new(&device?, note? as u8))
+        }
+        _ => return Err(error("Strange trigger"))
+    };
 
     let note_sequencer_risp_option: Option<RispType> = input.get("noteSequencer")?;
     if let Some(note_sequencer_risp) = note_sequencer_risp_option {

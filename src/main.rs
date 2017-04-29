@@ -25,7 +25,6 @@ mod microkorg;
 mod watch;
 
 mod songs {
-    pub mod polly;
     pub mod test;
 }
 
@@ -126,11 +125,12 @@ fn main() {
                             if let Some(new_patch_i) = new_patch_i_option {
                                 patches[selected_patch].stop_running_effects();
                                 selected_patch = new_patch_i;
-                                println!("selected_patch = {:?}", selected_patch);
+                                println!("Selected Patch = {:?}", patches[selected_patch].name());
                             }
 
                         },
                         _ => {
+                            println!("event = {:?}", event);
                             patches[selected_patch].on_midi_event(&output_ports, &device, event.message, &to_view_tx);
                         }
                     }
