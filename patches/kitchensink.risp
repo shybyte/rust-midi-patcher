@@ -12,7 +12,8 @@
 {:name          "Kitchensink"
  :program       42
  :time_per_note time_per_note
- :effects       [{:trigger 43 :noteSequencer {:notes chorus_notes}}
+ :effects       [{:trigger 46 :noteSequencer {:notes [45 57 58 57]}}
+                 {:trigger 43 :noteSequencer {:notes chorus_notes}}
                  {:trigger       43
                   :noteSequencer {:notes (+ 24 wild_notes) :time_per_note (/ time_per_note 2)}}
                  {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}}
@@ -25,7 +26,7 @@
                   :controlSequencer {:control_index OSC2_SEMITONE
                                      :stop_value    64
                                      :time_per_note 30
-                                     :values     (rep 2 78 96 114 126)}}
+                                     :values        (rep 2 78 96 114 126)}}
 
                  {:trigger          48
                   :controlSequencer {:control_index CUTOFF

@@ -39,11 +39,14 @@ use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
 use std::sync::{Arc, Mutex};
+use std::path::Path;
+use config::Config;
 use pm::{PortMidi};
 use pm::{OutputPort};
 use watch::*;
+use patch::Patch;
 
-use load_patches::load_patches;
+use load_patches::*;
 
 
 fn print_devices(pm: &PortMidi) {
@@ -111,7 +114,7 @@ fn main() {
         chan_select! {
             tick.recv() -> _tick_events => {
                 for file in get_changed_files(watch_rx.try_iter()) {
-                    println!("changed file = {:?}", file);
+                    on_patch_file_change(&file, &config, &mut patches);
                 }
             },
             rx.recv() -> midi_events => {
@@ -149,3 +152,18 @@ fn main() {
     }
 }
 
+fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch])  {
+    println!("changed file = {:?}", file);
+    match load_patch(file, config) {
+        Ok(loaded_patch) => {
+            println!("Loaded patch = {:?}", loaded_patch.name());
+            if let Some(index) = patches.iter().position(|p| p.name() == loaded_patch.name()) {
+                patches[index].update_from(loaded_patch);
+            } else {
+                println!("New Patch, ignore it for now...");
+            }
+
+        },
+        Err(err) => println!("Error while loading changed patch: {:?}", err)
+    }
+}

@@ -24,6 +24,13 @@ impl Patch {
         }
     }
 
+    pub fn update_from(&mut self, patch: Patch) {
+        self.stop_running_effects();
+        self.name = patch.name;
+        self.effects = patch.effects;
+        self.program = patch.program;
+    }
+
     pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         let triggered_effect_indices: Vec<usize> = (0..self.effects.len()).filter(|&i| self.effects[i].0.is_triggered(device, midi_message)).collect();

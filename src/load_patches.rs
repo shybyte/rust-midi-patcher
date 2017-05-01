@@ -44,7 +44,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
     patches
 }
 
-fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
+pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
     let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name.display())))?;
 
     let mut env = create_core_environment();
