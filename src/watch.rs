@@ -6,7 +6,7 @@ use std::path::PathBuf;
 
 pub fn watch_patches() -> (RecommendedWatcher, mpsc::Receiver<DebouncedEvent>) {
     let (tx, rx) = mpsc::channel();
-    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_millis(100)).unwrap();
+    let mut watcher: RecommendedWatcher = Watcher::new(tx, Duration::from_millis(50)).unwrap();
     watcher.watch("patches", RecursiveMode::Recursive).unwrap();
     (watcher, rx)
 }

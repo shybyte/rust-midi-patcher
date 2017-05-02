@@ -45,6 +45,8 @@ use pm::{PortMidi};
 use pm::{OutputPort};
 use watch::*;
 use patch::Patch;
+use chan::{Sender};
+use view::main_view::ToViewEvents;
 
 use load_patches::*;
 
@@ -69,12 +71,12 @@ fn main() {
         .collect();
 
     let mut patches = load_patches(&config);
-    let mut selected_patch  = patches.iter().position(|p|  p.name() == config.selected_patch).unwrap_or(0);
+    let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch).unwrap_or(0);
 
     const BUF_LEN: usize = 1024;
 
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
-    let tick = chan::tick_ms(100);
+    let tick = chan::tick_ms(50);
     let (_watch_tx, watch_rx) = watch_patches();
     let (tx, rx) = chan::sync(0);
     let (from_view_tx, from_view_rx) = chan::async();
@@ -114,7 +116,7 @@ fn main() {
         chan_select! {
             tick.recv() -> _tick_events => {
                 for file in get_changed_files(watch_rx.try_iter()) {
-                    on_patch_file_change(&file, &config, &mut patches);
+                    on_patch_file_change(&file, &config, &mut patches, &output_ports, &to_view_tx);
                 }
             },
             rx.recv() -> midi_events => {
@@ -152,18 +154,17 @@ fn main() {
     }
 }
 
-fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch])  {
+fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch], output_ports: &[Arc<Mutex<OutputPort>>], to_view_tx: &Sender<ToViewEvents>) {
     println!("changed file = {:?}", file);
     match load_patch(file, config) {
         Ok(loaded_patch) => {
             println!("Loaded patch = {:?}", loaded_patch.name());
             if let Some(index) = patches.iter().position(|p| p.name() == loaded_patch.name()) {
-                patches[index].update_from(loaded_patch);
+                patches[index].update_from(loaded_patch, output_ports, to_view_tx);
             } else {
                 println!("New Patch, ignore it for now...");
             }
-
-        },
+        }
         Err(err) => println!("Error while loading changed patch: {:?}", err)
     }
 }

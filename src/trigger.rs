@@ -1,7 +1,7 @@
 use pm::{MidiMessage, DeviceInfo};
 
 
-#[derive(Clone, Eq, PartialEq, Debug)]
+#[derive(Clone, Eq, PartialEq, Debug, Hash)]
 pub struct Trigger {
     device: String,
     note: u8

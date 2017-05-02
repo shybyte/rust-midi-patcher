@@ -8,10 +8,12 @@ use absolute_sleep::AbsoluteSleep;
 use std::sync::{Arc, Mutex};
 use chan::{Sender};
 use view::main_view::ToViewEvents;
+use std::collections::HashMap;
 
 pub struct Patch {
     name: String,
     effects: Vec<(Box<Trigger>, Box<Effect>)>,
+    last_midi_events: HashMap<Trigger, MidiMessage>,
     program: u8,
 }
 
@@ -20,15 +22,26 @@ impl Patch {
         Patch {
             name: name.into(),
             effects: effects,
+            last_midi_events: HashMap::new(),
             program: program
         }
     }
 
-    pub fn update_from(&mut self, patch: Patch) {
+    pub fn update_from(&mut self, patch: Patch, output_ports: &[Arc<Mutex<OutputPort>>], to_view_tx: &Sender<ToViewEvents>) {
+        let running_triggers: Vec<Box<Trigger>> = self.effects.iter()
+            .filter_map(|&(ref trigger, ref eff)| if eff.is_running() { Some(trigger.clone()) } else { None }).collect();
         self.stop_running_effects();
         self.name = patch.name;
         self.effects = patch.effects;
         self.program = patch.program;
+        let absolute_sleep = AbsoluteSleep::new();
+        for &mut (ref trigger, ref mut effect) in &mut self.effects {
+            if running_triggers.contains(trigger) {
+                if let Some(last_midi_message) = self.last_midi_events.get(trigger) {
+                    effect.start(output_ports, *last_midi_message, absolute_sleep, to_view_tx)
+                }
+            }
+        }
     }
 
     pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>) {
@@ -41,6 +54,7 @@ impl Patch {
             }
             let absolute_sleep = AbsoluteSleep::new();
             for triggered_index in triggered_effect_indices {
+                self.last_midi_events.insert(*self.effects[triggered_index].0.clone(), midi_message);
                 self.effects[triggered_index].1.start(output_ports, midi_message, absolute_sleep, to_view_tx);
             }
         }
