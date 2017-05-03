@@ -8,7 +8,7 @@ portmidi = "^0.2.4"
 chan-signal = "0.2.0"
 chan = "0.1.19"
 piston_window = "0.64.0"
-risp = "^0.6.0"
+risp = "^0.6.1"
 notify = "4.0.1"
 
 [replace]
