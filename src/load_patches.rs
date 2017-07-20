@@ -21,9 +21,10 @@ use microkorg::*;
 use config::Config;
 
 use songs::test::create_test_song;
+use songs::harmony_drum_test::create_harmony_drum_test_song;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
-    let mut patches = vec![create_test_song()];
+    let mut patches = vec![create_test_song(), create_harmony_drum_test_song(config)];
 
     let paths = fs::read_dir("patches").unwrap();
 

@@ -46,6 +46,9 @@ impl Patch {
 
     pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
+        for &mut(ref mut _t, ref mut effect) in self.effects.as_mut_slice() {
+            effect.on_midi_event(device, midi_message);
+        }
         let triggered_effect_indices: Vec<usize> = (0..self.effects.len()).filter(|&i| self.effects[i].0.is_triggered(device, midi_message)).collect();
         if !triggered_effect_indices.is_empty() {
             let triggered_mono_groups: Vec<MonoGroup> = triggered_effect_indices.iter().map(|&i| self.effects[i].1.mono_group()).collect();

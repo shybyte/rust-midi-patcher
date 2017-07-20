@@ -12,6 +12,7 @@ mod trigger;
 mod effects {
     pub mod effect;
     pub mod note_sequencer;
+    pub mod harmony_drum;
     pub mod sweep_down;
     pub mod control_sequencer;
 }
@@ -22,10 +23,12 @@ mod load_patches;
 mod absolute_sleep;
 mod utils;
 mod microkorg;
+mod midi_notes;
 mod watch;
 
 mod songs {
     pub mod test;
+    pub mod harmony_drum_test;
 }
 
 mod view {

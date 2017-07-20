@@ -1,7 +1,7 @@
-use pm::{MidiMessage, OutputPort};
+use pm::{MidiMessage, OutputPort, DeviceInfo};
 use std::sync::{Arc, Mutex};
 use absolute_sleep::AbsoluteSleep;
-use chan::{Sender};
+use chan::Sender;
 use view::main_view::ToViewEvents;
 
 
@@ -13,10 +13,11 @@ pub enum ThreadCommand {
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum MonoGroup {
     Note,
-    ControlIndex(u8)
+    ControlIndex(u8),
 }
 
 pub trait Effect {
+    fn on_midi_event(&mut self, _device: &DeviceInfo, _midi_message: MidiMessage) {}
     fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, to_view_tx: &Sender<ToViewEvents>);
     fn stop(&mut self);
     fn is_running(&self) -> bool;
