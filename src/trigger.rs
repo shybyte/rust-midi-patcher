@@ -1,4 +1,5 @@
 use pm::{MidiMessage, DeviceInfo};
+use utils::is_note_on;
 
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]
@@ -14,8 +15,6 @@ impl Trigger {
     }
 
     pub fn is_triggered(&self, device: &DeviceInfo, midi_message: MidiMessage) -> bool {
-        device.name().contains(&self.device) &&
-            (midi_message.status == 0x90 || (midi_message.status == 0x99 && midi_message.data2 > 0)) &&
-            midi_message.data1 == self.note
+        device.name().contains(&self.device) && is_note_on(midi_message) && midi_message.data1 == self.note
     }
 }

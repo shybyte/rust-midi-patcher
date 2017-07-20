@@ -8,26 +8,34 @@ use effects::effect::{Effect, MonoGroup};
 use chan;
 use midi_notes::*;
 use view::main_view::ToViewEvents;
+use utils::is_note_on;
+
 
 pub struct HarmonyDrum {
+    note_range: (u8, u8),
     harmony_input_device: String,
     output_device: String,
+    current_note: u8,
     output_port: Option<Arc<Mutex<OutputPort>>>,
 }
 
 impl HarmonyDrum {
-    pub fn new(harmony_input_device: &str, output_device: &str) -> HarmonyDrum {
+    pub fn new(harmony_input_device: &str, output_device: &str, note_range: (u8, u8)) -> HarmonyDrum {
         HarmonyDrum {
+            note_range,
             harmony_input_device: harmony_input_device.to_string(),
             output_device: output_device.to_string(),
-            output_port: None
+            output_port: None,
+            current_note: C3
         }
     }
 }
 
 impl Effect for HarmonyDrum {
     fn on_midi_event(&mut self, device: &DeviceInfo, midi_message: MidiMessage) {
-        if device.name().contains(&self.harmony_input_device) {
+        if device.name().contains(&self.harmony_input_device) && is_note_on(midi_message)
+            && self.note_range.0 <= midi_message.data1 && midi_message.data1 <= self.note_range.1 {
+            self.current_note = midi_message.data1;
             println!("===> got harmony input midi_message = {:?}", midi_message);
         }
     }
@@ -37,8 +45,8 @@ impl Effect for HarmonyDrum {
             .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
         self.output_port = Some(output_port_mutex.clone());
         let mut absolute_sleep = absolute_sleep;
-        let played_note = C4;
-        play_note_on(&mut output_port_mutex, played_note, 100);
+        let played_note = self.current_note;
+        play_note_on(&mut output_port_mutex, played_note, midi_message.data2);
         thread::spawn(move || {
             println!("play harmony drum {:?} {:?}", midi_message, played_note);
             absolute_sleep.sleep(Duration::from_millis(50));
@@ -46,8 +54,7 @@ impl Effect for HarmonyDrum {
         });
     }
 
-    fn stop(&mut self) {
-    }
+    fn stop(&mut self) {}
 
     fn is_running(&self) -> bool {
         false
@@ -59,8 +66,7 @@ impl Effect for HarmonyDrum {
 }
 
 impl Drop for HarmonyDrum {
-    fn drop(&mut self) {
-    }
+    fn drop(&mut self) {}
 }
 
 

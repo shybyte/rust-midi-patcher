@@ -44,3 +44,7 @@ pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String, io::Error> {
     file.read_to_string(&mut content)?;
     Ok(content)
 }
+
+pub fn is_note_on(midi_message: MidiMessage) -> bool {
+    (midi_message.status == 0x90 || (midi_message.status == 0x99 && midi_message.data2 > 0))
+}

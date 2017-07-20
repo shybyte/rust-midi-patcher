@@ -5,6 +5,7 @@ use effects::note_sequencer::NoteSequencer;
 use effects::harmony_drum::HarmonyDrum;
 use utils::{concat, repeated};
 use config::Config;
+use midi_notes::*;
 
 
 pub fn create_harmony_drum_test_song(config: &Config) -> Patch {
@@ -26,8 +27,8 @@ pub fn create_harmony_drum_test_song(config: &Config) -> Patch {
         (Box::new(Trigger::new(&config.default_in_device, 43)), Box::new(note_seq(chorus_notes.clone()))),
         (Box::new(Trigger::new(&config.default_in_device, 52)), Box::new(note_seq(vec![]))),
         (
-            Box::new(Trigger::new(&config.default_in_device, 42)),
-            Box::new(HarmonyDrum::new(&config.default_in_device, &config.default_out_device))
+            Box::new(Trigger::new(&config.default_in_device, C5)),
+            Box::new(HarmonyDrum::new(&config.default_in_device, &config.default_out_device, (C3, C4)))
         ),
     ], 0)
 }
