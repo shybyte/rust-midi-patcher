@@ -50,6 +50,7 @@ use watch::*;
 use patch::Patch;
 use chan::{Sender};
 use view::main_view::ToViewEvents;
+use utils::{control_change};
 
 use load_patches::*;
 
@@ -136,6 +137,12 @@ fn main() {
                                 println!("Selected Patch = {:?}", patches[selected_patch].name());
                             }
 
+                        },
+                        176 if device.name().contains("12Step")  => {
+                            println!("12step event = {:?}", event);
+                            let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
+                                .find(|p| p.lock().unwrap().device().name().contains("USB")).unwrap().clone();
+                            control_change(&mut output_port_mutex, 74, event.message.data2);
                         },
                         _ => {
                             println!("event = {:?}", event);
