@@ -13,6 +13,8 @@ use utils::is_note_on;
 
 pub struct HarmonyDrum {
     note_range: (u8, u8),
+    notes: Vec<u8>,
+    notes_index: usize,
     harmony_input_device: String,
     output_device: String,
     current_note: u8,
@@ -20,9 +22,11 @@ pub struct HarmonyDrum {
 }
 
 impl HarmonyDrum {
-    pub fn new(harmony_input_device: &str, output_device: &str, note_range: (u8, u8)) -> HarmonyDrum {
+    pub fn new(harmony_input_device: &str, output_device: &str, note_range: (u8, u8), notes: Vec<u8>) -> HarmonyDrum {
         HarmonyDrum {
             note_range,
+            notes_index: 0,
+            notes,
             harmony_input_device: harmony_input_device.to_string(),
             output_device: output_device.to_string(),
             output_port: None,
@@ -45,11 +49,12 @@ impl Effect for HarmonyDrum {
             .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
         self.output_port = Some(output_port_mutex.clone());
         let mut absolute_sleep = absolute_sleep;
-        let played_note = self.current_note;
+        let played_note = self.current_note + self.notes[self.notes_index];
+        self.notes_index = (self.notes_index + 1) % self.notes.len();
         play_note_on(&mut output_port_mutex, played_note, midi_message.data2);
         thread::spawn(move || {
             println!("play harmony drum {:?} {:?}", midi_message, played_note);
-            absolute_sleep.sleep(Duration::from_millis(50));
+            absolute_sleep.sleep(Duration::from_millis(100));
             play_note_off(&mut output_port_mutex, played_note);
         });
     }
