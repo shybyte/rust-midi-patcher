@@ -15,4 +15,4 @@ risp = "^0.6.1"
 notify = "4.0.1"
 
 [patch.crates-io]
-"risp" = { path = '../risp' }
+#"risp" = { path = '../risp' }
