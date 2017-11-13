@@ -1,4 +1,4 @@
-use pm::{MidiMessage, OutputPort};
+use pm::{MidiMessage};
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
 use std::time::Duration;
@@ -8,6 +8,8 @@ use utils::{control_change};
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
 use chan;
 use view::main_view::ToViewEvents;
+use virtual_midi::VirtualMidiOutput;
+
 
 pub struct SweepDown {
     output_device: String,
@@ -15,7 +17,6 @@ pub struct SweepDown {
     control_index: u8,
     mono_group: MonoGroup,
     sender: Option<Sender<ThreadCommand>>,
-    output_port: Option<Arc<Mutex<OutputPort>>>,
 }
 
 impl SweepDown {
@@ -26,19 +27,16 @@ impl SweepDown {
             control_index: control_index,
             mono_group: MonoGroup::ControlIndex(control_index),
             sender: None,
-            output_port: None
         }
     }
 }
 
 impl Effect for SweepDown {
-    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>) {
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>,
+             virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if self.sender.is_some() {
             self.stop();
         }
-        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
-            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
-        self.output_port = Some(output_port_mutex.clone());
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let velocity: f32 = midi_message.data2 as f32;
@@ -46,11 +44,14 @@ impl Effect for SweepDown {
         let control_index = self.control_index;
         let min_value: f32 = self.min_value as f32;
         let mut absolute_sleep = absolute_sleep;
+        let out_device = self.output_device.clone();
+        let virtual_midi_out = virtual_midi_out.clone();
+
         thread::spawn(move || {
-            println!("start sequence = {:?}", midi_message);
+            println!("start sweep down = {:?}", midi_message);
 
             while control_value >= min_value {
-                control_change(&mut output_port_mutex, control_index, control_value as u8);
+                control_change(&out_device, &virtual_midi_out, control_index, control_value as u8);
                 println!("sweep = {:?}", control_value);
                 control_value = control_value - 1.0 - (velocity / 50.0);
                 absolute_sleep.sleep(Duration::from_millis(20));

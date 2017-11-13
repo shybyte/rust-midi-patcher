@@ -1,5 +1,11 @@
 {:view false
- :selected_patch "HarmonyTest"
- :default_in_device "VMPK"
- :default_out_device "Through"
+; :selected_patch "HarmonyTest"
+; :selected_patch "Amazon"
+ :selected_patch "Unknown"
+; :selected_patch "Polly"
+; :default_in_device "VMPK"
+ :default_in_device "USB"
+; :default_in_device "K-B"
+;  :default_out_device "Through"
+ :defauvclt_out_device "USB"
  }

@@ -5,7 +5,8 @@ use std::io;
 use std::iter;
 use std::ops::Add;
 use std::sync::{Arc, Mutex};
-use pm::{MidiMessage, OutputPort};
+use pm::{MidiMessage};
+use virtual_midi::VirtualMidiOutput;
 
 pub fn repeated<T: Clone>(pattern: &[T], times: usize) -> Vec<T> {
     concat(iter::repeat(pattern.to_vec()).take(times).collect())
@@ -23,19 +24,19 @@ pub fn concat<T: Clone>(input: Vec<Vec<T>>) -> Vec<T> {
     input.into_iter().flat_map(|x| x).collect()
 }
 
-pub fn send_midi(output_port_mutex: &mut Arc<Mutex<OutputPort>>, m: MidiMessage) {
-    let mut output_port = output_port_mutex.lock().unwrap();
-    output_port.write_message(m).unwrap();
+pub fn send_midi(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, m: MidiMessage) {
+    let mut output_port = midi_output.lock().unwrap();
+    output_port.play(output_name, m);
 }
 
-pub fn control_change(output_port_mutex: &mut Arc<Mutex<OutputPort>>, control_index: u8, value: u8) {
+pub fn control_change(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, control_index: u8, value: u8) {
     let note_on = MidiMessage {
         status: 0xB0,
         data1: control_index,
         data2: value,
     };
 
-    send_midi(output_port_mutex, note_on);
+    send_midi(output_name, midi_output, note_on);
 }
 
 pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String, io::Error> {

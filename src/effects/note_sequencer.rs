@@ -1,14 +1,15 @@
-use pm::{MidiMessage, OutputPort};
+use pm::{MidiMessage};
 use std::sync::{Arc, Mutex, mpsc};
-use std::sync::mpsc::{Sender};
+use std::sync::mpsc::Sender;
 use std::time::Duration;
 use std::thread;
 use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
-use utils::send_midi;
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
 use chan;
 use view::main_view::ToViewEvents;
+use virtual_midi::VirtualMidiOutput;
+
 
 pub struct NoteSequencer {
     output_device: String,
@@ -17,7 +18,6 @@ pub struct NoteSequencer {
     time_per_note: Duration,
     beat_offset: usize,
     sender: Option<Sender<ThreadCommand>>,
-    output_port: Option<Arc<Mutex<OutputPort>>>,
     playing_notes: Arc<Mutex<HashSet<u8>>>,
 }
 
@@ -35,20 +35,19 @@ impl NoteSequencer {
             time_per_note: time_per_note,
             beat_offset: beat_offset,
             sender: None,
-            output_port: None,
             playing_notes: Arc::new(Mutex::new(HashSet::new()))
         }
     }
 }
 
 impl Effect for NoteSequencer {
-    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, to_view_tx: &chan::Sender<ToViewEvents>) {
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, to_view_tx: &chan::Sender<ToViewEvents>, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if self.sender.is_some() {
             self.stop();
         }
-        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
-            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
-        self.output_port = Some(output_port_mutex.clone());
+//        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
+//            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
+//        self.output_port = Some(output_port_mutex.clone());
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let notes = self.notes.clone();
@@ -58,22 +57,33 @@ impl Effect for NoteSequencer {
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
         let to_view_tx = to_view_tx.clone();
+        let output_name = self.output_device.clone();
+        let virtual_midi_out = virtual_midi_out.clone();
         thread::spawn(move || {
+            //       let start_time = SystemTime::now();
             println!("start sequence = {:?}", midi_message);
+            //       println!("start time = {:?}", start_time);
 
             for (index, &note) in notes.iter().enumerate() {
                 //                println!("play note = {:?}", note);
+                //                let elapsed = start_time.elapsed().unwrap();
+                //                let millis = elapsed.as_secs() * 1_000 + (elapsed.subsec_nanos() / 1_000_000) as u64;
+                //                let divergence = millis % 220;
+                //                if (divergence < 110 && divergence > 5) || (divergence > 110 && divergence < 215) {
+                //                    println!("elapsed = {:?} {:?}", divergence, millis);
+                //                }
 
                 playing_notes.lock().unwrap().insert(note);
-                play_note_on(&mut output_port_mutex, note, velocity);
-                if index % 2 == 0 {
+                play_note_on(&output_name, &virtual_midi_out, note, velocity);
+
+                if index % 2 == 0 && false {
                     to_view_tx.send(ToViewEvents::BEAT(((index + beat_offset) / 2 % 4) as u8));
                 }
 
 
                 absolute_sleep.sleep(time_per_note / 2);
 
-                play_note_off(&mut output_port_mutex, note);
+                play_note_off(&output_name, &virtual_midi_out, note);
                 playing_notes.lock().unwrap().remove(&note);
 
                 let r = rx.try_recv();
@@ -111,31 +121,33 @@ impl Effect for NoteSequencer {
 
 impl Drop for NoteSequencer {
     fn drop(&mut self) {
-        if let Some(ref mut output_port) = self.output_port {
-            for &note in self.playing_notes.lock().unwrap().iter() {
-                play_note_off(output_port, note);
-            }
-        }
+//        if let Some(ref mut output_port) = self.output_port {
+//            for &note in self.playing_notes.lock().unwrap().iter() {
+//                play_note_off(output_port, note);
+//            }
+//        }
     }
 }
 
 
-fn play_note_on(output_port_mutex: &mut Arc<Mutex<OutputPort>>, note: u8, velocity: u8) {
+fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
     let note_on = MidiMessage {
         status: 0x90,
         data1: note,
         data2: velocity,
     };
 
-    send_midi(output_port_mutex, note_on);
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_on);
 }
 
-fn play_note_off(output_port_mutex: &mut Arc<Mutex<OutputPort>>, note: u8) {
+fn play_note_off(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8) {
     let note_off = MidiMessage {
         status: 0x80,
         data1: note,
         data2: 0x40,
     };
 
-    send_midi(output_port_mutex, note_off);
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_off);
 }
+
+

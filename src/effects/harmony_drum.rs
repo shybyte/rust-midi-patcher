@@ -1,14 +1,14 @@
-use pm::{MidiMessage, OutputPort, DeviceInfo};
+use pm::{MidiMessage, DeviceInfo};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use std::thread;
 use absolute_sleep::AbsoluteSleep;
-use utils::send_midi;
 use effects::effect::{Effect, MonoGroup};
 use chan;
 use midi_notes::*;
 use view::main_view::ToViewEvents;
 use utils::is_note_on;
+use virtual_midi::VirtualMidiOutput;
 
 
 pub struct HarmonyDrum {
@@ -18,7 +18,6 @@ pub struct HarmonyDrum {
     harmony_input_device: String,
     output_device: String,
     current_note: u8,
-    output_port: Option<Arc<Mutex<OutputPort>>>,
 }
 
 impl HarmonyDrum {
@@ -29,7 +28,6 @@ impl HarmonyDrum {
             notes,
             harmony_input_device: harmony_input_device.to_string(),
             output_device: output_device.to_string(),
-            output_port: None,
             current_note: C3
         }
     }
@@ -44,18 +42,18 @@ impl Effect for HarmonyDrum {
         }
     }
 
-    fn start(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>) {
-        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
-            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
-        self.output_port = Some(output_port_mutex.clone());
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>,
+             virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         let mut absolute_sleep = absolute_sleep;
         let played_note = self.current_note + self.notes[self.notes_index];
         self.notes_index = (self.notes_index + 1) % self.notes.len();
-        play_note_on(&mut output_port_mutex, played_note, midi_message.data2);
+        play_note_on(&self.output_device, &virtual_midi_out, played_note, midi_message.data2);
+        let virtual_midi_out_clone = virtual_midi_out.clone();
+        let out_device = self.output_device.clone();
         thread::spawn(move || {
             println!("play harmony drum {:?} {:?}", midi_message, played_note);
             absolute_sleep.sleep(Duration::from_millis(100));
-            play_note_off(&mut output_port_mutex, played_note);
+            play_note_off(&out_device, &virtual_midi_out_clone, played_note);
         });
     }
 
@@ -75,22 +73,24 @@ impl Drop for HarmonyDrum {
 }
 
 
-fn play_note_on(output_port_mutex: &mut Arc<Mutex<OutputPort>>, note: u8, velocity: u8) {
+fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
     let note_on = MidiMessage {
         status: 0x90,
         data1: note,
         data2: velocity,
     };
 
-    send_midi(output_port_mutex, note_on);
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_on);
 }
 
-fn play_note_off(output_port_mutex: &mut Arc<Mutex<OutputPort>>, note: u8) {
+fn play_note_off(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8) {
     let note_off = MidiMessage {
         status: 0x80,
         data1: note,
         data2: 0x40,
     };
 
-    send_midi(output_port_mutex, note_off);
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_off);
 }
+
+

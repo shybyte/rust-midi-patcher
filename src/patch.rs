@@ -1,6 +1,6 @@
 extern crate portmidi as pm;
 
-use pm::{MidiMessage, DeviceInfo, OutputPort};
+use pm::{MidiMessage, DeviceInfo};
 
 use trigger::Trigger;
 use effects::effect::{Effect, MonoGroup};
@@ -9,6 +9,7 @@ use std::sync::{Arc, Mutex};
 use chan::{Sender};
 use view::main_view::ToViewEvents;
 use std::collections::HashMap;
+use virtual_midi::VirtualMidiOutput;
 
 pub struct Patch {
     name: String,
@@ -27,7 +28,8 @@ impl Patch {
         }
     }
 
-    pub fn update_from(&mut self, patch: Patch, output_ports: &[Arc<Mutex<OutputPort>>], to_view_tx: &Sender<ToViewEvents>) {
+    pub fn update_from(&mut self, patch: Patch, to_view_tx: &Sender<ToViewEvents>,
+                       virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         let running_triggers: Vec<Box<Trigger>> = self.effects.iter()
             .filter_map(|&(ref trigger, ref eff)| if eff.is_running() { Some(trigger.clone()) } else { None }).collect();
         self.stop_running_effects();
@@ -38,13 +40,14 @@ impl Patch {
         for &mut (ref trigger, ref mut effect) in &mut self.effects {
             if running_triggers.contains(trigger) {
                 if let Some(last_midi_message) = self.last_midi_events.get(trigger) {
-                    effect.start(output_ports, *last_midi_message, absolute_sleep, to_view_tx)
+                    effect.start(*last_midi_message, absolute_sleep, to_view_tx, virtual_midi_out)
                 }
             }
         }
     }
 
-    pub fn on_midi_event(&mut self, output_ports: &[Arc<Mutex<OutputPort>>], device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>) {
+    pub fn on_midi_event(&mut self, device: &DeviceInfo, midi_message: MidiMessage, to_view_tx: &Sender<ToViewEvents>,
+                         virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>> ) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         for &mut(ref mut _t, ref mut effect) in self.effects.as_mut_slice() {
             effect.on_midi_event(device, midi_message);
@@ -58,7 +61,7 @@ impl Patch {
             let absolute_sleep = AbsoluteSleep::new();
             for triggered_index in triggered_effect_indices {
                 self.last_midi_events.insert(*self.effects[triggered_index].0.clone(), midi_message);
-                self.effects[triggered_index].1.start(output_ports, midi_message, absolute_sleep, to_view_tx);
+                self.effects[triggered_index].1.start(midi_message, absolute_sleep, to_view_tx, virtual_midi_out);
             }
         }
     }

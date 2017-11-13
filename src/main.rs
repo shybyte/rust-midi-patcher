@@ -1,9 +1,14 @@
+#![allow(unused_mut)]
+
+
 #[macro_use]
 extern crate chan;
 extern crate portmidi as pm;
 extern crate chan_signal;
 extern crate risp;
+extern crate midi2opc;
 extern crate notify;
+extern crate midi_message;
 
 
 mod patch;
@@ -25,6 +30,7 @@ mod utils;
 mod microkorg;
 mod midi_notes;
 mod watch;
+mod virtual_midi;
 
 mod songs {
     pub mod test;
@@ -45,12 +51,12 @@ use std::sync::{Arc, Mutex};
 use std::path::Path;
 use config::Config;
 use pm::{PortMidi};
-use pm::{OutputPort};
 use watch::*;
 use patch::Patch;
 use chan::{Sender};
 use view::main_view::ToViewEvents;
 use utils::{control_change};
+use virtual_midi::VirtualMidiOutput;
 
 use load_patches::*;
 
@@ -69,13 +75,10 @@ fn main() {
     let context = pm::PortMidi::new().unwrap();
     print_devices(&context);
 
-    let output_ports: Vec<Arc<Mutex<OutputPort>>> = context.devices().unwrap().into_iter()
-        .filter(|dev| dev.is_output())
-        .map(|dev| Arc::new(Mutex::new(context.output_port(dev, BUF_LEN).unwrap())))
-        .collect();
+    let virtual_midi_output =  Arc::new(Mutex::new(VirtualMidiOutput::new(&context)));
 
     let mut patches = load_patches(&config);
-    let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch).unwrap_or(0);
+    let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch);
 
     const BUF_LEN: usize = 1024;
 
@@ -98,6 +101,7 @@ fn main() {
         })
         .collect();
 
+
     thread::spawn(move || {
         let timeout = Duration::from_millis(10);
         loop {
@@ -114,13 +118,13 @@ fn main() {
         start_view(from_view_tx, to_view_rx);
     }
 
-    println!("Selected Patch = {:?}", patches[selected_patch].name());
+    println!("Selected Patch = {:?}", selected_patch.map( |p| patches[p].name()));
 
     loop {
         chan_select! {
             tick.recv() -> _tick_events => {
                 for file in get_changed_files(watch_rx.try_iter()) {
-                    on_patch_file_change(&file, &config, &mut patches, &output_ports, &to_view_tx);
+                    on_patch_file_change(&file, &config, &mut patches, &to_view_tx, &virtual_midi_output);
                 }
             },
             rx.recv() -> midi_events => {
@@ -132,21 +136,25 @@ fn main() {
                             println!("program change {:?}", event.message);
                             let new_patch_i_option = patches.iter().position(|p|  p.program() == event.message.data1);
                             if let Some(new_patch_i) = new_patch_i_option {
-                                patches[selected_patch].stop_running_effects();
-                                selected_patch = new_patch_i;
-                                println!("Selected Patch = {:?}", patches[selected_patch].name());
+                                if let Some(sp) = selected_patch {
+                                    patches[sp].stop_running_effects();
+                                }
+                                selected_patch = new_patch_i_option;
+                                println!("Selected Patch = {:?}", patches[new_patch_i].name());
                             }
 
                         },
                         176 if device.name().contains("12Step")  => {
                             println!("12step event = {:?}", event);
-                            let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
-                                .find(|p| p.lock().unwrap().device().name().contains("USB")).unwrap().clone();
-                            control_change(&mut output_port_mutex, 74, event.message.data2);
+                            control_change("USB", &virtual_midi_output, 74, event.message.data2);
                         },
                         _ => {
-                            println!("event = {:?}", event);
-                            patches[selected_patch].on_midi_event(&output_ports, &device, event.message, &to_view_tx);
+
+//                            println!("event = {:?}", event);
+                            if let Some(sp) = selected_patch {
+                                patches[sp].on_midi_event(&device, event.message, &to_view_tx, &virtual_midi_output);
+                            }
+                            virtual_midi_output.lock().unwrap().visualize(event.message);
                         }
                     }
                 }
@@ -164,13 +172,14 @@ fn main() {
     }
 }
 
-fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch], output_ports: &[Arc<Mutex<OutputPort>>], to_view_tx: &Sender<ToViewEvents>) {
+fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch], to_view_tx: &Sender<ToViewEvents>,
+                        virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
     println!("changed file = {:?}", file);
     match load_patch(file, config) {
         Ok(loaded_patch) => {
             println!("Loaded patch = {:?}", loaded_patch.name());
             if let Some(index) = patches.iter().position(|p| p.name() == loaded_patch.name()) {
-                patches[index].update_from(loaded_patch, output_ports, to_view_tx);
+                patches[index].update_from(loaded_patch, to_view_tx, virtual_midi_out);
             } else {
                 println!("New Patch, ignore it for now...");
             }
