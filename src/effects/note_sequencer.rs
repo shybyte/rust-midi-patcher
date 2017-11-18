@@ -14,24 +14,17 @@ pub struct NoteSequencer {
     notes: Arc<Vec<u8>>,
     velocity: u8,
     time_per_note: Duration,
-    beat_offset: usize,
     sender: Option<Sender<ThreadCommand>>,
     playing_notes: Arc<Mutex<HashSet<u8>>>,
 }
 
 impl NoteSequencer {
     pub fn new(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8) -> NoteSequencer {
-        NoteSequencer::new_with_beat_offset(output_device, notes, time_per_note, velocity, 0)
-    }
-
-
-    pub fn new_with_beat_offset(output_device: &str, notes: Vec<u8>, time_per_note: Duration, velocity: u8, beat_offset: usize) -> NoteSequencer {
         NoteSequencer {
             output_device: output_device.to_string(),
             notes: Arc::new(notes),
             velocity: velocity,
             time_per_note: time_per_note,
-            beat_offset: beat_offset,
             sender: None,
             playing_notes: Arc::new(Mutex::new(HashSet::new()))
         }
@@ -43,18 +36,13 @@ impl Effect for NoteSequencer {
         if self.sender.is_some() {
             self.stop();
         }
-//        let mut output_port_mutex: Arc<Mutex<OutputPort>> = output_ports.iter()
-//            .find(|p| p.lock().unwrap().device().name().contains(&self.output_device)).unwrap().clone();
-//        self.output_port = Some(output_port_mutex.clone());
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let notes = self.notes.clone();
         let playing_notes = self.playing_notes.clone();
         let velocity = self.velocity;
-        let _beat_offset = self.beat_offset;
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
-//        let to_view_tx = to_view_tx.clone();
         let output_name = self.output_device.clone();
         let virtual_midi_out = virtual_midi_out.clone();
         thread::spawn(move || {
@@ -73,11 +61,6 @@ impl Effect for NoteSequencer {
 
                 playing_notes.lock().unwrap().insert(note);
                 play_note_on(&output_name, &virtual_midi_out, note, velocity);
-
-//                if index % 2 == 0 && false {
-//                    to_view_tx.send(ToViewEvents::BEAT(((index + beat_offset) / 2 % 4) as u8));
-//                }
-
 
                 absolute_sleep.sleep(time_per_note / 2);
 

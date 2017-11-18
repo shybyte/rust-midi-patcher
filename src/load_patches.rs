@@ -96,12 +96,11 @@ fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64, config: 
 
     let note_sequencer_risp_option: Option<RispType> = input.get("noteSequencer")?;
     if let Some(note_sequencer_risp) = note_sequencer_risp_option {
-        let beat_offset = note_sequencer_risp.get("beat_offset")?.unwrap_or(0) as usize;
         let time_per_note = note_sequencer_risp.get("time_per_note")?.unwrap_or(default_time_per_note) as u64;
 
         let notes_risp = note_sequencer_risp.get("notes")?.ok_or_else(|| error("Missing notes"))?;
         let notes = flatten_into(notes_risp)?.iter().map(|&x: &i64| x as u8).collect();
-        let effect = Box::new(NoteSequencer::new_with_beat_offset(&config.default_out_device, notes, Duration::from_millis(time_per_note), 0x7f, beat_offset));
+        let effect = Box::new(NoteSequencer::new(&config.default_out_device, notes, Duration::from_millis(time_per_note), 0x7f));
         return Ok((trigger, effect));
     }
 
