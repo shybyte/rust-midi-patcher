@@ -1,0 +1,6 @@
+{:name    "Entropie"
+ :program 1
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream true}}

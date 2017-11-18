@@ -1,0 +1,6 @@
+{:name    "Bahnhof"
+ :program 15
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream true}}

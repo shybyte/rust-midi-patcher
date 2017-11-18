@@ -2,6 +2,8 @@ use pm::{PortMidi, OutputPort, MidiMessage};
 
 use midi2opc::midi_light_strip::{MidiLightStrip, MidiLightConfig};
 
+pub use midi2opc::midi_light_strip::MidiLightPatch;
+
 const BUF_LEN: usize = 1024;
 const LED_COUNT: usize = 30;
 
@@ -20,17 +22,23 @@ impl VirtualMidiOutput {
             led_count: LED_COUNT,
 
             stream: true,
-//            stream: false,
+            //            stream: false,
             flash: true,
             blink: true,
             max_note: 128,
-//            flash: false,
-//            blink: true,
-//            max_note: 50,
+            //            flash: false,
+            //            blink: true,
+            //            max_note: 50,
             reversed: true,
             ..Default::default()
         });
         VirtualMidiOutput { output_ports, midi_light_strip: midi_light_strip.ok() }
+    }
+
+    pub fn reconfigure(&mut self, midi_light_patch: &MidiLightPatch) {
+        if let Some(ref midi_strip) = self.midi_light_strip {
+            midi_strip.reconfigure(midi_light_patch);
+        }
     }
 
     pub fn play(&mut self, output_name: &str, message: MidiMessage) {
@@ -49,4 +57,11 @@ impl VirtualMidiOutput {
             midi_strip.on_raw_midi_message(message.status, message.data1, message.data2)
         }
     }
+
+    pub fn stop(&self) {
+        if let Some(ref midi_strip) = self.midi_light_strip {
+            midi_strip.stop();
+        }
+    }
+
 }

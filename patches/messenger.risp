@@ -1,0 +1,6 @@
+{:name    "Messenger"
+ :program 96
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream false}}

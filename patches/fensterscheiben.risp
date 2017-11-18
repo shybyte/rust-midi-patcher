@@ -1,0 +1,6 @@
+{:name    "Fensterscheiben"
+ :program 11
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream false}}

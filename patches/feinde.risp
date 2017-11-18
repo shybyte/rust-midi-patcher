@@ -1,0 +1,6 @@
+{:name    "Feinde"
+ :program 13
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream false}}

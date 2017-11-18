@@ -1,0 +1,6 @@
+{:name    "Musikant/Tiefseeangler"
+ :program 97
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream false}}

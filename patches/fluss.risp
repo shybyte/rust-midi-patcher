@@ -1,0 +1,6 @@
+{:name    "Fluss"
+ :program 54
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream true}}

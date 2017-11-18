@@ -6,8 +6,6 @@ use std::thread;
 use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
-use chan;
-use view::main_view::ToViewEvents;
 use virtual_midi::VirtualMidiOutput;
 
 
@@ -41,7 +39,7 @@ impl NoteSequencer {
 }
 
 impl Effect for NoteSequencer {
-    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, to_view_tx: &chan::Sender<ToViewEvents>, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if self.sender.is_some() {
             self.stop();
         }
@@ -53,10 +51,10 @@ impl Effect for NoteSequencer {
         let notes = self.notes.clone();
         let playing_notes = self.playing_notes.clone();
         let velocity = self.velocity;
-        let beat_offset = self.beat_offset;
+        let _beat_offset = self.beat_offset;
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
-        let to_view_tx = to_view_tx.clone();
+//        let to_view_tx = to_view_tx.clone();
         let output_name = self.output_device.clone();
         let virtual_midi_out = virtual_midi_out.clone();
         thread::spawn(move || {
@@ -64,7 +62,7 @@ impl Effect for NoteSequencer {
             println!("start sequence = {:?}", midi_message);
             //       println!("start time = {:?}", start_time);
 
-            for (index, &note) in notes.iter().enumerate() {
+            for (_index, &note) in notes.iter().enumerate() {
                 //                println!("play note = {:?}", note);
                 //                let elapsed = start_time.elapsed().unwrap();
                 //                let millis = elapsed.as_secs() * 1_000 + (elapsed.subsec_nanos() / 1_000_000) as u64;
@@ -76,9 +74,9 @@ impl Effect for NoteSequencer {
                 playing_notes.lock().unwrap().insert(note);
                 play_note_on(&output_name, &virtual_midi_out, note, velocity);
 
-                if index % 2 == 0 && false {
-                    to_view_tx.send(ToViewEvents::BEAT(((index + beat_offset) / 2 % 4) as u8));
-                }
+//                if index % 2 == 0 && false {
+//                    to_view_tx.send(ToViewEvents::BEAT(((index + beat_offset) / 2 % 4) as u8));
+//                }
 
 
                 absolute_sleep.sleep(time_per_note / 2);

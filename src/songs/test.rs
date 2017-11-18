@@ -37,5 +37,5 @@ pub fn create_test_song() -> Patch {
             Box::new(Trigger::new(DEFAULT_IN_DEVICE, 48)),
             Box::new(ControlSequencer::new(DEFAULT_OUT_DEVICE, CUTOFF, vec![30, 100, 30, 100], 30, Duration::from_millis(500)))
         )
-    ], 0)
+    ], 0, None)
 }

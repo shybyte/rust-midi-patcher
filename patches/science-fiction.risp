@@ -1,0 +1,6 @@
+{:name    "ScienceFiction"
+ :program 12
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream false}}

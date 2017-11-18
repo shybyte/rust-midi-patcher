@@ -1,0 +1,6 @@
+{:name    "Quioma"
+ :program 57
+ :effects []
+ :lights  {:blink  true
+           :flash  true
+           :stream true}}

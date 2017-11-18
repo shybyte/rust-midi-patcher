@@ -23,5 +23,10 @@
 {:name          "Kirschblüten"
  :program       53
  :time_per_note 210
- :effects       [{:trigger 38 :noteSequencer {:notes chorus_notes}}
-                 {:trigger 36 :noteSequencer {:notes []}}]}
+ ; :effects       [{:trigger 38 :noteSequencer {:notes chorus_notes}}
+ ;                 {:trigger 36 :noteSequencer {:notes []}}]
+ :effects       []
+ :lights  {:blink  true
+           :flash  true
+           :stream true}
+ }

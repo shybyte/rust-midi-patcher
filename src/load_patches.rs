@@ -15,6 +15,8 @@ use effects::effect::Effect;
 use effects::note_sequencer::{NoteSequencer};
 use effects::sweep_down::{SweepDown};
 use effects::control_sequencer::{ControlSequencer};
+use virtual_midi::{MidiLightPatch};
+
 
 use microkorg::*;
 
@@ -64,8 +66,19 @@ pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError>
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);
             let effects_risp: Vec<RispType> = patch_risp.get("effects")?.ok_or_else(|| error("Missing effects"))?;
             let effects: Result<_, _> = effects_risp.into_iter().map(|e| to_trigger_effect_pair(&e, time_per_note, config)).collect();
-            Ok(Patch::new(name, effects?, program as u8))
+            let lights_patch: Option<MidiLightPatch> = patch_risp.get("lights")?.map(to_lights);
+            Ok(Patch::new(name, effects?, program as u8, lights_patch))
         })
+}
+
+pub fn to_lights(lights_risp: RispType) -> MidiLightPatch {
+    let mut  midi_light_patch = MidiLightPatch::default();
+    midi_light_patch.stream = lights_risp.get("stream").unwrap().unwrap_or(false);
+    midi_light_patch.blink = lights_risp.get("blink").unwrap().unwrap_or(false);
+    midi_light_patch.flash = lights_risp.get("flash").unwrap().unwrap_or(false);
+    let max_note: i64 = lights_risp.get("max_note").unwrap().unwrap_or(128);
+    midi_light_patch.max_note = max_note as u8;
+    midi_light_patch
 }
 
 // {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}

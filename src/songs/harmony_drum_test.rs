@@ -18,5 +18,5 @@ pub fn create_harmony_drum_test_song(_config: &Config) -> Patch {
             Box::new(Trigger::new(SAMPLE_PAD, 51)),
             Box::new(HarmonyDrum::new(USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, D3), vec![0, 7, 12]))
         ),
-    ], 0)
+    ], 0, None)
 }

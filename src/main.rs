@@ -37,11 +37,7 @@ mod songs {
     pub mod harmony_drum_test;
 }
 
-mod view {
-    pub mod main_view;
-}
 
-use view::main_view::start_view;
 
 use config::load_config;
 use chan_signal::Signal;
@@ -53,8 +49,6 @@ use config::Config;
 use pm::{PortMidi};
 use watch::*;
 use patch::Patch;
-use chan::{Sender};
-use view::main_view::ToViewEvents;
 use utils::{control_change};
 use virtual_midi::VirtualMidiOutput;
 
@@ -80,14 +74,16 @@ fn main() {
     let mut patches = load_patches(&config);
     let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch);
 
+    if let Some(sp) = selected_patch {
+        patches[sp].init(&virtual_midi_output);
+    }
+    
     const BUF_LEN: usize = 1024;
 
     let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
     let tick = chan::tick_ms(50);
     let (_watch_tx, watch_rx) = watch_patches();
     let (tx, rx) = chan::sync(0);
-    let (from_view_tx, from_view_rx) = chan::async();
-    let (to_view_tx, to_view_rx) = chan::async();
 
     let in_devices: Vec<pm::DeviceInfo> = context.devices()
         .unwrap()
@@ -114,17 +110,13 @@ fn main() {
         }
     });
 
-    if config.view {
-        start_view(from_view_tx, to_view_rx);
-    }
-
     println!("Selected Patch = {:?}", selected_patch.map( |p| patches[p].name()));
 
     loop {
         chan_select! {
             tick.recv() -> _tick_events => {
                 for file in get_changed_files(watch_rx.try_iter()) {
-                    on_patch_file_change(&file, &config, &mut patches, &to_view_tx, &virtual_midi_output);
+                    on_patch_file_change(&file, &config, &mut patches, &virtual_midi_output);
                 }
             },
             rx.recv() -> midi_events => {
@@ -140,6 +132,7 @@ fn main() {
                                     patches[sp].stop_running_effects();
                                 }
                                 selected_patch = new_patch_i_option;
+                                patches[new_patch_i].init(&virtual_midi_output);
                                 println!("Selected Patch = {:?}", patches[new_patch_i].name());
                             }
 
@@ -152,7 +145,7 @@ fn main() {
 
 //                            println!("event = {:?}", event);
                             if let Some(sp) = selected_patch {
-                                patches[sp].on_midi_event(&device, event.message, &to_view_tx, &virtual_midi_output);
+                                patches[sp].on_midi_event(&device, event.message, &virtual_midi_output);
                             }
                             virtual_midi_output.lock().unwrap().visualize(event.message);
                         }
@@ -164,22 +157,21 @@ fn main() {
                 if os_sig == Some(Signal::INT) {
                     break;
                 }
-            },
-            from_view_rx.recv() -> _ => {
-                break;
             }
         }
     }
+
+    virtual_midi_output.lock().unwrap().stop();
 }
 
-fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch], to_view_tx: &Sender<ToViewEvents>,
+fn on_patch_file_change(file: &Path, config: &Config, patches: &mut [Patch],
                         virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
     println!("changed file = {:?}", file);
     match load_patch(file, config) {
         Ok(loaded_patch) => {
             println!("Loaded patch = {:?}", loaded_patch.name());
             if let Some(index) = patches.iter().position(|p| p.name() == loaded_patch.name()) {
-                patches[index].update_from(loaded_patch, to_view_tx, virtual_midi_out);
+                patches[index].update_from(loaded_patch, virtual_midi_out);
             } else {
                 println!("New Patch, ignore it for now...");
             }

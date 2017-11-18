@@ -4,9 +4,7 @@ use std::time::Duration;
 use std::thread;
 use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup};
-use chan;
 use midi_notes::*;
-use view::main_view::ToViewEvents;
 use utils::is_note_on;
 use virtual_midi::VirtualMidiOutput;
 
@@ -42,7 +40,7 @@ impl Effect for HarmonyDrum {
         }
     }
 
-    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>,
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep,
              virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         let mut absolute_sleep = absolute_sleep;
         let played_note = self.current_note + self.notes[self.notes_index];

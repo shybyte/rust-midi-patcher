@@ -6,8 +6,6 @@ use std::thread;
 use absolute_sleep::AbsoluteSleep;
 use utils::{control_change};
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
-use chan;
-use view::main_view::ToViewEvents;
 use virtual_midi::VirtualMidiOutput;
 
 
@@ -32,7 +30,7 @@ impl SweepDown {
 }
 
 impl Effect for SweepDown {
-    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep, _to_view_tx: &chan::Sender<ToViewEvents>,
+    fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep,
              virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if self.sender.is_some() {
             self.stop();
