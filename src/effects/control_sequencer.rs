@@ -41,14 +41,14 @@ impl Effect for ControlSequencer {
         }
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
-        let values = self.values.clone();
+        let values = Arc::clone(&self.values);
         let control_index = self.control_index;
         let time_per_note = self.time_per_note;
         let stop_value = self.stop_value;
         let mut absolute_sleep = absolute_sleep;
 
         let out_device = self.output_device.clone();
-        let virtual_midi_out = virtual_midi_out.clone();
+        let virtual_midi_out = Arc::clone(virtual_midi_out);
 
         thread::spawn(move || {
             println!("start sequence = {:?}", midi_message);

@@ -38,13 +38,13 @@ impl Effect for NoteSequencer {
         }
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
-        let notes = self.notes.clone();
-        let playing_notes = self.playing_notes.clone();
+        let notes = Arc::clone(&self.notes);
+        let playing_notes = Arc::clone(&self.playing_notes);
         let velocity = self.velocity;
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
         let output_name = self.output_device.clone();
-        let virtual_midi_out = virtual_midi_out.clone();
+        let virtual_midi_out = Arc::clone(virtual_midi_out);
         thread::spawn(move || {
             //       let start_time = SystemTime::now();
             println!("start sequence = {:?}", midi_message);

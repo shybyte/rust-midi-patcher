@@ -37,13 +37,13 @@ impl Effect for SweepDown {
         }
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
-        let velocity: f32 = midi_message.data2 as f32;
+        let velocity = f32::from(midi_message.data2);
         let mut control_value: f32 = velocity;
         let control_index = self.control_index;
-        let min_value: f32 = self.min_value as f32;
+        let min_value = f32::from(self.min_value);
         let mut absolute_sleep = absolute_sleep;
         let out_device = self.output_device.clone();
-        let virtual_midi_out = virtual_midi_out.clone();
+        let virtual_midi_out = Arc::clone(virtual_midi_out);
 
         thread::spawn(move || {
             println!("start sweep down = {:?}", midi_message);

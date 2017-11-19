@@ -45,8 +45,8 @@ impl Effect for HarmonyDrum {
         let mut absolute_sleep = absolute_sleep;
         let played_note = self.current_note + self.notes[self.notes_index];
         self.notes_index = (self.notes_index + 1) % self.notes.len();
-        play_note_on(&self.output_device, &virtual_midi_out, played_note, midi_message.data2);
-        let virtual_midi_out_clone = virtual_midi_out.clone();
+        play_note_on(&self.output_device, virtual_midi_out, played_note, midi_message.data2);
+        let virtual_midi_out_clone = Arc::clone(virtual_midi_out);
         let out_device = self.output_device.clone();
         thread::spawn(move || {
             println!("play harmony drum {:?} {:?}", midi_message, played_note);
