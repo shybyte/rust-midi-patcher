@@ -66,11 +66,6 @@ impl Effect for HarmonyDrum {
     }
 }
 
-impl Drop for HarmonyDrum {
-    fn drop(&mut self) {}
-}
-
-
 fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
     let note_on = MidiMessage {
         status: 0x90,

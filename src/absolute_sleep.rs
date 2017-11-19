@@ -15,15 +15,14 @@ impl AbsoluteSleep {
     pub fn sleep(&mut self, duration: Duration) {
         self.duration_sum += duration;
         let now = Instant::now();
-        let sleep_time = self.duration_sum - (now - self.start_time);
-        thread::sleep(sleep_time);
-//        let sleep_time_option = self.duration_sum.checked_sub(now - self.start_time);
-//        if let Some(sleep_time) = sleep_time_option {
-//            thread::sleep(sleep_time);
-//        } else {
-//            eprintln!("Timing Problem = {:?}", self.duration_sum - (now - self.start_time));
-//        }
-
+//        let sleep_time = self.duration_sum - (now - self.start_time);
+//        thread::sleep(sleep_time);
+        let sleep_time_option = self.duration_sum.checked_sub(now - self.start_time);
+        if let Some(sleep_time) = sleep_time_option {
+            thread::sleep(sleep_time);
+        } else {
+            eprintln!("Timing Problem = {:?}", self.duration_sum - (now - self.start_time));
+        }
     }
 }
 

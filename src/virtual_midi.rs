@@ -20,17 +20,11 @@ impl VirtualMidiOutput {
             .collect();
         let midi_light_strip = MidiLightStrip::start(MidiLightConfig {
             led_count: LED_COUNT,
-
-            stream: true,
-            //            stream: false,
+            stream: false,
             flash: true,
             blink: true,
             max_note: 128,
-            //            flash: false,
-            //            blink: true,
-            //            max_note: 50,
             reversed: true,
-            ..Default::default()
         });
         VirtualMidiOutput { output_ports, midi_light_strip: midi_light_strip.ok() }
     }
@@ -58,9 +52,21 @@ impl VirtualMidiOutput {
         }
     }
 
-    pub fn stop(&self) {
+    pub fn stop(&mut self) {
         if let Some(ref midi_strip) = self.midi_light_strip {
             midi_strip.stop();
+        }
+        self.all_notes_off();
+    }
+
+    pub fn all_notes_off(&mut self) {
+        let all_notes_off = MidiMessage {
+            status: 176,
+            data1: 123,
+            data2: 0
+        };
+        for output_port in &mut self.output_ports {
+            output_port.write_message(all_notes_off).ok();
         }
     }
 

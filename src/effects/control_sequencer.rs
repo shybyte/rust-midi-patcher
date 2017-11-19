@@ -81,13 +81,3 @@ impl Effect for ControlSequencer {
         self.mono_group
     }
 }
-
-impl Drop for ControlSequencer {
-    fn drop(&mut self) {
-//        if let Some(ref mut output_port) = self.output_port {
-//            control_change(output_port, self.control_index, self.stop_value);
-//        }
-    }
-}
-
-

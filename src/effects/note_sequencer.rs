@@ -3,7 +3,6 @@ use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::Sender;
 use std::time::Duration;
 use std::thread;
-use std::collections::HashSet;
 use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
 use virtual_midi::VirtualMidiOutput;
@@ -15,7 +14,6 @@ pub struct NoteSequencer {
     velocity: u8,
     time_per_note: Duration,
     sender: Option<Sender<ThreadCommand>>,
-    playing_notes: Arc<Mutex<HashSet<u8>>>,
 }
 
 impl NoteSequencer {
@@ -26,7 +24,6 @@ impl NoteSequencer {
             velocity: velocity,
             time_per_note: time_per_note,
             sender: None,
-            playing_notes: Arc::new(Mutex::new(HashSet::new()))
         }
     }
 }
@@ -39,18 +36,18 @@ impl Effect for NoteSequencer {
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
         let notes = Arc::clone(&self.notes);
-        let playing_notes = Arc::clone(&self.playing_notes);
         let velocity = self.velocity;
         let time_per_note = self.time_per_note;
         let mut absolute_sleep = absolute_sleep;
         let output_name = self.output_device.clone();
         let virtual_midi_out = Arc::clone(virtual_midi_out);
+
         thread::spawn(move || {
             //       let start_time = SystemTime::now();
             println!("start sequence = {:?}", midi_message);
             //       println!("start time = {:?}", start_time);
 
-            for (_index, &note) in notes.iter().enumerate() {
+            for &note in notes.iter() {
                 //                println!("play note = {:?}", note);
                 //                let elapsed = start_time.elapsed().unwrap();
                 //                let millis = elapsed.as_secs() * 1_000 + (elapsed.subsec_nanos() / 1_000_000) as u64;
@@ -59,13 +56,11 @@ impl Effect for NoteSequencer {
                 //                    println!("elapsed = {:?} {:?}", divergence, millis);
                 //                }
 
-                playing_notes.lock().unwrap().insert(note);
                 play_note_on(&output_name, &virtual_midi_out, note, velocity);
 
                 absolute_sleep.sleep(time_per_note / 2);
 
                 play_note_off(&output_name, &virtual_midi_out, note);
-                playing_notes.lock().unwrap().remove(&note);
 
                 let r = rx.try_recv();
                 if let Ok(ThreadCommand::Stop) = r {
@@ -99,17 +94,6 @@ impl Effect for NoteSequencer {
         MonoGroup::Note
     }
 }
-
-impl Drop for NoteSequencer {
-    fn drop(&mut self) {
-//        if let Some(ref mut output_port) = self.output_port {
-//            for &note in self.playing_notes.lock().unwrap().iter() {
-//                play_note_off(output_port, note);
-//            }
-//        }
-    }
-}
-
 
 fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
     let note_on = MidiMessage {
