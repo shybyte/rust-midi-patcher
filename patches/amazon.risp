@@ -11,7 +11,7 @@
  :program       42
  :time_per_note 220
  :effects       [{:trigger 43 :noteSequencer {:notes chorus_notes}}
-                 {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}}
+                 {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes]}}
                  {:trigger 36 :noteSequencer {:notes wild_notes}}
                  {:trigger 52 :noteSequencer {:notes []}}]
  :lights        {:blink    true

@@ -16,7 +16,7 @@
                  {:trigger 43 :noteSequencer {:notes chorus_notes}}
                  {:trigger       43
                   :noteSequencer {:notes (+ 24 wild_notes) :time_per_note (/ time_per_note 2)}}
-                 {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}}
+                 {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes]}}
                  {:trigger 36 :noteSequencer {:notes wild_notes}}
                  {:trigger 52 :noteSequencer {:notes []}}
 

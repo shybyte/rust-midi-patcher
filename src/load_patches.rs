@@ -81,7 +81,7 @@ pub fn to_lights(lights_risp: &RispType) -> MidiLightPatch {
     midi_light_patch
 }
 
-// {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes] :beat_offset 4}
+// {:trigger 45 :noteSequencer {:notes [38 50 38 50 chorus_notes]}
 fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64, config: &Config) -> Result<(Box<Trigger>, Box<Effect>), RispError> {
     let trigger_risp: RispType = input.get("trigger")?.ok_or_else(|| error("Missing trigger"))?;
     let trigger = match trigger_risp {
