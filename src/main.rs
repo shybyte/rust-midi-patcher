@@ -64,6 +64,10 @@ fn print_devices(pm: &PortMidi) {
 
 fn main() {
     println!("Started");
+
+    // Must run before any other thread starts.
+    let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
+
     let config = load_config("config/config.risp").unwrap();
 
     let context = pm::PortMidi::new().unwrap();
@@ -80,7 +84,7 @@ fn main() {
     
     const BUF_LEN: usize = 1024;
 
-    let os_signal = chan_signal::notify(&[Signal::INT, Signal::TERM]);
+
     let tick = chan::tick_ms(50);
     let (_watch_tx, watch_rx) = watch_patches();
     let (tx, rx) = chan::sync(0);

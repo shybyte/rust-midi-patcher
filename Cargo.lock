@@ -3,9 +3,9 @@ name = "rust_midi_patcher"
 version = "0.1.0"
 dependencies = [
  "chan 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "chan-signal 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "chan-signal 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "midi-message 0.1.0 (git+https://github.com/shybyte/midi-message-rs)",
- "midi2opc 0.1.0",
+ "midi2opc 0.1.0 (git+https://github.com/shybyte/midi2opc)",
  "notify 4.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "portmidi 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "risp 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -62,7 +62,7 @@ dependencies = [
 
 [[package]]
 name = "chan-signal"
-version = "0.2.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bit-set 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -145,9 +145,10 @@ source = "git+https://github.com/shybyte/midi-message-rs#cda61b2d02365e674f40695
 [[package]]
 name = "midi2opc"
 version = "0.1.0"
+source = "git+https://github.com/shybyte/midi2opc#942a3e62638fbe51eebfde95b9b5bcb86c8801fb"
 dependencies = [
  "chan 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
- "chan-signal 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "chan-signal 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "midi-message 0.1.0 (git+https://github.com/shybyte/midi-message-rs)",
  "portmidi 0.2.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -350,7 +351,7 @@ dependencies = [
 "checksum bytes 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "c129aff112dcc562970abb69e2508b40850dd24c274761bb50fb8a0067ba6c27"
 "checksum cfg-if 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "de1e760d7b6535af4241fca8bd8adf68e2e7edacc6b29f5d399050c5e48cf88c"
 "checksum chan 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)" = "f93bfe971116428a9066c1c3c69a09ae3ef69432f8418be28ab50f96783e6a50"
-"checksum chan-signal 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0f3bb6c3bc387004ad914f0c5b7f33ace8bf7604bbec35f228b1a017f52cd3a0"
+"checksum chan-signal 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "f1f1e11f6e1c14c9e805a87c622cb8fcb636283b3119a2150af390cc6702d7fe"
 "checksum filetime 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)" = "5363ab8e4139b8568a6237db5248646e5a8a2f89bd5ccb02092182b11fd3e922"
 "checksum fsevent 0.2.16 (registry+https://github.com/rust-lang/crates.io-index)" = "dfe593ebcfc76884138b25426999890b10da8e6a46d01b499d7c54c604672c38"
 "checksum fsevent-sys 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)" = "1a772d36c338d07a032d5375a36f15f9a7043bf0cb8ce7cee658e037c6032874"
@@ -361,6 +362,7 @@ dependencies = [
 "checksum log 0.3.7 (registry+https://github.com/rust-lang/crates.io-index)" = "5141eca02775a762cc6cd564d8d2c50f67c0ea3a372cbf1c51592b3e029e10ad"
 "checksum memchr 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)" = "1dbccc0e46f1ea47b9f17e6d67c5a96bd27030519c519c9c91327e31275a47b4"
 "checksum midi-message 0.1.0 (git+https://github.com/shybyte/midi-message-rs)" = "<none>"
+"checksum midi2opc 0.1.0 (git+https://github.com/shybyte/midi2opc)" = "<none>"
 "checksum mio 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a637d1ca14eacae06296a008fa7ad955347e34efcb5891cfd8ba05491a37907e"
 "checksum miow 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "3e690c5df6b2f60acd45d56378981e827ff8295562fc8d34f573deb267a59cd1"
 "checksum net2 0.2.27 (registry+https://github.com/rust-lang/crates.io-index)" = "18b9642ad6222faf5ce46f6966f59b71b9775ad5758c9e09fcf0a6c8061972b4"
