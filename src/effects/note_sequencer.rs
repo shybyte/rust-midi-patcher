@@ -58,7 +58,7 @@ impl Effect for NoteSequencer {
 
                 play_note_on(&output_name, &virtual_midi_out, note, velocity);
 
-                absolute_sleep.sleep(time_per_note / 2);
+                absolute_sleep.sleep(time_per_note *1/ 4);
 
                 play_note_off(&output_name, &virtual_midi_out, note);
 
@@ -68,7 +68,7 @@ impl Effect for NoteSequencer {
                     break;
                 }
 
-                absolute_sleep.sleep(time_per_note / 2);
+                absolute_sleep.sleep(time_per_note * 3 / 4);
 
                 let r = rx.try_recv();
                 if let Ok(ThreadCommand::Stop) = r {

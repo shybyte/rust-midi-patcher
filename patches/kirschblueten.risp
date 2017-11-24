@@ -27,6 +27,5 @@
  ;                 {:trigger 36 :noteSequencer {:notes []}}]
  :effects       []
  :lights  {:blink  true
-           :flash  true
            :stream true}
  }

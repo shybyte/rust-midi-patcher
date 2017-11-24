@@ -20,10 +20,7 @@ impl VirtualMidiOutput {
             .collect();
         let midi_light_strip = MidiLightStrip::start(MidiLightConfig {
             led_count: LED_COUNT,
-            stream: false,
-            flash: true,
-            blink: true,
-            max_note: 128,
+            patch: MidiLightPatch::default(),
             reversed: true,
         });
         VirtualMidiOutput { output_ports, midi_light_strip: midi_light_strip.ok() }

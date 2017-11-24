@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["shybyte <ein@volloeko.de>"]
 
 [dependencies]
-midi2opc = { git = "https://github.com/shybyte/midi2opc" }
-#midi2opc = { path = '../midi2opc' }
+#midi2opc = { git = "https://github.com/shybyte/midi2opc" }
+midi2opc = { path = '../midi2opc' }
 midi-message = { git = "https://github.com/shybyte/midi-message-rs" }
 portmidi = "^0.2.4"
 chan-signal = "0.3.1"

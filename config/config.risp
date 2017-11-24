@@ -1,6 +1,6 @@
 {:view false
 ; :selected_patch "HarmonyTest"
- :selected_patch "Amazon"
+ :selected_patch "Quioma"
 ; :selected_patch "Unknown"
 ; :selected_patch "Polly"
 ; :default_in_device "VMPK"

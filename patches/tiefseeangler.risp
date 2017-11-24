@@ -1,0 +1,4 @@
+{:name    "Tiefseeangler"
+ :program 98
+ :effects []
+ :lights  {:fish true}}

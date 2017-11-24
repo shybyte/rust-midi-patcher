@@ -1,6 +1,5 @@
-{:name    "Musikant/Tiefseeangler"
+{:name    "Musikant"
  :program 97
  :effects []
- :lights  {:blink  true
-           :flash  true
-           :stream false}}
+ :lights  {:blink true
+           :flash true}}
