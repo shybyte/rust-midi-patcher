@@ -1,13 +1,13 @@
 extern crate portmidi as pm;
 
-use pm::{MidiMessage, DeviceInfo};
-
-use trigger::Trigger;
-use effects::effect::{Effect, MonoGroup};
 use absolute_sleep::AbsoluteSleep;
-use std::sync::{Arc, Mutex};
+use effects::effect::{Effect, MonoGroup};
+use effects::effect::DeviceName;
+use pm::MidiMessage;
 use std::collections::HashMap;
-use virtual_midi::{VirtualMidiOutput, MidiLightPatch};
+use std::sync::{Arc, Mutex};
+use trigger::Trigger;
+use virtual_midi::{MidiLightPatch, VirtualMidiOutput};
 
 pub struct Patch {
     name: String,
@@ -54,7 +54,7 @@ impl Patch {
         }
     }
 
-    pub fn on_midi_event(&mut self, device: &DeviceInfo, midi_message: MidiMessage,
+    pub fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage,
                          virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         for &mut (ref mut _t, ref mut effect) in self.effects.as_mut_slice() {

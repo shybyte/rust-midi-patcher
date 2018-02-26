@@ -1,10 +1,11 @@
-use pm::{MidiMessage, DeviceInfo};
-use std::sync::{Arc, Mutex};
-use std::time::{Duration, Instant};
-use std::thread;
 use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup};
+use effects::effect::DeviceName;
 use midi_notes::*;
+use pm::{MidiMessage};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::{Duration, Instant};
 use utils::is_note_on;
 use virtual_midi::VirtualMidiOutput;
 
@@ -42,8 +43,8 @@ impl HarmonyDrum {
 }
 
 impl Effect for HarmonyDrum {
-    fn on_midi_event(&mut self, device: &DeviceInfo, midi_message: MidiMessage) {
-        if device.name().contains(&self.harmony_input_device) && is_note_on(midi_message)
+    fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage) {
+        if device.contains(&self.harmony_input_device) && is_note_on(midi_message)
             && self.note_range.0 <= midi_message.data1 && midi_message.data1 <= self.note_range.1 {
             self.current_note = midi_message.data1;
             println!("===> got harmony input midi_message = {:?}", midi_message);

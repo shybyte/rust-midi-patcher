@@ -149,11 +149,12 @@ fn main() {
                         176 if device.name().contains(EXPRESS_PEDAL)  => {
                             println!("Express event = {:?}", event);
                             control_change("USB", &virtual_midi_output, 74, event.message.data2);
+//                            control_change("USB", &virtual_midi_output, 1, event.message.data2);
                         },
                         _ => {
 //                            println!("{:?} {:?}", device, event);
                             if let Some(sp) = selected_patch {
-                                patches[sp].on_midi_event(&device, event.message, &virtual_midi_output);
+                                patches[sp].on_midi_event(&device.name(), event.message, &virtual_midi_output);
                             }
                             virtual_midi_output.lock().unwrap().visualize(event.message);
                         }
