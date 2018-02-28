@@ -39,6 +39,26 @@ pub fn control_change(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutp
     send_midi(output_name, midi_output, note_on);
 }
 
+pub fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
+    let note_on = MidiMessage {
+        status: 0x90,
+        data1: note,
+        data2: velocity,
+    };
+
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_on);
+}
+
+pub fn play_note_off(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8) {
+    let note_off = MidiMessage {
+        status: 0x80,
+        data1: note,
+        data2: 0x40,
+    };
+
+    midi_output.lock().unwrap().play_and_visualize(output_name, note_off);
+}
+
 pub fn read_file<P: AsRef<Path>>(file_name: P) -> Result<String, io::Error> {
     let mut file = File::open(file_name).unwrap();
     let mut content = String::new();

@@ -14,7 +14,7 @@ pub struct Patch {
     effects: Vec<(Box<Trigger>, Box<Effect>)>,
     last_midi_events: HashMap<Trigger, MidiMessage>,
     program: u8,
-    midi_light_patch: Option<MidiLightPatch>
+    midi_light_patch: Option<MidiLightPatch>,
 }
 
 impl Patch {
@@ -25,7 +25,7 @@ impl Patch {
             effects: effects,
             last_midi_events: HashMap::new(),
             program: program,
-            midi_light_patch: midi_light_patch
+            midi_light_patch: midi_light_patch,
         }
     }
 
@@ -58,11 +58,16 @@ impl Patch {
                          virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
         for &mut (ref mut _t, ref mut effect) in self.effects.as_mut_slice() {
-            effect.on_midi_event(device, midi_message);
+            effect.on_midi_event(device, midi_message, virtual_midi_out);
         }
-        let triggered_effect_indices: Vec<usize> = (0..self.effects.len()).filter(|&i| self.effects[i].0.is_triggered(device, midi_message)).collect();
+        let triggered_effect_indices: Vec<usize> = (0..self.effects.len())
+            .filter(|&i| self.effects[i].0.is_triggered(device, midi_message))
+            .collect();
         if !triggered_effect_indices.is_empty() {
-            let triggered_mono_groups: Vec<MonoGroup> = triggered_effect_indices.iter().map(|&i| self.effects[i].1.mono_group()).collect();
+            let triggered_mono_groups: Vec<MonoGroup> = triggered_effect_indices.iter()
+                .map(|&i| self.effects[i].1.mono_group())
+                .filter(|&mg| mg != MonoGroup::None)
+                .collect();
             for triggered_mono_group in triggered_mono_groups {
                 self.stop_running_effects_in_mono_group(triggered_mono_group);
             }

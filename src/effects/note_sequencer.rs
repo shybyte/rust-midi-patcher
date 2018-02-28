@@ -6,6 +6,8 @@ use std::thread;
 use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup, ThreadCommand};
 use virtual_midi::VirtualMidiOutput;
+use utils::play_note_on;
+use utils::play_note_off;
 
 
 pub struct NoteSequencer {
@@ -94,25 +96,4 @@ impl Effect for NoteSequencer {
         MonoGroup::Note
     }
 }
-
-fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
-    let note_on = MidiMessage {
-        status: 0x90,
-        data1: note,
-        data2: velocity,
-    };
-
-    midi_output.lock().unwrap().play_and_visualize(output_name, note_on);
-}
-
-fn play_note_off(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8) {
-    let note_off = MidiMessage {
-        status: 0x80,
-        data1: note,
-        data2: 0x40,
-    };
-
-    midi_output.lock().unwrap().play_and_visualize(output_name, note_off);
-}
-
 

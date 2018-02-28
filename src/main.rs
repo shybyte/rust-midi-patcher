@@ -20,6 +20,8 @@ mod effects {
     pub mod harmony_drum;
     pub mod sweep_down;
     pub mod control_sequencer;
+    pub mod control_forwarder;
+    pub mod pedal_button;
 }
 
 mod config;
@@ -37,8 +39,6 @@ mod songs {
     pub mod harmony_drum_test;
 }
 
-
-
 use config::load_config;
 use chan_signal::Signal;
 use std::time::Duration;
@@ -49,11 +49,9 @@ use config::Config;
 use pm::{PortMidi};
 use watch::*;
 use patch::Patch;
-use utils::{control_change};
 use virtual_midi::VirtualMidiOutput;
 
 use load_patches::*;
-use midi_devices::*;
 
 
 fn print_devices(pm: &PortMidi) {
@@ -74,7 +72,8 @@ fn main() {
     let context = pm::PortMidi::new().unwrap();
     print_devices(&context);
 
-    let virtual_midi_output =  Arc::new(Mutex::new(VirtualMidiOutput::new(&context)));
+    let (tx, rx) = chan::sync(1000);
+    let virtual_midi_output =  Arc::new(Mutex::new(VirtualMidiOutput::new(&context, tx.clone())));
 
     let mut patches = load_patches(&config);
     let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch);
@@ -82,13 +81,12 @@ fn main() {
     if let Some(sp) = selected_patch {
         patches[sp].init(&virtual_midi_output);
     }
-    
+
     const BUF_LEN: usize = 1024;
 
 
     let tick = chan::tick_ms(50);
     let (_watch_tx, watch_rx) = watch_patches();
-    let (tx, rx) = chan::sync(0);
 
     let in_devices: Vec<pm::DeviceInfo> = context.devices()
         .unwrap()
@@ -108,7 +106,9 @@ fn main() {
         loop {
             for port in &in_ports {
                 if let Ok(Some(events)) = port.read_n(BUF_LEN) {
-                    tx.send((port.device(), events));
+                    for event in events.iter() {
+                        tx.send((port.device().name().clone(), event.message));
+                    }
                 }
             }
             thread::sleep(timeout);
@@ -125,39 +125,28 @@ fn main() {
                 }
             },
             rx.recv() -> midi_events => {
-                let (device, events) = midi_events.unwrap();
-                for event in events {
-                    match event.message.status {
-                        248 => continue,
-                        192 => {
-                            println!("program change {:?}", event.message);
-                            let new_patch_i_option = patches.iter().position(|p|  p.program() == event.message.data1);
-                            if let Some(new_patch_i) = new_patch_i_option {
-                                if let Some(sp) = selected_patch {
-                                    patches[sp].stop_running_effects();
-                                }
-                                selected_patch = new_patch_i_option;
-                                patches[new_patch_i].init(&virtual_midi_output);
-                                println!("Selected Patch = {:?}", patches[new_patch_i].name());
-                            }
-
-                        },
-                        176 if device.name().contains(STEP12)  => {
-                            println!("12step event = {:?}", event);
-                            control_change("USB", &virtual_midi_output, 74, event.message.data2);
-                        },
-                        176 if device.name().contains(EXPRESS_PEDAL)  => {
-                            println!("Express event = {:?}", event);
-                            control_change("USB", &virtual_midi_output, 74, event.message.data2);
-//                            control_change("USB", &virtual_midi_output, 1, event.message.data2);
-                        },
-                        _ => {
-//                            println!("{:?} {:?}", device, event);
+                let (device, midi_message) = midi_events.unwrap();
+                match midi_message.status {
+                    248 => continue,
+                    192 => {
+                        println!("program change {:?}", midi_message);
+                        let new_patch_i_option = patches.iter().position(|p|  p.program() == midi_message.data1);
+                        if let Some(new_patch_i) = new_patch_i_option {
                             if let Some(sp) = selected_patch {
-                                patches[sp].on_midi_event(&device.name(), event.message, &virtual_midi_output);
+                                patches[sp].stop_running_effects();
                             }
-                            virtual_midi_output.lock().unwrap().visualize(event.message);
+                            selected_patch = new_patch_i_option;
+                            patches[new_patch_i].init(&virtual_midi_output);
+                            println!("Selected Patch = {:?}", patches[new_patch_i].name());
                         }
+
+                    },
+                    _ => {
+                            //println!("{:?} {:?}", device, midi_message);
+                        if let Some(sp) = selected_patch {
+                            patches[sp].on_midi_event(&device, midi_message, &virtual_midi_output);
+                        }
+                        virtual_midi_output.lock().unwrap().visualize(midi_message);
                     }
                 }
             },

@@ -25,7 +25,9 @@ pub struct HarmonyDrum {
 
 impl HarmonyDrum {
     pub fn new(harmony_input_device: &str, output_device: &str,
-               note_range: (u8, u8), notes: Vec<u8>, note_duration: Duration, debounce_duration: Duration,
+               note_range: (u8, u8), notes: Vec<u8>,
+               note_duration: Duration,
+               debounce_duration: Duration,
                reset_duration: Duration) -> HarmonyDrum {
         HarmonyDrum {
             note_range,
@@ -43,7 +45,7 @@ impl HarmonyDrum {
 }
 
 impl Effect for HarmonyDrum {
-    fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage) {
+    fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if device.contains(&self.harmony_input_device) && is_note_on(midi_message)
             && self.note_range.0 <= midi_message.data1 && midi_message.data1 <= self.note_range.1 {
             self.current_note = midi_message.data1;
