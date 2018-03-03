@@ -8,11 +8,13 @@ use std::thread;
 use std::time::{Duration, Instant};
 use utils::is_note_on;
 use virtual_midi::VirtualMidiOutput;
+use utils::play_note_on;
+use utils::play_note_off;
 
 
 pub struct HarmonyDrum {
     note_range: (u8, u8),
-    notes: Vec<u8>,
+    notes: Vec<i8>,
     notes_index: usize,
     harmony_input_device: String,
     output_device: String,
@@ -25,7 +27,7 @@ pub struct HarmonyDrum {
 
 impl HarmonyDrum {
     pub fn new(harmony_input_device: &str, output_device: &str,
-               note_range: (u8, u8), notes: Vec<u8>,
+               note_range: (u8, u8), notes: Vec<i8>,
                note_duration: Duration,
                debounce_duration: Duration,
                reset_duration: Duration) -> HarmonyDrum {
@@ -69,7 +71,7 @@ impl Effect for HarmonyDrum {
 
         self.last_timestamp = Instant::now();
         let mut absolute_sleep = absolute_sleep;
-        let played_note = self.current_note + self.notes[self.notes_index];
+        let played_note = (self.current_note as i8 + self.notes[self.notes_index]) as u8;
         self.notes_index = (self.notes_index + 1) % self.notes.len();
         play_note_on(&self.output_device, virtual_midi_out, played_note, midi_message.data2);
         let virtual_midi_out_clone = Arc::clone(virtual_midi_out);
@@ -91,26 +93,6 @@ impl Effect for HarmonyDrum {
     fn mono_group(&self) -> MonoGroup {
         MonoGroup::Note
     }
-}
-
-fn play_note_on(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8, velocity: u8) {
-    let note_on = MidiMessage {
-        status: 0x90,
-        data1: note,
-        data2: velocity,
-    };
-
-    midi_output.lock().unwrap().play_and_visualize(output_name, note_on);
-}
-
-fn play_note_off(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, note: u8) {
-    let note_off = MidiMessage {
-        status: 0x80,
-        data1: note,
-        data2: 0x40,
-    };
-
-    midi_output.lock().unwrap().play_and_visualize(output_name, note_off);
 }
 
 

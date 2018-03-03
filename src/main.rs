@@ -1,6 +1,5 @@
 #![allow(unused_mut)]
 
-
 #[macro_use]
 extern crate chan;
 extern crate portmidi as pm;
@@ -21,7 +20,8 @@ mod effects {
     pub mod sweep_down;
     pub mod control_sequencer;
     pub mod control_forwarder;
-    pub mod pedal_button;
+    pub mod pedal_melody;
+    pub mod button_melody;
 }
 
 mod config;
@@ -37,6 +37,7 @@ mod virtual_midi;
 mod songs {
     pub mod test;
     pub mod harmony_drum_test;
+    pub mod endstation_paradies;
 }
 
 use config::load_config;
@@ -128,7 +129,7 @@ fn main() {
                 let (device, midi_message) = midi_events.unwrap();
                 match midi_message.status {
                     248 => continue,
-                    192 => {
+                    192 if config.patch_selection => {
                         println!("program change {:?}", midi_message);
                         let new_patch_i_option = patches.iter().position(|p|  p.program() == midi_message.data1);
                         if let Some(new_patch_i) = new_patch_i_option {

@@ -1,6 +1,8 @@
 {:view false
-; :selected_patch "HarmonyTest"
- :selected_patch "Quioma"
+; :selected_patch "Amazon"
+ :selected_patch "liebeslieder"
+ :patch_selection false
+; :selected_patch "Bahnhof"
 ; :selected_patch "Unknown"
 ; :selected_patch "Polly"
 ; :default_in_device "VMPK"

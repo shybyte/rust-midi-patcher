@@ -12,10 +12,10 @@ use patch::Patch;
 use utils::read_file;
 use trigger::Trigger;
 use effects::effect::Effect;
-use effects::note_sequencer::{NoteSequencer};
-use effects::sweep_down::{SweepDown};
-use effects::control_sequencer::{ControlSequencer};
-use virtual_midi::{MidiLightPatch};
+use effects::note_sequencer::NoteSequencer;
+use effects::sweep_down::SweepDown;
+use effects::control_sequencer::ControlSequencer;
+use virtual_midi::MidiLightPatch;
 
 
 use microkorg::*;
@@ -24,9 +24,18 @@ use config::Config;
 
 use songs::test::create_test_song;
 use songs::harmony_drum_test::create_harmony_drum_test_song;
+use songs::endstation_paradies::*;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
-    let mut patches = vec![create_test_song(), create_harmony_drum_test_song(config)];
+    let mut patches = vec![
+        create_test_song(),
+        create_harmony_drum_test_song(config),
+        liebeslieder(config),
+        sicherheitskopie(config),
+        young(config),
+        diktator(config),
+        liebt_uns(config),
+    ];
 
     let paths = fs::read_dir("patches").unwrap();
 
@@ -52,7 +61,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
 pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
     let start_time = Instant::now();
     let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name.display())))?;
-    println!("Read Patch File in {:?} ms",(Instant::now() - start_time).subsec_nanos() / 1_000_000);
+    println!("Read Patch File in {:?} ms", (Instant::now() - start_time).subsec_nanos() / 1_000_000);
 
     let mut env = create_core_environment();
     env.set("CUTOFF", Int(i64::from(CUTOFF)));
@@ -60,7 +69,7 @@ pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError>
 
     eval_risp_script(&risp_code, &mut env)
         .and_then(|patch_risp| {
-            println!("Evaluated Patch File in {:?} ms",(Instant::now() - start_time).subsec_nanos() / 1_000_000);
+            println!("Evaluated Patch File in {:?} ms", (Instant::now() - start_time).subsec_nanos() / 1_000_000);
             let program = patch_risp.get("program")?.unwrap_or(0);
             let name: String = patch_risp.get("name")?.ok_or_else(|| error("Missing Name"))?;
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);
@@ -72,7 +81,7 @@ pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError>
 }
 
 pub fn to_lights(lights_risp: &RispType) -> MidiLightPatch {
-    let mut  midi_light_patch = MidiLightPatch::default();
+    let mut midi_light_patch = MidiLightPatch::default();
     midi_light_patch.stream = lights_risp.get("stream").unwrap().unwrap_or(false);
     midi_light_patch.blink = lights_risp.get("blink").unwrap().unwrap_or(false);
     midi_light_patch.flash = lights_risp.get("flash").unwrap().unwrap_or(false);

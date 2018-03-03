@@ -28,6 +28,7 @@ impl Effect for ControlForwarder {
                      midi_message: MidiMessage,
                      virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if device.contains(&self.input_device) {
+            eprintln!("midi_message = {:?}", midi_message);
             control_change(&self.output_device, &virtual_midi_out, self.control_index, midi_message.data2);
         }
     }
