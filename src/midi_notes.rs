@@ -7,5 +7,6 @@ pub const D3: u8 = 38;
 pub const C4: u8 = 48;
 pub const D4: u8 = 50;
 pub const C5: u8 = 60;
+pub const CIS5: u8 = 61;
 pub const C6: u8 = 72;
 pub const C7: u8 = 84;

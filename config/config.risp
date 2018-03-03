@@ -1,7 +1,10 @@
 {:view false
 ; :selected_patch "Amazon"
- :selected_patch "liebeslieder"
- :patch_selection false
+; :selected_patch "liebeslieder"
+; :selected_patch "liebt uns"
+; :selected_patch "young"
+ :selected_patch "diktator"
+ :patch_selection true
 ; :selected_patch "Bahnhof"
 ; :selected_patch "Unknown"
 ; :selected_patch "Polly"

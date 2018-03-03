@@ -20,6 +20,7 @@ mod effects {
     pub mod sweep_down;
     pub mod control_sequencer;
     pub mod control_forwarder;
+    pub mod control_to_pitch_forwarder;
     pub mod pedal_melody;
     pub mod button_melody;
 }
@@ -143,7 +144,7 @@ fn main() {
 
                     },
                     _ => {
-                            //println!("{:?} {:?}", device, midi_message);
+                            println!("{:?} {:?}", device, midi_message);
                         if let Some(sp) = selected_patch {
                             patches[sp].on_midi_event(&device, midi_message, &virtual_midi_output);
                         }
