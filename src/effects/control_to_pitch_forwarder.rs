@@ -2,7 +2,6 @@ use effects::effect::{Effect};
 use effects::effect::DeviceName;
 use pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use utils::control_change;
 use virtual_midi::VirtualMidiOutput;
 use utils::pitch_wheel;
 
@@ -26,7 +25,7 @@ impl Effect for ControlToPitchForwarder {
                      midi_message: MidiMessage,
                      virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if device.contains(&self.input_device) {
-            eprintln!("==========>  ControlToPitchForwarder {:?}", midi_message);
+            // eprintln!("==========>  ControlToPitchForwarder {:?}", midi_message);
             pitch_wheel(&self.output_device, &virtual_midi_out, 0, midi_message.data2);
         }
     }
