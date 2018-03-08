@@ -3,6 +3,7 @@ use effects::control_forwarder::ControlForwarder;
 use effects::harmony_drum::HarmonyDrum;
 use effects::pedal_melody::PedalMelody;
 use effects::button_melody::ButtonMelody;
+use effects::button_melody_sustaining::ButtonMelodySustaining;
 use microkorg::*;
 use midi_devices::*;
 use midi_notes::*;
@@ -17,18 +18,25 @@ pub fn liebeslieder(_config: &Config) -> Patch {
                vec![
                    (
                        Box::new(Trigger::never()),
-                       Box::new(PedalMelody::new(
-                           EXPRESS_PEDAL, "LOOP", &[C5]))
+                       Box::new(PedalMelody::new_with_treshholds(
+                           EXPRESS_PEDAL, "LOOP", &[C5, D5, E5], 1, 127))
                    ),
+//                   (
+//                       Box::new(Trigger::never()),
+//                       Box::new(ButtonMelody::new(
+//                           "LOOP", C5, USB_MIDI_ADAPTER,
+//                           add(vec![0, 4, -1, -3, 0, 4, 7, 5], C5),
+//                           Duration::from_secs(2)))
+//                   ),
                    (
                        Box::new(Trigger::never()),
-                       Box::new(ButtonMelody::new(
-                           "LOOP", C5, USB_MIDI_ADAPTER,
+                       Box::new(ButtonMelodySustaining::new(
+                           "LOOP", C5, E5, USB_MIDI_ADAPTER,
                            add(vec![0, 4, -1, -3, 0, 4, 7, 5], C5),
-                           Duration::from_secs(2)))
+                           Duration::from_secs(5), Duration::from_millis(250)))
                    ),
                ],
-               26 // 43
+               27 // 44
                , None)
 }
 

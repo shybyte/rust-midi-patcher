@@ -28,6 +28,14 @@ impl PedalMelody {
             prev_note_value: 0,
         }
     }
+    pub fn new_with_treshholds(input_device: &str, output_device: &str, notes: &[Note], lower_threshold: u8, upper_threshold: u8) -> PedalMelody {
+        PedalMelody {
+            input_device: input_device.to_string(),
+            output_device: output_device.to_string(),
+            note_mappings: create_notes_mapping_internal(notes, lower_threshold, upper_threshold),
+            prev_note_value: 0,
+        }
+    }
 }
 
 impl Effect for PedalMelody {
@@ -54,6 +62,10 @@ impl Effect for PedalMelody {
 
 
 fn create_notes_mapping(notes: &[Note]) -> Vec<(ControlValue, Note)> {
+    create_notes_mapping_internal(notes, LOWER_THRESHOLD, UPPER_THRESHOLD)
+}
+
+fn create_notes_mapping_internal(notes: &[Note], lower_threshold: u8, upper_threshold: u8) -> Vec<(ControlValue, Note)> {
     if notes.is_empty() {
         panic!("Missing notes");
     }
@@ -63,9 +75,9 @@ fn create_notes_mapping(notes: &[Note]) -> Vec<(ControlValue, Note)> {
         1 | 2 => { result.push((0, *notes.get(1).unwrap_or(&0))); }
         _ => {
             let &(middle_notes, tail) = &notes[1..].split_at(notes.len() - 2);
-            let middle_note_range_size = (UPPER_THRESHOLD - LOWER_THRESHOLD) / (middle_notes.len()) as u8;
+            let middle_note_range_size = (upper_threshold - lower_threshold) / (middle_notes.len()) as u8;
             for (i, &note) in middle_notes.iter().enumerate() {
-                result.push((UPPER_THRESHOLD - (i as u8 + 1) * middle_note_range_size, note));
+                result.push((upper_threshold - (i as u8 + 1) * middle_note_range_size, note));
             }
             result.push((0, tail[0]));
         }
@@ -75,11 +87,11 @@ fn create_notes_mapping(notes: &[Note]) -> Vec<(ControlValue, Note)> {
 }
 
 
-#[test]
-#[should_panic]
-fn test_create_notes_mapping_empty_notes() {
-    create_notes_mapping(&vec![]);
-}
+//#[test]
+//#[should_panic]
+//fn test_create_notes_mapping_empty_notes() {
+//    create_notes_mapping(&vec![]);
+//}
 
 #[test]
 fn test_create_notes_mapping_1() {

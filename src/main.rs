@@ -23,6 +23,7 @@ mod effects {
     pub mod control_to_pitch_forwarder;
     pub mod pedal_melody;
     pub mod button_melody;
+    pub mod button_melody_sustaining;
 }
 
 mod config;
