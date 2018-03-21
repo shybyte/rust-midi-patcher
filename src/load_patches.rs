@@ -30,6 +30,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
     let mut patches = vec![
         create_test_song(),
         create_harmony_drum_test_song(config),
+        wahrheit(config),
         liebeslieder(config),
         sicherheitskopie(config),
         young(config),

@@ -1,5 +1,6 @@
 use config::Config;
 use effects::control_forwarder::ControlForwarder;
+use effects::control_sequence_stepper::ControlSequenceStepper;
 use effects::harmony_drum::HarmonyDrum;
 use effects::pedal_melody::PedalMelody;
 use effects::button_melody::ButtonMelody;
@@ -11,6 +12,24 @@ use patch::Patch;
 use std::time::Duration;
 use trigger::Trigger;
 use effects::control_to_pitch_forwarder::ControlToPitchForwarder;
+
+pub fn wahrheit(_config: &Config) -> Patch {
+    Patch::new("wahrheit",
+               vec![
+                   (
+                       Box::new(Trigger::new(SAMPLE_PAD, 38)),
+                       Box::new(ControlSequenceStepper::new(
+                           USB_MIDI_ADAPTER, OSC2_SEMITONE, &[64, 95]))
+                   ),
+                   (
+                       Box::new(Trigger::never()),
+                       Box::new(ControlForwarder::new(
+                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF))
+                   ),
+               ],
+               48, // A71
+               None)
+}
 
 
 pub fn liebeslieder(_config: &Config) -> Patch {
