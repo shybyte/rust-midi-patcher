@@ -8,6 +8,10 @@ use std::sync::{Arc, Mutex};
 use pm::{MidiMessage};
 use virtual_midi::VirtualMidiOutput;
 
+
+pub mod range_mapper;
+pub mod midi_filter;
+
 pub fn repeated<T: Clone>(pattern: &[T], times: usize) -> Vec<T> {
     concat(iter::repeat(pattern.to_vec()).take(times).collect())
 }
@@ -82,4 +86,8 @@ pub fn is_note_on(midi_message: MidiMessage) -> bool {
 
 pub fn is_note_off(midi_message: MidiMessage) -> bool {
     (midi_message.status == 0x80)
+}
+
+pub fn is_control_change(midi_message: MidiMessage) -> bool {
+    (midi_message.status == 0xB0)
 }

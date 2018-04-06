@@ -25,10 +25,13 @@ mod effects {
     pub mod pedal_melody;
     pub mod button_melody;
     pub mod button_melody_sustaining;
+    pub mod midi_forwarder;
 }
 
 mod config;
 mod midi_devices;
+mod midi_beat_tracker;
+mod midi_event;
 mod load_patches;
 mod absolute_sleep;
 mod utils;

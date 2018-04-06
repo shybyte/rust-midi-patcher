@@ -3,7 +3,7 @@ use effects::control_forwarder::ControlForwarder;
 use effects::control_sequence_stepper::ControlSequenceStepper;
 use effects::harmony_drum::HarmonyDrum;
 use effects::pedal_melody::PedalMelody;
-use effects::button_melody::ButtonMelody;
+use effects::button_melody::{ButtonMelody, HarmonyButtonMelody};
 use effects::button_melody_sustaining::ButtonMelodySustaining;
 use microkorg::*;
 use midi_devices::*;
@@ -12,6 +12,10 @@ use patch::Patch;
 use std::time::Duration;
 use trigger::Trigger;
 use effects::control_to_pitch_forwarder::ControlToPitchForwarder;
+use effects::midi_forwarder::MidiForwarder;
+use utils::midi_filter::MidiFilter;
+use utils::midi_filter::FilterType;
+use utils::range_mapper::RangeToRangeMapper;
 
 pub fn wahrheit(_config: &Config) -> Patch {
     Patch::new("wahrheit",
@@ -23,8 +27,10 @@ pub fn wahrheit(_config: &Config) -> Patch {
                    ),
                    (
                        Box::new(Trigger::never()),
-                       Box::new(ControlForwarder::new(
-                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF))
+                       Box::new(ControlForwarder::new_with_value_mapper(
+                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF,
+                           RangeToRangeMapper::new((0, 255), (0, 255)),
+                       ))
                    ),
                ],
                48, // A71
@@ -72,7 +78,7 @@ pub fn sicherheitskopie(_config: &Config) -> Patch {
                 Box::new(Trigger::new("LOOP", C5)),
                 Box::new(ButtonMelody::new(
                     "LOOP", C5, USB_MIDI_ADAPTER,
-                    add(vec![5, 3, 1, 5, 3, 1, 8, 7, 5], CIS5),
+                    vec![5, 3, 1, 5, 3, 1, 8, 7, 5], CIS5 as i8,
                     Duration::from_secs(2)))
             ),
         ],
@@ -136,8 +142,33 @@ pub fn liebt_uns(_config: &Config) -> Patch {
                        Box::new(Trigger::new("LOOP", C5)),
                        Box::new(ButtonMelody::new(
                            "LOOP", C5, USB_MIDI_ADAPTER,
-                           add(vec![4, 7, 4, 0, 4, 7, 16, 12], C4),
+                           vec![4, 7, 4, 0, 4, 7, 16, 12], C4 as i8,
                            Duration::from_secs(2)))
+                   ),
+                   (
+                       Box::new(Trigger::never()),
+                       Box::new(MidiForwarder::new(
+                           MidiFilter {
+                               device: HAND_SONIC.to_string(),
+                               range: (10, 127),
+                               filter_type: FilterType::Note,
+                           }, THROUGH_PORT)
+                       )
+                   ),
+                   (
+                       Box::new(Trigger::never()),
+                       Box::new(HarmonyButtonMelody {
+                           harmony_input_filter: MidiFilter {
+                               device: HAND_SONIC.to_string(),
+                               range: (10, 127),
+                               filter_type: FilterType::Note,
+                           },
+                           button_melody: ButtonMelody::new(
+                               HAND_SONIC, C5, USB_MIDI_ADAPTER,
+                               vec![0], 0,
+                               Duration::from_secs(2)),
+                       }
+                       )
                    ),
                ],
                18, // 33
