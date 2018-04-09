@@ -84,7 +84,7 @@ impl Effect for HarmonyDrum {
         });
     }
 
-    fn stop(&mut self) {}
+    fn stop(&mut self, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
 
     fn is_running(&self) -> bool {
         false

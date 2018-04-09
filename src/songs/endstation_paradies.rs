@@ -16,6 +16,7 @@ use effects::midi_forwarder::MidiForwarder;
 use utils::midi_filter::MidiFilter;
 use utils::midi_filter::FilterType;
 use utils::range_mapper::RangeToRangeMapper;
+use midi_devices::HAND_SONIC;
 
 pub fn wahrheit(_config: &Config) -> Patch {
     Patch::new("wahrheit",
@@ -77,7 +78,7 @@ pub fn sicherheitskopie(_config: &Config) -> Patch {
             (
                 Box::new(Trigger::new("LOOP", C5)),
                 Box::new(ButtonMelody::new(
-                    "LOOP", C5, USB_MIDI_ADAPTER,
+                    "LOOP", vec![C5], USB_MIDI_ADAPTER,
                     vec![5, 3, 1, 5, 3, 1, 8, 7, 5], CIS5 as i8,
                     Duration::from_secs(2)))
             ),
@@ -136,14 +137,14 @@ pub fn liebt_uns(_config: &Config) -> Patch {
                    (
                        Box::new(Trigger::never()),
                        Box::new(PedalMelody::new(
-                           EXPRESS_PEDAL, "LOOP", &[C5]))
+                           EXPRESS_PEDAL, "PEDAL_NOTE", &[C5, 0, 1]))
                    ),
                    (
-                       Box::new(Trigger::new("LOOP", C5)),
+                       Box::new(Trigger::never()),
                        Box::new(ButtonMelody::new(
-                           "LOOP", C5, USB_MIDI_ADAPTER,
-                           vec![4, 7, 4, 0, 4, 7, 16, 12], C4 as i8,
-                           Duration::from_secs(2)))
+                           "PEDAL_NOTE", vec![C5], "BASE_NOTE",
+                           vec![0, 7, 3, 8], A4 as i8,
+                           Duration::from_secs(5)))
                    ),
                    (
                        Box::new(Trigger::never()),
@@ -157,19 +158,84 @@ pub fn liebt_uns(_config: &Config) -> Patch {
                    ),
                    (
                        Box::new(Trigger::never()),
+                       Box::new(MidiForwarder::new(
+                           MidiFilter {
+                               device: "BASE_NOTE".to_string(),
+                               range: (10, 127),
+                               filter_type: FilterType::Note,
+                           }, THROUGH_PORT)
+                       )
+                   ),
+                   (
+                       Box::new(Trigger::never()),
+                       Box::new(HarmonyButtonMelody {
+                           harmony_input_filter: MidiFilter {
+                               device: "BASE_NOTE".to_string(),
+                               range: (10, 127),
+                               filter_type: FilterType::Note,
+                           },
+                           stop_signal_filter: Some(MidiFilter::note("PEDAL_NOTE", 1)),
+                           button_melodies: vec![
+                               ButtonMelody::new(
+                                   HAND_SONIC, vec![1], USB_MIDI_ADAPTER,
+                                   vec![-12, -5, 0, 7, 12], C4 as i8,
+                                   Duration::from_secs(2)),
+                           ],
+                           active: false,
+                       }
+                       )
+                   ),
+                   (
+                       Box::new(Trigger::never()),
                        Box::new(HarmonyButtonMelody {
                            harmony_input_filter: MidiFilter {
                                device: HAND_SONIC.to_string(),
                                range: (10, 127),
                                filter_type: FilterType::Note,
                            },
-                           button_melody: ButtonMelody::new(
-                               HAND_SONIC, C5, USB_MIDI_ADAPTER,
-                               vec![0], 0,
-                               Duration::from_secs(2)),
+                           stop_signal_filter: Some(MidiFilter::note("PEDAL_NOTE", 1)),
+                           button_melodies: vec![
+                               ButtonMelody::new(
+                                   HAND_SONIC, vec![1], USB_MIDI_ADAPTER,
+                                   vec![0, 3, 7, 12, 15, 19], C4 as i8,
+                                   Duration::from_secs(2)),
+                               ButtonMelody::new(
+                                   HAND_SONIC, vec![3], USB_MIDI_ADAPTER,
+                                   vec![0, 4, 7, 12], C4 as i8,
+                                   Duration::from_secs(2)),
+                           ],
+                           active: true,
                        }
                        )
                    ),
+//                   (
+//                       Box::new(Trigger::new(HAND_SONIC, 1)),
+//                       Box::new(ControlSequenceStepper::new(
+//                           USB_MIDI_ADAPTER, CONTROL2, &[1, 2, 3, 4, 10,20,30]))
+//                   ),
+//                   (
+//                       Box::new(Trigger::never()),
+//                       Box::new(HarmonyButtonMelody {
+//                           harmony_input_filter: MidiFilter {
+//                               device: HAND_SONIC.to_string(),
+//                               range: (10, 127),
+//                               filter_type: FilterType::Note,
+//                           },
+//                           button_melodies: vec![
+//                               ButtonMelody::new(
+//                                   HAND_SONIC, 1, THROUGH_PORT,
+//                                   vec![19], C4 as i8,
+//                                   Duration::from_secs(2),
+//                               ),
+//                               ButtonMelody::new(
+//                                   HAND_SONIC, 2, THROUGH_PORT,
+//                                   vec![-12], C4 as i8,
+//                                   Duration::from_secs(2),
+//                               )
+//                           ],
+//                       }
+//                       )
+//                   )
                ],
                18, // 33
                None)

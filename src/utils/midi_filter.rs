@@ -17,6 +17,14 @@ pub struct MidiFilter {
 }
 
 impl MidiFilter {
+    pub fn note(device: &str, note: u8) -> Self {
+        MidiFilter {
+            device: device.to_string(),
+            range: (note, note),
+            filter_type: FilterType::Note
+        }
+    }
+
     pub fn matches(&self, device: &str, midi_message: MidiMessage) -> bool {
         if !device.contains(&self.device) {
             return false;
@@ -30,6 +38,6 @@ impl MidiFilter {
             return false;
         }
 
-        return self.range.0 >= midi_message.data1 && midi_message.data1 <= self.range.1;
+        return self.range.0 <= midi_message.data1 && midi_message.data1 <= self.range.1;
     }
 }

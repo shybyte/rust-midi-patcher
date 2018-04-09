@@ -12,19 +12,19 @@ use utils::midi_filter::MidiFilter;
 
 pub struct ButtonMelody {
     button_device: String,
-    button_note: u8,
+    button_notes: Vec<u8>,
     notes: Vec<i8>,
     base_note: i8,
     notes_index: usize,
     output_device: String,
-    current_note: u8,
+    current_note: Option<u8>,
     reset_duration: Duration,
     last_timestamp: Instant,
 }
 
 impl ButtonMelody {
     pub fn new(button_device: &str,
-               button_note: u8,
+               button_notes: Vec<u8>,
                output_device: &str,
                notes: Vec<i8>,
                base_note: i8,
@@ -32,13 +32,13 @@ impl ButtonMelody {
     ) -> ButtonMelody {
         ButtonMelody {
             button_device: button_device.to_string(),
-            button_note,
+            button_notes,
             output_device: output_device.to_string(),
             notes,
             base_note,
             reset_duration,
             notes_index: 0,
-            current_note: 0,
+            current_note: None,
             last_timestamp: Instant::now(),
         }
     }
@@ -47,7 +47,7 @@ impl ButtonMelody {
 impl Effect for ButtonMelody {
     fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if !(device.contains(&self.button_device) && (is_note_on(midi_message)
-            || is_note_off(midi_message)) && midi_message.data1 == self.button_note) {
+            || is_note_off(midi_message)) && self.button_notes.contains(&midi_message.data1)) {
             return;
         }
 
@@ -64,9 +64,16 @@ impl Effect for ButtonMelody {
             self.notes_index = (self.notes_index + 1) % self.notes.len();
             let final_played_note = (played_note + self.base_note) as u8;
             play_note_on(&self.output_device, virtual_midi_out, final_played_note, midi_message.data2);
-            self.current_note = final_played_note;
+            self.current_note = Some(final_played_note);
         } else if is_note_off(midi_message) {
-            play_note_off(&self.output_device, virtual_midi_out, self.current_note);
+            self.stop(virtual_midi_out);
+        }
+    }
+
+    fn stop(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
+        if let Some(current_note) = self.current_note {
+            play_note_off(&self.output_device, virtual_midi_out, current_note);
+            self.current_note = None;
         }
     }
 }
@@ -74,18 +81,41 @@ impl Effect for ButtonMelody {
 
 pub struct HarmonyButtonMelody {
     pub harmony_input_filter: MidiFilter,
-    pub button_melody: ButtonMelody
+    pub stop_signal_filter: Option<MidiFilter>,
+    pub button_melodies: Vec<ButtonMelody>,
+    pub active: bool,
 }
+
 
 impl Effect for HarmonyButtonMelody {
     fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
+        if let Some(ref stop_signal_filter) = self.stop_signal_filter {
+            if stop_signal_filter.matches(device, midi_message) {
+                eprintln!(" ========> Stop");
+                for button_melody in &mut self.button_melodies {
+                    button_melody.stop(virtual_midi_out);
+                }
+                self.active = false;
+            }
+        }
+
         if self.harmony_input_filter.matches(device, midi_message) {
-            self.button_melody.base_note = midi_message.data1 as i8;
+            eprintln!(" ========> New Base");
+            for button_melody in &mut self.button_melodies {
+                button_melody.base_note = midi_message.data1 as i8;
+            }
+            self.active = true;
             return;
         }
 
-        self.button_melody.on_midi_event(device, midi_message, virtual_midi_out);
+        if self.active {
+            for button_melody in &mut self.button_melodies {
+                button_melody.on_midi_event(device, midi_message, virtual_midi_out);
+            }
+        }
     }
 }
+
+
 
 

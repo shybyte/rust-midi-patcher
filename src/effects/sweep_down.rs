@@ -33,7 +33,7 @@ impl Effect for SweepDown {
     fn start(&mut self, midi_message: MidiMessage, absolute_sleep: AbsoluteSleep,
              virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if self.sender.is_some() {
-            self.stop();
+            self.stop(virtual_midi_out);
         }
         let (tx, rx) = mpsc::channel();
         self.sender = Some(tx);
@@ -62,7 +62,7 @@ impl Effect for SweepDown {
         });
     }
 
-    fn stop(&mut self) {
+    fn stop(&mut self, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if let Some(ref tx) = self.sender {
             tx.send(ThreadCommand::Stop).ok();
         }

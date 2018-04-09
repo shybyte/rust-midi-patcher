@@ -21,7 +21,7 @@ pub enum MonoGroup {
 pub trait Effect {
     fn on_midi_event(&mut self, _device: &DeviceName, _midi_message: MidiMessage, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
     fn start(&mut self, _midi_message: MidiMessage, _absolute_sleep: AbsoluteSleep, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
-    fn stop(&mut self) {}
+    fn stop(&mut self, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
     fn is_running(&self) -> bool {false}
     fn mono_group(&self) -> MonoGroup {MonoGroup::None}
 }

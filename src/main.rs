@@ -140,7 +140,7 @@ fn main() {
                         let new_patch_i_option = patches.iter().position(|p|  p.program() == midi_message.data1);
                         if let Some(new_patch_i) = new_patch_i_option {
                             if let Some(sp) = selected_patch {
-                                patches[sp].stop_running_effects();
+                                patches[sp].stop_running_effects(&virtual_midi_output);
                             }
                             selected_patch = new_patch_i_option;
                             patches[new_patch_i].init(&virtual_midi_output);
@@ -149,7 +149,7 @@ fn main() {
 
                     },
                     _ => {
-                            println!("{:?} {:?}", device, midi_message);
+                            println!("{:?} {:?} {:x}", device, midi_message, midi_message.status);
                         if let Some(sp) = selected_patch {
                             patches[sp].on_midi_event(&device, midi_message, &virtual_midi_output);
                         }

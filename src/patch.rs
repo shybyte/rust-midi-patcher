@@ -38,7 +38,7 @@ impl Patch {
     pub fn update_from(&mut self, patch: Patch, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         let running_triggers: Vec<Box<Trigger>> = self.effects.iter()
             .filter_map(|&(ref trigger, ref eff)| if eff.is_running() { Some(trigger.clone()) } else { None }).collect();
-        self.stop_running_effects();
+        self.stop_running_effects(virtual_midi_out);
         self.name = patch.name;
         self.effects = patch.effects;
         self.midi_light_patch = patch.midi_light_patch;
@@ -69,7 +69,7 @@ impl Patch {
                 .filter(|&mg| mg != MonoGroup::None)
                 .collect();
             for triggered_mono_group in triggered_mono_groups {
-                self.stop_running_effects_in_mono_group(triggered_mono_group);
+                self.stop_running_effects_in_mono_group(triggered_mono_group, virtual_midi_out);
             }
             let absolute_sleep = AbsoluteSleep::new();
             for triggered_index in triggered_effect_indices {
@@ -79,18 +79,18 @@ impl Patch {
         }
     }
 
-    fn stop_running_effects_in_mono_group(&mut self, mono_group: MonoGroup) {
+    fn stop_running_effects_in_mono_group(&mut self, mono_group: MonoGroup, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         for &mut (_, ref mut eff) in &mut self.effects {
             if eff.is_running() && eff.mono_group() == mono_group {
-                eff.stop();
+                eff.stop(virtual_midi_out);
             }
         }
     }
 
-    pub fn stop_running_effects(&mut self) {
+    pub fn stop_running_effects(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         for &mut (_, ref mut eff) in &mut self.effects {
             if eff.is_running() {
-                eff.stop();
+                eff.stop(virtual_midi_out);
             }
         }
     }
