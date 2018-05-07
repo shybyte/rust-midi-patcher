@@ -16,12 +16,15 @@ pub fn create_harmony_drum_test_song(_config: &Config) -> Patch {
         (
             Box::new(Trigger::new(SAMPLE_PAD, 45)),
             Box::new(HarmonyDrum::new(USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, D3), vec![0],
-                                      Duration::from_millis(100), Duration::from_millis(0), Duration::from_secs(3600)))
+                                      Duration::from_millis(100),1.0, Duration::from_millis(0), Duration::from_secs(3600)))
         ),
         (
             Box::new(Trigger::new(SAMPLE_PAD, 51)),
             Box::new(HarmonyDrum::new(
-                USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C5), vec![7, 12, 19], Duration::from_millis(100), Duration::from_millis(0), Duration::from_secs(3600)))
+                USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C5), vec![7, 12, 19],
+                Duration::from_millis(100),
+                1.0,
+                Duration::from_millis(0), Duration::from_secs(3600)))
         ),
         (
             Box::new(Trigger::new(SAMPLE_PAD, 0)),
@@ -47,7 +50,10 @@ pub fn create_harmony_drum_test_song(_config: &Config) -> Patch {
         (
             Box::new(Trigger::new("LOOP", C5)),
             Box::new(HarmonyDrum::new(
-                USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C5), vec![4, 7, 4, 0, 4, 7, 16, 12], Duration::from_millis(100), Duration::from_millis(200), Duration::from_secs(2)))
+                USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C5), vec![4, 7, 4, 0, 4, 7, 16, 12],
+                Duration::from_millis(100),
+                1.0,
+                Duration::from_millis(200), Duration::from_secs(2)))
         ),
 //        (
 //            Box::new(Trigger::new("LOOP", C5)),

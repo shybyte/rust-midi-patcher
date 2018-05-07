@@ -2,7 +2,7 @@ use absolute_sleep::AbsoluteSleep;
 use effects::effect::{Effect, MonoGroup};
 use effects::effect::DeviceName;
 use midi_notes::*;
-use pm::{MidiMessage};
+use pm::MidiMessage;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
@@ -21,6 +21,7 @@ pub struct HarmonyDrum {
     current_note: u8,
     note_duration: Duration,
     debounce_duration: Duration,
+    velocity: f32,
     reset_duration: Duration,
     last_timestamp: Instant,
 }
@@ -29,6 +30,7 @@ impl HarmonyDrum {
     pub fn new(harmony_input_device: &str, output_device: &str,
                note_range: (u8, u8), notes: Vec<i8>,
                note_duration: Duration,
+               velocity: f32,
                debounce_duration: Duration,
                reset_duration: Duration) -> HarmonyDrum {
         HarmonyDrum {
@@ -39,6 +41,7 @@ impl HarmonyDrum {
             output_device: output_device.to_string(),
             current_note: C3,
             note_duration,
+            velocity,
             debounce_duration,
             reset_duration,
             last_timestamp: Instant::now(),
@@ -61,9 +64,9 @@ impl Effect for HarmonyDrum {
         let duration_since_last_event = timestamp - self.last_timestamp;
         self.last_timestamp = timestamp;
 
-        if { duration_since_last_event < self.debounce_duration} {
+        if { duration_since_last_event < self.debounce_duration } {
             return;
-        } else if { duration_since_last_event > self.reset_duration} {
+        } else if { duration_since_last_event > self.reset_duration } {
             self.notes_index = 0;
         }
 
@@ -73,7 +76,8 @@ impl Effect for HarmonyDrum {
         let mut absolute_sleep = absolute_sleep;
         let played_note = (self.current_note as i8 + self.notes[self.notes_index]) as u8;
         self.notes_index = (self.notes_index + 1) % self.notes.len();
-        play_note_on(&self.output_device, virtual_midi_out, played_note, midi_message.data2);
+        play_note_on(&self.output_device, virtual_midi_out, played_note,
+                     (midi_message.data2 as f32 * self.velocity) as u8);
         let virtual_midi_out_clone = Arc::clone(virtual_midi_out);
         let out_device = self.output_device.clone();
         let note_duration = self.note_duration.clone();

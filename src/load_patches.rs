@@ -36,6 +36,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
         young(config),
         diktator(config),
         liebt_uns(config),
+        system(config),
     ];
 
     let paths = fs::read_dir("patches").unwrap();
