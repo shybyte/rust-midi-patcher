@@ -17,6 +17,7 @@ use utils::midi_filter::MidiFilter;
 use utils::midi_filter::FilterType;
 use utils::range_mapper::RangeToRangeMapper;
 use midi_devices::HAND_SONIC;
+use effects::control_sequencer::ControlSequencer;
 
 pub fn wahrheit(_config: &Config) -> Patch {
     Patch::new("wahrheit",
@@ -24,7 +25,9 @@ pub fn wahrheit(_config: &Config) -> Patch {
                    (
                        Box::new(Trigger::new(HAND_SONIC, 74)),
                        Box::new(ControlSequenceStepper::new(
-                           USB_MIDI_ADAPTER, OSC2_SEMITONE, &[64, 95]))
+                           USB_MIDI_ADAPTER, OSC2_SEMITONE, &[64, 95])
+                           .with_reset_filter(MidiFilter::note(HAND_SONIC, 70))
+                       )
                    ),
                    (
                        Box::new(Trigger::never()),
@@ -137,6 +140,16 @@ pub fn diktator(_config: &Config) -> Patch {
                        Box::new(Trigger::never()),
                        Box::new(ControlForwarder::new(
                            EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF))
+                   ),
+                   (
+                       Box::new(Trigger::new(HAND_SONIC, 74)),
+                       Box::new(ControlSequencer::new(
+                           USB_MIDI_ADAPTER,
+                           OSC2_SEMITONE,
+                           vec![126, 114, 96, 78],
+                           64,
+                           Duration::from_millis(100),
+                       ))
                    ),
                ],
                43, // A64
@@ -299,12 +312,12 @@ pub fn system(_config: &Config) -> Patch {
                                ButtonMelody::new(
                                    HAND_SONIC, vec![1], THROUGH_PORT,
                                    vec![12, 19], C4 as i8,
-                                   Duration::from_secs(2)),
+                                   Duration::from_secs(2))
+                                   .with_reset_filter(MidiFilter::note(HAND_SONIC, A4)),
                                ButtonMelody::new(
                                    HAND_SONIC, vec![5], THROUGH_PORT,
                                    vec![19], C4 as i8,
                                    Duration::from_secs(2))
-
                            ],
                            active: true,
                        }
@@ -342,7 +355,6 @@ pub fn system(_config: &Config) -> Patch {
                18, // 33
                None)
 }
-
 
 
 pub fn add(xs: Vec<i16>, y: u8) -> Vec<u8> {

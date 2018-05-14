@@ -4,12 +4,14 @@ use utils::is_note_on;
 use utils::is_note_off;
 use utils::is_control_change;
 
+#[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum FilterType {
     Note,
     #[allow(dead_code)]
     Control,
 }
 
+#[derive(Debug)]
 pub struct MidiFilter {
     pub device: String,
     pub range: ValueRange,

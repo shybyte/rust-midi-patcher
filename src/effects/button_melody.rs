@@ -25,6 +25,7 @@ pub struct ButtonMelody {
     current_note: Option<u8>,
     reset_duration: Duration,
     last_timestamp: Instant,
+    reset_filter: Option<MidiFilter>,
 }
 
 impl ButtonMelody {
@@ -45,12 +46,26 @@ impl ButtonMelody {
             notes_index: 0,
             current_note: None,
             last_timestamp: Instant::now(),
+            reset_filter: None,
         }
+    }
+
+    pub fn with_reset_filter(mut self, filter: MidiFilter) -> Self {
+        self.reset_filter = Some(filter);
+        self
     }
 }
 
 impl Effect for ButtonMelody {
     fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
+        if let Some(ref reset_signal_filter) = self.reset_filter {
+            eprintln!(" =================> Test {} {} {:?}", device, midi_message, reset_signal_filter);
+            if reset_signal_filter.matches(device, midi_message) {
+                eprintln!(" ====================> Reset");
+                self.notes_index = 0;
+            }
+        }
+
         if !(device.contains(&self.button_device) && (is_note_on(midi_message)
             || is_note_off(midi_message)) && self.button_notes.contains(&midi_message.data1)) {
             return;
@@ -197,7 +212,6 @@ impl<T> Effect for HarmonyButtonMelody<T>
                 button_melody.set_base_note(midi_message.data1 as i8);
             }
             self.active = true;
-            return;
         }
 
         if self.active {
