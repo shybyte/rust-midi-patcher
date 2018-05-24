@@ -119,8 +119,10 @@ pub fn young(_config: &Config) -> Patch {
                    ),
                    (
                        Box::new(Trigger::never()),
-                       Box::new(ControlForwarder::new(
-                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF))
+                       Box::new(ControlForwarder::new_with_value_mapper(
+                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF,
+                           RangeToRangeMapper::new((0, 255), (10, 255)),
+                       ))
                    ),
                    (
                        Box::new(Trigger::never()),
@@ -352,7 +354,7 @@ pub fn system(_config: &Config) -> Patch {
 //                       )
 //                   )
                ],
-               18, // 33
+               51, // A74
                None)
 }
 
