@@ -31,6 +31,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
         create_test_song(),
         create_harmony_drum_test_song(config),
         wahrheit(config),
+        enddzeit(config),
         liebeslieder(config),
         sicherheitskopie(config),
         young(config),
