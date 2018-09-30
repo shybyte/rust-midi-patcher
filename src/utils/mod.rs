@@ -95,3 +95,13 @@ pub fn is_control_change(midi_message: MidiMessage) -> bool {
 pub fn add_notes(xs: Vec<i16>, y: u8) -> Vec<u8> {
     xs.iter().map(|x| (x + (y as i16)) as u8).collect()
 }
+
+pub trait Boxable {
+    fn boxit(self) -> Box<Self>;
+}
+
+impl <T> Boxable for T {
+    fn boxit(self) -> Box<Self> {
+        Box::new(self)
+    }
+}

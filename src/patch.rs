@@ -29,6 +29,16 @@ impl Patch {
         }
     }
 
+    pub fn new_simple<S: Into<String>>(name: S, effects: Vec<(Box<Effect>)>, program: u8) -> Patch {
+        Patch {
+            name: name.into(),
+            effects: effects.into_iter().map(|e| (Box::new(Trigger::never()), e)).collect(),
+            last_midi_events: HashMap::new(),
+            program: program,
+            midi_light_patch: None,
+        }
+    }
+
     pub fn init(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if let Some(ref midi_light_patch) = self.midi_light_patch {
             virtual_midi_out.lock().unwrap().reconfigure(midi_light_patch);
