@@ -38,7 +38,7 @@ impl ControlSequenceStepper {
 }
 
 impl Effect for ControlSequenceStepper {
-    fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
+    fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if let Some(ref stop_signal_filter) = self.reset_filter {
             if stop_signal_filter.matches(device, midi_message) {
                 self.value_index = 0;
