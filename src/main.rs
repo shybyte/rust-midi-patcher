@@ -44,6 +44,7 @@ mod songs {
     pub mod test;
     pub mod harmony_drum_test;
     pub mod endstation_paradies;
+    pub mod endstation;
 }
 
 use config::load_config;

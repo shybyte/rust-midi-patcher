@@ -91,3 +91,7 @@ pub fn is_note_off(midi_message: MidiMessage) -> bool {
 pub fn is_control_change(midi_message: MidiMessage) -> bool {
     (midi_message.status == 0xB0)
 }
+
+pub fn add_notes(xs: Vec<i16>, y: u8) -> Vec<u8> {
+    xs.iter().map(|x| (x + (y as i16)) as u8).collect()
+}

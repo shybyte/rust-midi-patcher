@@ -23,6 +23,9 @@ impl RangeToRangeMapper {
     }
 }
 
+/// Notes below 10 are often used for special purposes.
+pub static ALL_REAL_NOTES: ValueRange = (10, 127);
+
 
 #[cfg(test)]
 mod tests {
