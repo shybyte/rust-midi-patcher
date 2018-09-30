@@ -23,7 +23,7 @@ impl MidiFilter {
         MidiFilter {
             device: device.to_string(),
             range: (note, note),
-            filter_type: FilterType::Note
+            filter_type: FilterType::Note,
         }
     }
 
