@@ -19,7 +19,10 @@ pub fn liebt_uns(_config: &Config) -> Patch {
     Patch::new_simple(
         "liebt uns",
         vec![
+            // Pedal -> PEDAL_NOTE
             PedalMelody::new(EXPRESS_PEDAL, PEDAL_NOTE, &[C5, 0, 1]).boxit(),
+
+            // PEDAL_NOTE -> BASE_NOTE -> THROUGH_PORT
             ButtonMelodySustaining::new(
                 PEDAL_NOTE,
                 C5,
@@ -31,6 +34,8 @@ pub fn liebt_uns(_config: &Config) -> Patch {
                 Duration::from_millis(250),
             ).boxit(),
             MidiForwarder::new(MidiFilter::notes(BASE_NOTE), THROUGH_PORT).boxit(),
+
+            // (BASE_NOTE, PEDAL_NOTE)-> HarmonyButtonMelody -> USB_MIDI_ADAPTER
             HarmonyButtonMelody {
                 harmony_input_filter: MidiFilter::notes_on(BASE_NOTE),
                 stop_signal_filter: Some(MidiFilter::note(PEDAL_NOTE, 1)),
