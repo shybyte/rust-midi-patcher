@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use effects::effect::Effect;
 use effects::effect::DeviceName;
 use pm::MidiMessage;
