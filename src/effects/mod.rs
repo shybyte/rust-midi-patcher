@@ -1,0 +1,12 @@
+pub mod effect;
+pub mod note_sequencer;
+pub mod harmony_drum;
+pub mod sweep_down;
+pub mod control_sequencer;
+pub mod control_sequence_stepper;
+pub mod control_forwarder;
+pub mod control_to_pitch_forwarder;
+pub mod pedal_melody;
+pub mod button_melody;
+pub mod button_melody_sustaining;
+pub mod midi_forwarder;
