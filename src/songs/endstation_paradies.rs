@@ -17,7 +17,6 @@ use utils::midi_filter::MidiFilter;
 use utils::midi_filter::FilterType;
 use utils::range_mapper::RangeToRangeMapper;
 use midi_devices::HAND_SONIC;
-use effects::control_sequencer::ControlSequencer;
 use utils::add_notes;
 
 pub fn wahrheit(_config: &Config) -> Patch {
@@ -171,28 +170,6 @@ pub fn enddzeit(_config: &Config) -> Patch {
 }
 
 
-pub fn diktator(_config: &Config) -> Patch {
-    Patch::new("diktator",
-               vec![
-                   (
-                       Box::new(Trigger::never()),
-                       Box::new(ControlForwarder::new(
-                           EXPRESS_PEDAL, USB_MIDI_ADAPTER, CUTOFF))
-                   ),
-                   (
-                       Box::new(Trigger::new(HAND_SONIC, 74)),
-                       Box::new(ControlSequencer::new(
-                           USB_MIDI_ADAPTER,
-                           OSC2_SEMITONE,
-                           vec![126, 114, 96, 78],
-                           64,
-                           Duration::from_millis(100),
-                       ))
-                   ),
-               ],
-               43, // A64
-               None)
-}
 
 pub fn system(_config: &Config) -> Patch {
     Patch::new("system",

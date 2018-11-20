@@ -26,6 +26,7 @@ use songs::test::create_test_song;
 use songs::harmony_drum_test::create_harmony_drum_test_song;
 use songs::endstation_paradies::*;
 use songs::endstation::liebt_uns::liebt_uns;
+use songs::endstation::diktator::diktator;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
     let mut patches = vec![
