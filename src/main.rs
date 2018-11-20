@@ -34,19 +34,19 @@ mod songs {
     pub mod endstation;
 }
 
-use config::load_config;
+use crate::config::load_config;
 use chan_signal::Signal;
 use std::time::Duration;
 use std::thread;
 use std::sync::{Arc, Mutex};
 use std::path::Path;
-use config::Config;
-use pm::{PortMidi};
-use watch::*;
-use patch::Patch;
-use virtual_midi::VirtualMidiOutput;
+use crate::config::Config;
+use crate::pm::{PortMidi};
+use crate::watch::*;
+use crate::patch::Patch;
+use crate::virtual_midi::VirtualMidiOutput;
 
-use load_patches::*;
+use crate::load_patches::*;
 
 
 fn print_devices(pm: &PortMidi) {

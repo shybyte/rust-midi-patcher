@@ -1,10 +1,10 @@
-use effects::effect::DeviceName;
-use effects::effect::Effect;
-use pm::MidiMessage;
+use crate::effects::effect::DeviceName;
+use crate::effects::effect::Effect;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use utils::midi_filter::MidiFilter;
-use utils::send_midi;
-use virtual_midi::VirtualMidiOutput;
+use crate::utils::midi_filter::MidiFilter;
+use crate::utils::send_midi;
+use crate::virtual_midi::VirtualMidiOutput;
 
 
 pub struct MidiForwarder {

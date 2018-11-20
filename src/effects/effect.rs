@@ -1,8 +1,8 @@
-use pm::{MidiMessage};
+use crate::pm::{MidiMessage};
 use std::sync::{Arc, Mutex};
-use absolute_sleep::AbsoluteSleep;
+use crate::absolute_sleep::AbsoluteSleep;
 
-use virtual_midi::VirtualMidiOutput;
+use crate::virtual_midi::VirtualMidiOutput;
 
 pub type DeviceName = str;
 

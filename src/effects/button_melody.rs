@@ -1,16 +1,16 @@
 #![allow(dead_code)]
 
-use effects::effect::Effect;
-use effects::effect::DeviceName;
-use pm::MidiMessage;
+use crate::effects::effect::Effect;
+use crate::effects::effect::DeviceName;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
-use utils::is_note_on;
-use virtual_midi::VirtualMidiOutput;
-use utils::is_note_off;
-use utils::play_note_on;
-use utils::play_note_off;
-use utils::midi_filter::MidiFilter;
+use crate::utils::is_note_on;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::is_note_off;
+use crate::utils::play_note_on;
+use crate::utils::play_note_off;
+use crate::utils::midi_filter::MidiFilter;
 use std::collections::HashMap;
 
 pub trait HasBaseNote {

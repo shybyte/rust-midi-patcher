@@ -1,16 +1,16 @@
-use config::Config;
-use effects::button_melody::{ButtonMelody, HarmonyButtonMelody};
-use effects::button_melody_sustaining::ButtonMelodySustaining;
-use effects::midi_forwarder::MidiForwarder;
-use effects::pedal_melody::PedalMelody;
-use midi_devices::HAND_SONIC;
-use midi_devices::*;
-use midi_notes::*;
-use patch::Patch;
+use crate::config::Config;
+use crate::effects::button_melody::{ButtonMelody, HarmonyButtonMelody};
+use crate::effects::button_melody_sustaining::ButtonMelodySustaining;
+use crate::effects::midi_forwarder::MidiForwarder;
+use crate::effects::pedal_melody::PedalMelody;
+use crate::midi_devices::HAND_SONIC;
+use crate::midi_devices::*;
+use crate::midi_notes::*;
+use crate::patch::Patch;
 use std::time::Duration;
-use utils::add;
-use utils::Boxable;
-use utils::midi_filter::MidiFilter;
+use crate::utils::add;
+use crate::utils::Boxable;
+use crate::utils::midi_filter::MidiFilter;
 
 static PEDAL_NOTE: &str = "PEDAL_NOTE";
 static BASE_NOTE: &str = "BASE_NOTE";

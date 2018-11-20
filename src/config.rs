@@ -1,9 +1,9 @@
 use risp::eval_risp_script;
 use risp::types::{RispError, error};
 use risp::core::create_core_environment;
-use utils::read_file;
+use crate::utils::read_file;
 
-use midi_devices::*;
+use crate::midi_devices::*;
 
 pub struct Config {
     pub view: bool,

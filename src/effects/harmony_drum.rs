@@ -1,15 +1,15 @@
-use absolute_sleep::AbsoluteSleep;
-use effects::effect::{Effect, MonoGroup};
-use effects::effect::DeviceName;
-use midi_notes::*;
-use pm::MidiMessage;
+use crate::absolute_sleep::AbsoluteSleep;
+use crate::effects::effect::{Effect, MonoGroup};
+use crate::effects::effect::DeviceName;
+use crate::midi_notes::*;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
-use utils::is_note_on;
-use virtual_midi::VirtualMidiOutput;
-use utils::play_note_on;
-use utils::play_note_off;
+use crate::utils::is_note_on;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::play_note_on;
+use crate::utils::play_note_off;
 
 
 pub struct HarmonyDrum {

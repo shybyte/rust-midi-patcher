@@ -1,6 +1,6 @@
-use effects::effect::DeviceName;
-use pm::{MidiMessage};
-use utils::is_note_on;
+use crate::effects::effect::DeviceName;
+use crate::pm::{MidiMessage};
+use crate::utils::is_note_on;
 
 
 #[derive(Clone, Eq, PartialEq, Debug, Hash)]

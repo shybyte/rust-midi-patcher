@@ -8,25 +8,25 @@ use risp::core::create_core_environment;
 use risp::convert::flatten_into;
 use risp::types::RispType::*;
 
-use patch::Patch;
-use utils::read_file;
-use trigger::Trigger;
-use effects::effect::Effect;
-use effects::note_sequencer::NoteSequencer;
-use effects::sweep_down::SweepDown;
-use effects::control_sequencer::ControlSequencer;
-use virtual_midi::MidiLightPatch;
+use crate::patch::Patch;
+use crate::utils::read_file;
+use crate::trigger::Trigger;
+use crate::effects::effect::Effect;
+use crate::effects::note_sequencer::NoteSequencer;
+use crate::effects::sweep_down::SweepDown;
+use crate::effects::control_sequencer::ControlSequencer;
+use crate::virtual_midi::MidiLightPatch;
 
 
-use microkorg::*;
+use crate::microkorg::*;
 
-use config::Config;
+use crate::config::Config;
 
-use songs::test::create_test_song;
-use songs::harmony_drum_test::create_harmony_drum_test_song;
-use songs::endstation_paradies::*;
-use songs::endstation::liebt_uns::liebt_uns;
-use songs::endstation::diktator::diktator;
+use crate::songs::test::create_test_song;
+use crate::songs::harmony_drum_test::create_harmony_drum_test_song;
+use crate::songs::endstation_paradies::*;
+use crate::songs::endstation::liebt_uns::liebt_uns;
+use crate::songs::endstation::diktator::diktator;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
     let mut patches = vec![

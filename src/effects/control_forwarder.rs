@@ -1,10 +1,10 @@
-use effects::effect::Effect;
-use effects::effect::DeviceName;
-use pm::MidiMessage;
+use crate::effects::effect::Effect;
+use crate::effects::effect::DeviceName;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use utils::control_change;
-use virtual_midi::VirtualMidiOutput;
-use utils::range_mapper::RangeToRangeMapper;
+use crate::utils::control_change;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::range_mapper::RangeToRangeMapper;
 
 
 pub struct ControlForwarder {

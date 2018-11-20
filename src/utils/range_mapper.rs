@@ -29,7 +29,7 @@ pub static ALL_REAL_NOTES: ValueRange = (10, 127);
 
 #[cfg(test)]
 mod tests {
-    use utils::range_mapper::{RangeToRangeMapper, ValueRange};
+    use crate::utils::range_mapper::{RangeToRangeMapper};
 
     #[test]
     fn test() {

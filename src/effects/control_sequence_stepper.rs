@@ -1,11 +1,11 @@
-use absolute_sleep::AbsoluteSleep;
-use effects::effect::{Effect, MonoGroup};
-use pm::MidiMessage;
+use crate::absolute_sleep::AbsoluteSleep;
+use crate::effects::effect::{Effect, MonoGroup};
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use utils::control_change;
-use virtual_midi::VirtualMidiOutput;
-use utils::midi_filter::MidiFilter;
-use effects::effect::DeviceName;
+use crate::utils::control_change;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::midi_filter::MidiFilter;
+use crate::effects::effect::DeviceName;
 
 
 pub struct ControlSequenceStepper {

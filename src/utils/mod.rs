@@ -5,8 +5,8 @@ use std::io;
 use std::iter;
 use std::ops::Add;
 use std::sync::{Arc, Mutex};
-use pm::{MidiMessage};
-use virtual_midi::VirtualMidiOutput;
+use crate::pm::{MidiMessage};
+use crate::virtual_midi::VirtualMidiOutput;
 
 
 pub mod range_mapper;

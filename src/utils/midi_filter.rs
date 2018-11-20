@@ -1,9 +1,9 @@
-use utils::range_mapper::ValueRange;
-use pm::MidiMessage;
-use utils::is_note_on;
-use utils::is_note_off;
-use utils::is_control_change;
-use utils::range_mapper::ALL_REAL_NOTES;
+use crate::utils::range_mapper::ValueRange;
+use crate::pm::MidiMessage;
+use crate::utils::is_note_on;
+use crate::utils::is_note_off;
+use crate::utils::is_control_change;
+use crate::utils::range_mapper::ALL_REAL_NOTES;
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
 pub enum FilterType {

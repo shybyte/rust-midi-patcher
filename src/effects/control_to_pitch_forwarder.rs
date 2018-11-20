@@ -1,9 +1,9 @@
-use effects::effect::{Effect};
-use effects::effect::DeviceName;
-use pm::MidiMessage;
+use crate::effects::effect::{Effect};
+use crate::effects::effect::DeviceName;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use virtual_midi::VirtualMidiOutput;
-use utils::pitch_wheel;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::pitch_wheel;
 
 
 pub struct ControlToPitchForwarder {

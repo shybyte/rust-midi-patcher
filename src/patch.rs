@@ -1,13 +1,13 @@
 extern crate portmidi as pm;
 
-use absolute_sleep::AbsoluteSleep;
-use effects::effect::{Effect, MonoGroup};
-use effects::effect::DeviceName;
-use pm::MidiMessage;
+use crate::absolute_sleep::AbsoluteSleep;
+use crate::effects::effect::{Effect, MonoGroup};
+use crate::effects::effect::DeviceName;
+use crate::pm::MidiMessage;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use trigger::Trigger;
-use virtual_midi::{MidiLightPatch, VirtualMidiOutput};
+use crate::trigger::Trigger;
+use crate::virtual_midi::{MidiLightPatch, VirtualMidiOutput};
 
 pub struct Patch {
     name: String,

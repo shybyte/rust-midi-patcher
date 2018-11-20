@@ -2,6 +2,7 @@
 name = "rust_midi_patcher"
 version = "0.1.0"
 authors = ["shybyte <ein@volloeko.de>"]
+edition = "2018"
 
 [dependencies]
 midi2opc = { git = "https://github.com/shybyte/midi2opc" }

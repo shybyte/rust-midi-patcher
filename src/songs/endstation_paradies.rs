@@ -1,23 +1,23 @@
-use config::Config;
-use effects::control_forwarder::ControlForwarder;
-use effects::control_sequence_stepper::ControlSequenceStepper;
-use effects::harmony_drum::HarmonyDrum;
-use effects::pedal_melody::PedalMelody;
-use effects::button_melody::{ButtonMelody, HarmonyButtonMelody};
-use effects::button_melody_sustaining::ButtonMelodySustaining;
-use microkorg::*;
-use midi_devices::*;
-use midi_notes::*;
-use patch::Patch;
+use crate::config::Config;
+use crate::effects::control_forwarder::ControlForwarder;
+use crate::effects::control_sequence_stepper::ControlSequenceStepper;
+use crate::effects::harmony_drum::HarmonyDrum;
+use crate::effects::pedal_melody::PedalMelody;
+use crate::effects::button_melody::{ButtonMelody, HarmonyButtonMelody};
+use crate::effects::button_melody_sustaining::ButtonMelodySustaining;
+use crate::microkorg::*;
+use crate::midi_devices::*;
+use crate::midi_notes::*;
+use crate::patch::Patch;
 use std::time::Duration;
-use trigger::Trigger;
-use effects::control_to_pitch_forwarder::ControlToPitchForwarder;
-use effects::midi_forwarder::MidiForwarder;
-use utils::midi_filter::MidiFilter;
-use utils::midi_filter::FilterType;
-use utils::range_mapper::RangeToRangeMapper;
-use midi_devices::HAND_SONIC;
-use utils::add_notes;
+use crate::trigger::Trigger;
+use crate::effects::control_to_pitch_forwarder::ControlToPitchForwarder;
+use crate::effects::midi_forwarder::MidiForwarder;
+use crate::utils::midi_filter::MidiFilter;
+use crate::utils::midi_filter::FilterType;
+use crate::utils::range_mapper::RangeToRangeMapper;
+use crate::midi_devices::HAND_SONIC;
+use crate::utils::add_notes;
 
 pub fn wahrheit(_config: &Config) -> Patch {
     Patch::new("wahrheit",

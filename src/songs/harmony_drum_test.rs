@@ -1,12 +1,12 @@
 use std::time::Duration;
-use patch::Patch;
-use trigger::Trigger;
-use effects::harmony_drum::HarmonyDrum;
-use effects::control_forwarder::ControlForwarder;
-use config::Config;
-use midi_notes::*;
-use midi_devices::*;
-use microkorg::*;
+use crate::patch::Patch;
+use crate::trigger::Trigger;
+use crate::effects::harmony_drum::HarmonyDrum;
+use crate::effects::control_forwarder::ControlForwarder;
+use crate::config::Config;
+use crate::midi_notes::*;
+use crate::midi_devices::*;
+use crate::microkorg::*;
 
 
 pub fn create_harmony_drum_test_song(_config: &Config) -> Patch {

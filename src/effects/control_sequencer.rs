@@ -1,12 +1,12 @@
-use pm::{MidiMessage};
+use crate::pm::{MidiMessage};
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
 use std::time::Duration;
 use std::thread;
-use absolute_sleep::AbsoluteSleep;
-use utils::{control_change};
-use effects::effect::{Effect, MonoGroup, ThreadCommand};
-use virtual_midi::VirtualMidiOutput;
+use crate::absolute_sleep::AbsoluteSleep;
+use crate::utils::{control_change};
+use crate::effects::effect::{Effect, MonoGroup, ThreadCommand};
+use crate::virtual_midi::VirtualMidiOutput;
 
 
 

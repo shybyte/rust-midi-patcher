@@ -1,4 +1,4 @@
-use pm::{PortMidi, OutputPort, MidiMessage};
+use crate::pm::{PortMidi, OutputPort, MidiMessage};
 use chan::Sender;
 
 use midi2opc::midi_light_strip::{MidiLightStrip, MidiLightConfig};

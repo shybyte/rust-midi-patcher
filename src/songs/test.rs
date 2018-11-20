@@ -1,11 +1,11 @@
 use std::time::Duration;
-use patch::Patch;
-use trigger::Trigger;
-use effects::note_sequencer::{NoteSequencer};
-use effects::sweep_down::{SweepDown};
-use effects::control_sequencer::{ControlSequencer};
-use midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
-use utils::{add, concat, repeated};
+use crate::patch::Patch;
+use crate::trigger::Trigger;
+use crate::effects::note_sequencer::{NoteSequencer};
+use crate::effects::sweep_down::{SweepDown};
+use crate::effects::control_sequencer::{ControlSequencer};
+use crate::midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
+use crate::utils::{add, concat, repeated};
 
 
 const CUTOFF: u8 = 74;

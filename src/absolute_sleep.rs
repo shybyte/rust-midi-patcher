@@ -33,7 +33,7 @@ impl AbsoluteSleep {
 mod tests {
     use std::i64;
     use std::time::{Duration, Instant};
-    use absolute_sleep::AbsoluteSleep;
+    use crate::absolute_sleep::AbsoluteSleep;
     use std::thread;
 
     #[test]

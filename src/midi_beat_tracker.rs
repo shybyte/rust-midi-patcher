@@ -34,7 +34,7 @@ impl MidiBeatTracker {
 
 #[cfg(test)]
 mod tests {
-    use midi_beat_tracker::MidiBeatTracker;
+    use crate::midi_beat_tracker::MidiBeatTracker;
     use midi_message::MidiMessage;
 
     #[test]

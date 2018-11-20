@@ -1,12 +1,12 @@
-use microkorg::*;
-use midi_devices::*;
-use config::Config;
-use patch::Patch;
-use trigger::Trigger;
-use effects::control_forwarder::ControlForwarder;
-use effects::control_sequencer::ControlSequencer;
+use crate::microkorg::*;
+use crate::midi_devices::*;
+use crate::config::Config;
+use crate::patch::Patch;
+use crate::trigger::Trigger;
+use crate::effects::control_forwarder::ControlForwarder;
+use crate::effects::control_sequencer::ControlSequencer;
 use std::time::Duration;
-use utils::Boxable;
+use crate::utils::Boxable;
 
 
 pub fn diktator(_config: &Config) -> Patch {

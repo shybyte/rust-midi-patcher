@@ -1,10 +1,10 @@
-use effects::effect::Effect;
-use effects::effect::DeviceName;
-use pm::MidiMessage;
+use crate::effects::effect::Effect;
+use crate::effects::effect::DeviceName;
+use crate::pm::MidiMessage;
 use std::sync::{Arc, Mutex};
-use virtual_midi::VirtualMidiOutput;
-use utils::play_note_on;
-use utils::play_note_off;
+use crate::virtual_midi::VirtualMidiOutput;
+use crate::utils::play_note_on;
+use crate::utils::play_note_off;
 
 const UPPER_THRESHOLD: u8 = 124;
 const LOWER_THRESHOLD: u8 = 4;
