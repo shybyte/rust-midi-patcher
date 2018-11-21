@@ -92,8 +92,8 @@ pub fn is_control_change(midi_message: MidiMessage) -> bool {
     (midi_message.status == 0xB0)
 }
 
-pub fn add_notes(xs: Vec<i16>, y: u8) -> Vec<u8> {
-    xs.into_iter().map(|x| (x + i16::from(y)) as u8).collect()
+pub fn add_notes<T: AsRef<[i16]>>(xs: T, y: u8) -> Vec<u8> {
+    xs.as_ref().iter().map(|x| (x + i16::from(y)) as u8).collect()
 }
 
 pub trait Boxable {
