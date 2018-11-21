@@ -59,6 +59,6 @@ impl MidiFilter {
             return false;
         }
 
-        return self.range.0 <= midi_message.data1 && midi_message.data1 <= self.range.1;
+        self.range.0 <= midi_message.data1 && midi_message.data1 <= self.range.1
     }
 }

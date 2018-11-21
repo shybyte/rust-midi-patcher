@@ -31,7 +31,6 @@ impl HarmonyDrum {
                note_range: (u8, u8), notes: Vec<i8>,
                note_duration: Duration,
                velocity: f32,
-               debounce_duration: Duration,
                reset_duration: Duration) -> HarmonyDrum {
         HarmonyDrum {
             note_range,
@@ -42,10 +41,14 @@ impl HarmonyDrum {
             current_note: C3,
             note_duration,
             velocity,
-            debounce_duration,
+            debounce_duration: Duration::from_millis(0),
             reset_duration,
             last_timestamp: Instant::now(),
         }
+    }
+    pub fn with_debounce(mut self, debounce_duration: Duration) -> Self {
+        self.debounce_duration = debounce_duration;
+        self
     }
 }
 
@@ -64,9 +67,9 @@ impl Effect for HarmonyDrum {
         let duration_since_last_event = timestamp - self.last_timestamp;
         self.last_timestamp = timestamp;
 
-        if { duration_since_last_event < self.debounce_duration } {
+        if duration_since_last_event < self.debounce_duration {
             return;
-        } else if { duration_since_last_event > self.reset_duration } {
+        } else if duration_since_last_event > self.reset_duration {
             self.notes_index = 0;
         }
 
@@ -77,10 +80,10 @@ impl Effect for HarmonyDrum {
         let played_note = (self.current_note as i8 + self.notes[self.notes_index]) as u8;
         self.notes_index = (self.notes_index + 1) % self.notes.len();
         play_note_on(&self.output_device, virtual_midi_out, played_note,
-                     (midi_message.data2 as f32 * self.velocity) as u8);
+                     (f32::from(midi_message.data2) * self.velocity) as u8);
         let virtual_midi_out_clone = Arc::clone(virtual_midi_out);
         let out_device = self.output_device.clone();
-        let note_duration = self.note_duration.clone();
+        let note_duration = self.note_duration;
         thread::spawn(move || {
             println!("play harmony drum {:?} {:?}", midi_message, played_note);
             absolute_sleep.sleep(note_duration);

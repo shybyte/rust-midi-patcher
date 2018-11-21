@@ -21,7 +21,7 @@ impl ControlSequenceStepper {
     pub fn new(output_device: &str,control_index: u8, values: &[u8]) -> Self {
         ControlSequenceStepper {
             output_device: output_device.to_string(),
-            control_index: control_index,
+            control_index,
             values: values.to_vec(),
             value_index: 0,
             mono_group: MonoGroup::ControlIndex(control_index),

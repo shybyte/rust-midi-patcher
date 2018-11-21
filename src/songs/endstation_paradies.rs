@@ -42,7 +42,7 @@ pub fn wahrheit(_config: &Config) -> Patch {
                            USB_MIDI_ADAPTER, THROUGH_PORT, (C2, C4), vec![12],
                            Duration::from_millis(100),
                            1.0,
-                           Duration::from_millis(0), Duration::from_secs(3600)))
+                           Duration::from_secs(3600)))
                    )
                ],
                48, // A71
@@ -69,7 +69,7 @@ pub fn liebeslieder(_config: &Config) -> Patch {
                        Box::new(Trigger::never()),
                        Box::new(ButtonMelodySustaining::new(
                            "LOOP", C5, E5, USB_MIDI_ADAPTER,
-                           add_notes(vec![0, 4, -1, -3, 0, 4, 7, 5], C5),
+                           add_notes(vec![0, 4, -1, -3, 0, 4, 7, 5].as_slice(), C5),
                            Duration::from_secs(5), Duration::from_millis(250)))
                    ),
                ],
@@ -107,7 +107,7 @@ pub fn young(_config: &Config) -> Patch {
                        Box::new(HarmonyDrum::new(USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, D3), vec![0],
                                                  Duration::from_millis(100),
                                                  1.0,
-                                                 Duration::from_millis(0), Duration::from_secs(3600)))
+                                                 Duration::from_secs(3600)))
                    ),
                    (
                        Box::new(Trigger::new(HAND_SONIC, 63)),
@@ -115,7 +115,7 @@ pub fn young(_config: &Config) -> Patch {
                            USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C5), vec![7, 12, 19],
                            Duration::from_millis(100),
                            0.2,
-                           Duration::from_millis(0), Duration::from_secs(3600)))
+                           Duration::from_secs(3600)))
                    ),
                    (
                        Box::new(Trigger::never()),
@@ -150,7 +150,7 @@ pub fn enddzeit(_config: &Config) -> Patch {
         USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C6), vec![7, 12, 19],
         Duration::from_millis(100),
         0.2,
-        Duration::from_millis(0), Duration::from_secs(3600)))
+        Duration::from_secs(3600)))
 ),
 (
     Box::new(Trigger::never()),

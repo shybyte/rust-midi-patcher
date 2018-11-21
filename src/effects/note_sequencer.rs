@@ -23,8 +23,8 @@ impl NoteSequencer {
         NoteSequencer {
             output_device: output_device.to_string(),
             notes: Arc::new(notes),
-            velocity: velocity,
-            time_per_note: time_per_note,
+            velocity,
+            time_per_note,
             sender: None,
         }
     }
@@ -60,7 +60,7 @@ impl Effect for NoteSequencer {
 
                 play_note_on(&output_name, &virtual_midi_out, note, velocity);
 
-                absolute_sleep.sleep(time_per_note *1/ 4);
+                absolute_sleep.sleep(time_per_note / 4);
 
                 play_note_off(&output_name, &virtual_midi_out, note);
 

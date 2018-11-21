@@ -77,7 +77,7 @@ impl Effect for ButtonMelody {
         let duration_since_last_event = timestamp - self.last_timestamp;
         self.last_timestamp = timestamp;
 
-        if { duration_since_last_event > self.reset_duration } {
+        if duration_since_last_event > self.reset_duration {
             self.notes_index = 0;
         }
 
@@ -154,7 +154,7 @@ impl Effect for ButtonMultiMelody {
         let duration_since_last_event = timestamp - self.last_timestamp;
         self.last_timestamp = timestamp;
 
-        if { duration_since_last_event > self.reset_duration } {
+        if duration_since_last_event > self.reset_duration {
             self.notes_index = 0;
         }
 

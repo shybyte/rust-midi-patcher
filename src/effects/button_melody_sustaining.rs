@@ -31,8 +31,8 @@ impl ButtonMelodySustaining {
                debounce_duration: Duration) -> ButtonMelodySustaining {
         ButtonMelodySustaining {
             button_device: button_device.to_string(),
-            button_note_start: button_note_start,
-            button_note_stop: button_note_stop,
+            button_note_start,
+            button_note_stop,
             output_device: output_device.to_string(),
             notes,
             reset_duration,
@@ -45,7 +45,7 @@ impl ButtonMelodySustaining {
 }
 
 impl ButtonMelodySustaining {
-    fn stop_current_note(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>)  {
+    fn stop_current_note(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if let Some(current_note) = self.current_note {
             play_note_off(&self.output_device, virtual_midi_out, current_note);
             self.current_note = None;
@@ -63,9 +63,9 @@ impl Effect for ButtonMelodySustaining {
         let timestamp = Instant::now();
         let duration_since_last_event = timestamp - self.last_timestamp;
 
-        if { duration_since_last_event < self.debounce_duration} {
+        if duration_since_last_event < self.debounce_duration {
             return;
-        } else if { duration_since_last_event > self.reset_duration} {
+        } else if duration_since_last_event > self.reset_duration {
             self.notes_index = 0;
         }
 

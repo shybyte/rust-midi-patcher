@@ -21,8 +21,8 @@ impl SweepDown {
     pub fn new(output_device: &str, min_value: u8, control_index: u8) -> SweepDown {
         SweepDown {
             output_device: output_device.to_string(),
-            min_value: min_value,
-            control_index: control_index,
+            min_value,
+            control_index,
             mono_group: MonoGroup::ControlIndex(control_index),
             sender: None,
         }

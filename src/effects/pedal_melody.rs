@@ -48,10 +48,10 @@ impl Effect for PedalMelody {
             let &(_, note) = self.note_mappings.iter().find(|&&(threshold, _note)| control_value >= threshold).unwrap();
             if note != self.prev_note_value {
                 eprintln!("Play {} {}", note, self.output_device);
-                if { note > 0 } {
+                if note > 0 {
                     play_note_on(&self.output_device, &virtual_midi_out, note, 127);
                 }
-                if { self.prev_note_value > 0 } {
+                if self.prev_note_value > 0 {
                     play_note_off(&self.output_device, &virtual_midi_out, self.prev_note_value);
                 }
             }

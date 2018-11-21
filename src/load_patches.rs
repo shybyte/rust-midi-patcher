@@ -51,7 +51,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
         match load_patch(&patch_path, config) {
             Ok(amazon) => {
                 let load_time: Duration = Instant::now() - loading_start_time;
-                println!("Loaded Patch {:?} in {:?}", patch_path.display(), load_time.subsec_nanos() / 1_000_000);
+                println!("Loaded Patch {:?} in {:?}", patch_path.display(), load_time.subsec_millis());
                 patches.push(amazon);
             }
             Err(error) => {
@@ -66,7 +66,7 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
 pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError> {
     let start_time = Instant::now();
     let risp_code = read_file(file_name).map_err(|_| error(format!("Can't read file {:?}", file_name.display())))?;
-    println!("Read Patch File in {:?} ms", (Instant::now() - start_time).subsec_nanos() / 1_000_000);
+    println!("Read Patch File in {:?} ms", (Instant::now() - start_time).subsec_millis());
 
     let mut env = create_core_environment();
     env.set("CUTOFF", Int(i64::from(CUTOFF)));
@@ -74,7 +74,7 @@ pub fn load_patch(file_name: &Path, config: &Config) -> Result<Patch, RispError>
 
     eval_risp_script(&risp_code, &mut env)
         .and_then(|patch_risp| {
-            println!("Evaluated Patch File in {:?} ms", (Instant::now() - start_time).subsec_nanos() / 1_000_000);
+            println!("Evaluated Patch File in {:?} ms", (Instant::now() - start_time).subsec_millis());
             let program = patch_risp.get("program")?.unwrap_or(0);
             let name: String = patch_risp.get("name")?.ok_or_else(|| error("Missing Name"))?;
             let time_per_note = patch_risp.get("time_per_note")?.unwrap_or(200);

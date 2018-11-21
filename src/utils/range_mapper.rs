@@ -12,13 +12,13 @@ impl RangeToRangeMapper {
 
     pub fn map(&self, value: u8) -> u8 {
         if value <= self.source.0 {
-            return self.target.0;
+            self.target.0
         } else if value >= self.source.1 {
-            return self.target.1;
+            self.target.1
         } else {
-            let source_range = (self.source.1 - self.source.0) as i64;
-            let target_range = (self.target.1 - self.target.0) as i64;
-            (target_range * (value - self.source.0) as i64 / source_range + self.target.0 as i64) as u8
+            let source_range = i64::from(self.source.1 - self.source.0);
+            let target_range = i64::from(self.target.1 - self.target.0);
+            (target_range * i64::from(value - self.source.0)  / source_range + i64::from(self.target.0)) as u8
         }
     }
 }

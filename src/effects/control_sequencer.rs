@@ -24,10 +24,10 @@ impl ControlSequencer {
     pub fn new(output_device: &str,control_index: u8, values: Vec<u8>, stop_value: u8, time_per_note: Duration) -> ControlSequencer {
         ControlSequencer {
             output_device: output_device.to_string(),
-            control_index: control_index,
+            control_index,
             values: Arc::new(values),
-            stop_value: stop_value,
-            time_per_note: time_per_note,
+            stop_value,
+            time_per_note,
             sender: None,
             mono_group: MonoGroup::ControlIndex(control_index)
         }

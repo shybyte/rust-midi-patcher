@@ -46,8 +46,8 @@ pub fn control_change(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutp
 pub fn pitch_wheel(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, data1: u8, data2: u8) {
     let message = MidiMessage {
         status: 224,
-        data1: data1,
-        data2: data2,
+        data1,
+        data2,
     };
 
     send_midi(output_name, midi_output, message);
@@ -92,8 +92,8 @@ pub fn is_control_change(midi_message: MidiMessage) -> bool {
     (midi_message.status == 0xB0)
 }
 
-pub fn add_notes(xs: Vec<i16>, y: u8) -> Vec<u8> {
-    xs.iter().map(|x| (x + (y as i16)) as u8).collect()
+pub fn add_notes(xs: &[i16], y: u8) -> Vec<u8> {
+    xs.iter().map(|x| (x + i16::from(y)) as u8).collect()
 }
 
 pub trait Boxable {

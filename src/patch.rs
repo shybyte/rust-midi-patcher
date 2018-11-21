@@ -22,10 +22,10 @@ impl Patch {
                                 midi_light_patch: Option<MidiLightPatch>) -> Patch {
         Patch {
             name: name.into(),
-            effects: effects,
+            effects,
             last_midi_events: HashMap::new(),
-            program: program,
-            midi_light_patch: midi_light_patch,
+            program,
+            midi_light_patch,
         }
     }
 
@@ -34,7 +34,7 @@ impl Patch {
             name: name.into(),
             effects: effects.into_iter().map(|e| (Box::new(Trigger::never()), e)).collect(),
             last_midi_events: HashMap::new(),
-            program: program,
+            program,
             midi_light_patch: None,
         }
     }

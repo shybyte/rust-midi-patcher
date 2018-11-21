@@ -12,7 +12,7 @@ pub struct Trigger {
 
 impl Trigger {
     pub fn new(device: &str, note: u8) -> Trigger {
-        Trigger { device: device.to_string(), note: note }
+        Trigger { device: device.to_string(), note }
     }
     pub fn never() -> Trigger {
         Trigger { device: "NEVER!".to_string(), note: 0 }
