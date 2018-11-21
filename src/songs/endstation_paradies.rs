@@ -69,7 +69,7 @@ pub fn liebeslieder(_config: &Config) -> Patch {
                        Box::new(Trigger::never()),
                        Box::new(ButtonMelodySustaining::new(
                            "LOOP", C5, E5, USB_MIDI_ADAPTER,
-                           add_notes(vec![0, 4, -1, -3, 0, 4, 7, 5].as_slice(), C5),
+                           add_notes(vec![0, 4, -1, -3, 0, 4, 7, 5], C5),
                            Duration::from_secs(5), Duration::from_millis(250)))
                    ),
                ],
