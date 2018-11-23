@@ -2,7 +2,7 @@ use crate::absolute_sleep::AbsoluteSleep;
 use crate::effects::effect::{Effect, MonoGroup};
 use crate::effects::effect::DeviceName;
 use crate::midi_notes::*;
-use crate::pm::MidiMessage;
+use portmidi::MidiMessage;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};

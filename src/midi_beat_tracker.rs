@@ -1,46 +1,49 @@
 #![allow(dead_code)]
 
+use portmidi::MidiMessage;
+use crate::utils::midi_filter::MidiFilter;
+use std::time::Instant;
+use std::time::Duration;
 
-use std::collections::vec_deque::VecDeque;
-use midi_message::MidiMessage;
-
-
-struct MidiBeatTracker {
-    midi_events: VecDeque<u64>,
-    beat_duration: f64,
-    beat_duration_range: f64,
+pub struct MidiBeatTracker {
+    filter: MidiFilter,
+    last_time_stamp: Option<Instant>,
+    beat_duration: Duration,
+    default_beat_duration: Duration,
 }
 
 impl MidiBeatTracker {
-    fn new(default_beat_duration: f64, beat_duration_range: f64) -> Self {
+    pub fn new(filter: MidiFilter, default_beat_duration: Duration) -> Self {
         MidiBeatTracker {
-            midi_events: VecDeque::new(),
+            filter,
+            last_time_stamp: None,
+            default_beat_duration,
             beat_duration: default_beat_duration,
-            beat_duration_range,
         }
     }
 
-    pub fn on_midi_event(&mut self, time_stamp: u64, midi_event: MidiMessage) {
-        if let MidiMessage::NoteOn(_, _, _) = midi_event {
-            self.midi_events.push_back(time_stamp);
+    pub fn on_midi_event(&mut self, device: &str, midi_message: MidiMessage) {
+        if !self.filter.matches(device, midi_message) {
+            return;
         }
+
+        let now = Instant::now();
+
+        if let Some(last_time_stamp) = self.last_time_stamp {
+            let last_beat_duration = now - last_time_stamp;
+            eprintln!("min = {:?}", self.default_beat_duration / 2);
+            eprintln!("last_beat_duration = {:?}", last_beat_duration);
+            if (self.default_beat_duration * 2 / 3) < last_beat_duration &&
+                last_beat_duration < (3 / 2 * self.default_beat_duration) {
+                eprintln!(" ===> beat_duration = {:?}", last_beat_duration);
+                self.beat_duration = last_beat_duration;
+            }
+        }
+
+        self.last_time_stamp = Some(now);
     }
 
-    pub fn beat_duration(&self) -> f64 {
+    pub fn beat_duration(&self) -> Duration {
         self.beat_duration
-    }
-}
-
-
-#[cfg(test)]
-mod tests {
-    use crate::midi_beat_tracker::MidiBeatTracker;
-    use midi_message::MidiMessage;
-
-    #[test]
-    fn test() {
-        let mut tracker = MidiBeatTracker::new(1.0, 0.5);
-        tracker.on_midi_event(0, MidiMessage::NoteOn(0, 45, 56));
-        assert_eq!(tracker.beat_duration(), 1.0);
     }
 }

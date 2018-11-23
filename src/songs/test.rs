@@ -6,6 +6,7 @@ use crate::effects::sweep_down::{SweepDown};
 use crate::effects::control_sequencer::{ControlSequencer};
 use crate::midi_devices::{DEFAULT_IN_DEVICE, DEFAULT_OUT_DEVICE};
 use crate::utils::{add, concat, repeated};
+use crate::effects::control_sequencer::NoteDuration;
 
 
 const CUTOFF: u8 = 74;
@@ -35,7 +36,7 @@ pub fn create_test_song() -> Patch {
         (Box::new(Trigger::new(DEFAULT_IN_DEVICE, 50)), Box::new(SweepDown::new(DEFAULT_OUT_DEVICE, 30, CUTOFF))),
         (
             Box::new(Trigger::new(DEFAULT_IN_DEVICE, 48)),
-            Box::new(ControlSequencer::new(DEFAULT_OUT_DEVICE, CUTOFF, vec![30, 100, 30, 100], 30, Duration::from_millis(500)))
+            Box::new(ControlSequencer::new(DEFAULT_OUT_DEVICE, CUTOFF, vec![30, 100, 30, 100], 30, NoteDuration::Absolute(Duration::from_millis(500))))
         )
     ], 0, None)
 }

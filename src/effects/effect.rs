@@ -1,8 +1,9 @@
-use crate::pm::{MidiMessage};
+use portmidi::{MidiMessage};
 use std::sync::{Arc, Mutex};
 use crate::absolute_sleep::AbsoluteSleep;
 
 use crate::virtual_midi::VirtualMidiOutput;
+use std::time::Duration;
 
 pub type DeviceName = str;
 
@@ -23,6 +24,7 @@ pub trait Effect {
     fn start(&mut self, _midi_message: MidiMessage, _absolute_sleep: AbsoluteSleep, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
     fn stop(&mut self, _virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {}
     fn is_running(&self) -> bool {false}
+    fn set_beat_duration(&mut self, _duration: Duration) {}
     fn mono_group(&self) -> MonoGroup {MonoGroup::None}
 }
 

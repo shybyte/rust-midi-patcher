@@ -27,6 +27,7 @@ use crate::songs::harmony_drum_test::create_harmony_drum_test_song;
 use crate::songs::endstation_paradies::*;
 use crate::songs::endstation::liebt_uns::liebt_uns;
 use crate::songs::endstation::diktator::diktator;
+use crate::effects::control_sequencer::NoteDuration;
 
 pub fn load_patches(config: &Config) -> Vec<Patch> {
     let mut patches = vec![
@@ -140,7 +141,7 @@ fn to_trigger_effect_pair(input: &RispType, default_time_per_note: i64, config: 
         let values_risp = control_sequencer_risp.get("values")?.ok_or_else(|| error("Missing notes"))?;
         let values = flatten_into(values_risp)?.iter().map(|&x: &i64| x as u8).collect();
         let effect = Box::new(ControlSequencer::new(&config.default_out_device, control_index as u8, values,
-                                                    stop_value as u8, Duration::from_millis(time_per_note)));
+                                                    stop_value as u8, NoteDuration::Absolute(Duration::from_millis(time_per_note))));
         return Ok((trigger, effect));
     }
 

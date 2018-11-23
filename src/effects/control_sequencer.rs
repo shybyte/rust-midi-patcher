@@ -1,4 +1,4 @@
-use crate::pm::{MidiMessage};
+use portmidi::{MidiMessage};
 use std::sync::{Arc, Mutex, mpsc};
 use std::sync::mpsc::{Sender};
 use std::time::Duration;
@@ -8,7 +8,10 @@ use crate::utils::{control_change};
 use crate::effects::effect::{Effect, MonoGroup, ThreadCommand};
 use crate::virtual_midi::VirtualMidiOutput;
 
-
+pub enum NoteDuration {
+    Absolute(Duration),
+    Relative(u32)
+}
 
 pub struct ControlSequencer {
     output_device: String,
@@ -16,12 +19,13 @@ pub struct ControlSequencer {
     values: Arc<Vec<u8>>,
     stop_value: u8,
     mono_group: MonoGroup,
-    time_per_note: Duration,
+    time_per_note: NoteDuration,
     sender: Option<Sender<ThreadCommand>>,
+    beat_duration: Duration,
 }
 
 impl ControlSequencer {
-    pub fn new(output_device: &str,control_index: u8, values: Vec<u8>, stop_value: u8, time_per_note: Duration) -> ControlSequencer {
+    pub fn new(output_device: &str,control_index: u8, values: Vec<u8>, stop_value: u8, time_per_note: NoteDuration) -> ControlSequencer {
         ControlSequencer {
             output_device: output_device.to_string(),
             control_index,
@@ -29,7 +33,8 @@ impl ControlSequencer {
             stop_value,
             time_per_note,
             sender: None,
-            mono_group: MonoGroup::ControlIndex(control_index)
+            mono_group: MonoGroup::ControlIndex(control_index),
+            beat_duration: Duration::from_secs(1)
         }
     }
 }
@@ -43,7 +48,10 @@ impl Effect for ControlSequencer {
         self.sender = Some(tx);
         let values = Arc::clone(&self.values);
         let control_index = self.control_index;
-        let time_per_note = self.time_per_note;
+        let time_per_note = match self.time_per_note {
+            NoteDuration::Absolute(dur) => dur,
+            NoteDuration::Relative(divider) => self.beat_duration / divider
+        };
         let stop_value = self.stop_value;
         let mut absolute_sleep = absolute_sleep;
 
@@ -75,6 +83,10 @@ impl Effect for ControlSequencer {
 
     fn is_running(&self) -> bool {
         self.sender.is_some()
+    }
+
+    fn set_beat_duration(&mut self, duration: Duration) {
+        self.beat_duration = duration;
     }
 
     fn mono_group(&self) -> MonoGroup {

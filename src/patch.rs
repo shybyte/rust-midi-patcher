@@ -1,13 +1,12 @@
-extern crate portmidi as pm;
-
 use crate::absolute_sleep::AbsoluteSleep;
 use crate::effects::effect::{Effect, MonoGroup};
 use crate::effects::effect::DeviceName;
-use crate::pm::MidiMessage;
+use portmidi::MidiMessage;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use crate::trigger::Trigger;
 use crate::virtual_midi::{MidiLightPatch, VirtualMidiOutput};
+use crate::midi_beat_tracker::MidiBeatTracker;
 
 pub struct Patch {
     name: String,
@@ -15,6 +14,7 @@ pub struct Patch {
     last_midi_events: HashMap<Trigger, MidiMessage>,
     program: u8,
     midi_light_patch: Option<MidiLightPatch>,
+    beat_tracker: Option<MidiBeatTracker>,
 }
 
 impl Patch {
@@ -26,6 +26,7 @@ impl Patch {
             last_midi_events: HashMap::new(),
             program,
             midi_light_patch,
+            beat_tracker: None,
         }
     }
 
@@ -36,7 +37,13 @@ impl Patch {
             last_midi_events: HashMap::new(),
             program,
             midi_light_patch: None,
+            beat_tracker: None,
         }
+    }
+
+    pub fn beat_tracker(mut self, beat_tracker: MidiBeatTracker) -> Self {
+        self.beat_tracker = Some(beat_tracker);
+        self
     }
 
     pub fn init(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
@@ -67,9 +74,18 @@ impl Patch {
     pub fn on_midi_event(&mut self, device: &DeviceName, midi_message: MidiMessage,
                          virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         // println!("Patch.on_midi_event {:?}  {:?}", device, midi_message);
+
+        if let Some(ref mut beat_tracker) = self.beat_tracker {
+            beat_tracker.on_midi_event(device, midi_message);
+            for &mut (ref mut _t, ref mut effect) in self.effects.as_mut_slice() {
+                effect.set_beat_duration(beat_tracker.beat_duration());
+            }
+        }
+
         for &mut (ref mut _t, ref mut effect) in self.effects.as_mut_slice() {
             effect.on_midi_event(device, midi_message, virtual_midi_out);
         }
+
         let triggered_effect_indices: Vec<usize> = (0..self.effects.len())
             .filter(|&i| self.effects[i].0.is_triggered(device, midi_message))
             .collect();
