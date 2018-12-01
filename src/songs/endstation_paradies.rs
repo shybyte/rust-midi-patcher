@@ -37,6 +37,13 @@ pub fn wahrheit(_config: &Config) -> Patch {
                        ))
                    ),
                    (
+                       Box::new(Trigger::never()),
+                       Box::new(ControlForwarder::new_with_value_mapper(
+                           EXPRESS_PEDAL, THROUGH_PORT, MOD,
+                           RangeToRangeMapper::new((0, 255), (0, 255)),
+                       ))
+                   ),
+                   (
                        Box::new(Trigger::new(HAND_SONIC, 74)),
                        Box::new(HarmonyDrum::new(
                            USB_MIDI_ADAPTER, THROUGH_PORT, (C2, C4), vec![12],
@@ -165,7 +172,7 @@ pub fn enddzeit(_config: &Config) -> Patch {
 //        EXPRESS_PEDAL, THROUGH_PORT))
 //),
                ],
-               28, // a45
+               28, // b45
                None)
 }
 
