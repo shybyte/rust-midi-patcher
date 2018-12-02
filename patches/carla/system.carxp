@@ -1,0 +1,1046 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE CARLA-PROJECT>
+<CARLA-PROJECT VERSION='2.0'>
+ <EngineSettings>
+  <ForceStereo>false</ForceStereo>
+  <PreferPluginBridges>false</PreferPluginBridges>
+  <PreferUiBridges>true</PreferUiBridges>
+  <UIsAlwaysOnTop>false</UIsAlwaysOnTop>
+  <MaxParameters>200</MaxParameters>
+  <UIBridgesTimeout>4000</UIBridgesTimeout>
+ </EngineSettings>
+
+ <Transport>
+  <BeatsPerMinute>120</BeatsPerMinute>
+ </Transport>
+
+ <!-- Helm -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>Helm</Name>
+   <URI>http://tytel.org/helm</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1e5</Options>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>amp_attack</Name>
+    <Symbol>amp_attack</Symbol>
+    <Value>0.02738624997437</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>amp_decay</Name>
+    <Symbol>amp_decay</Symbol>
+    <Value>0.375</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>amp_release</Name>
+    <Symbol>amp_release</Symbol>
+    <Value>0.433734953403473</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>amp_sustain</Name>
+    <Symbol>amp_sustain</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>arp_frequency</Name>
+    <Symbol>arp_frequency</Symbol>
+    <Value>0.600000023841858</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>arp_gate</Name>
+    <Symbol>arp_gate</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>arp_octaves</Name>
+    <Symbol>arp_octaves</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>arp_on</Name>
+    <Symbol>arp_on</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>arp_pattern</Name>
+    <Symbol>arp_pattern</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>arp_sync</Name>
+    <Symbol>arp_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>arp_tempo</Name>
+    <Symbol>arp_tempo</Symbol>
+    <Value>0.818181812763214</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>beats_per_minute</Name>
+    <Symbol>beats_per_minute</Symbol>
+    <Value>0.357142865657806</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>14</Index>
+    <Name>cross_modulation</Name>
+    <Symbol>cross_modulation</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>15</Index>
+    <Name>cutoff</Name>
+    <Symbol>cutoff</Symbol>
+    <Value>0.596610188484192</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>16</Index>
+    <Name>delay_dry_wet</Name>
+    <Symbol>delay_dry_wet</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>17</Index>
+    <Name>delay_feedback</Name>
+    <Symbol>delay_feedback</Symbol>
+    <Value>0.699999988079071</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>18</Index>
+    <Name>delay_frequency</Name>
+    <Symbol>delay_frequency</Symbol>
+    <Value>0.571428596973419</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>19</Index>
+    <Name>delay_on</Name>
+    <Symbol>delay_on</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>20</Index>
+    <Name>delay_sync</Name>
+    <Symbol>delay_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>21</Index>
+    <Name>delay_tempo</Name>
+    <Symbol>delay_tempo</Symbol>
+    <Value>0.818181812763214</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>22</Index>
+    <Name>distortion_drive</Name>
+    <Symbol>distortion_drive</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>23</Index>
+    <Name>distortion_mix</Name>
+    <Symbol>distortion_mix</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>24</Index>
+    <Name>distortion_on</Name>
+    <Symbol>distortion_on</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>25</Index>
+    <Name>distortion_type</Name>
+    <Symbol>distortion_type</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>26</Index>
+    <Name>fil_attack</Name>
+    <Symbol>fil_attack</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>27</Index>
+    <Name>fil_decay</Name>
+    <Symbol>fil_decay</Symbol>
+    <Value>0.507062673568726</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>28</Index>
+    <Name>fil_env_depth</Name>
+    <Symbol>fil_env_depth</Symbol>
+    <Value>0.643999993801117</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>29</Index>
+    <Name>fil_release</Name>
+    <Symbol>fil_release</Symbol>
+    <Value>0.375</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>30</Index>
+    <Name>fil_sustain</Name>
+    <Symbol>fil_sustain</Symbol>
+    <Value>0.707317054271698</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>31</Index>
+    <Name>filter_blend</Name>
+    <Symbol>filter_blend</Symbol>
+    <Value>0.0384615398943424</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>32</Index>
+    <Name>filter_drive</Name>
+    <Symbol>filter_drive</Symbol>
+    <Value>0.375</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>33</Index>
+    <Name>filter_on</Name>
+    <Symbol>filter_on</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>34</Index>
+    <Name>filter_shelf</Name>
+    <Symbol>filter_shelf</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>35</Index>
+    <Name>filter_style</Name>
+    <Symbol>filter_style</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>36</Index>
+    <Name>formant_on</Name>
+    <Symbol>formant_on</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>37</Index>
+    <Name>formant_x</Name>
+    <Symbol>formant_x</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>38</Index>
+    <Name>formant_y</Name>
+    <Symbol>formant_y</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>39</Index>
+    <Name>keytrack</Name>
+    <Symbol>keytrack</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>40</Index>
+    <Name>legato</Name>
+    <Symbol>legato</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>41</Index>
+    <Name>mod_attack</Name>
+    <Symbol>mod_attack</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>42</Index>
+    <Name>mod_decay</Name>
+    <Symbol>mod_decay</Symbol>
+    <Value>0.108433738350868</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>43</Index>
+    <Name>mod_release</Name>
+    <Symbol>mod_release</Symbol>
+    <Value>0.0240963846445084</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>44</Index>
+    <Name>mod_sustain</Name>
+    <Symbol>mod_sustain</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>45</Index>
+    <Name>mono_lfo_1_amplitude</Name>
+    <Symbol>mono_lfo_1_amplitude</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>46</Index>
+    <Name>mono_lfo_1_frequency</Name>
+    <Symbol>mono_lfo_1_frequency</Symbol>
+    <Value>0.615384638309479</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>47</Index>
+    <Name>mono_lfo_1_retrigger</Name>
+    <Symbol>mono_lfo_1_retrigger</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>48</Index>
+    <Name>mono_lfo_1_sync</Name>
+    <Symbol>mono_lfo_1_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>49</Index>
+    <Name>mono_lfo_1_tempo</Name>
+    <Symbol>mono_lfo_1_tempo</Symbol>
+    <Value>0.545454561710358</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>50</Index>
+    <Name>mono_lfo_1_waveform</Name>
+    <Symbol>mono_lfo_1_waveform</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>51</Index>
+    <Name>mono_lfo_2_amplitude</Name>
+    <Symbol>mono_lfo_2_amplitude</Symbol>
+    <Value>0.727272748947144</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>52</Index>
+    <Name>mono_lfo_2_frequency</Name>
+    <Symbol>mono_lfo_2_frequency</Symbol>
+    <Value>0.615384638309479</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>53</Index>
+    <Name>mono_lfo_2_retrigger</Name>
+    <Symbol>mono_lfo_2_retrigger</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>54</Index>
+    <Name>mono_lfo_2_sync</Name>
+    <Symbol>mono_lfo_2_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>55</Index>
+    <Name>mono_lfo_2_tempo</Name>
+    <Symbol>mono_lfo_2_tempo</Symbol>
+    <Value>0.727272748947144</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>56</Index>
+    <Name>mono_lfo_2_waveform</Name>
+    <Symbol>mono_lfo_2_waveform</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>57</Index>
+    <Name>noise_volume</Name>
+    <Symbol>noise_volume</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>58</Index>
+    <Name>num_steps</Name>
+    <Symbol>num_steps</Symbol>
+    <Value>0.225806444883347</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>59</Index>
+    <Name>osc_1_transpose</Name>
+    <Symbol>osc_1_transpose</Symbol>
+    <Value>0.572916686534882</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>60</Index>
+    <Name>osc_1_tune</Name>
+    <Symbol>osc_1_tune</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>61</Index>
+    <Name>osc_1_unison_detune</Name>
+    <Symbol>osc_1_unison_detune</Symbol>
+    <Value>0.100000001490116</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>62</Index>
+    <Name>osc_1_unison_voices</Name>
+    <Symbol>osc_1_unison_voices</Symbol>
+    <Value>0.142857149243355</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>63</Index>
+    <Name>osc_1_volume</Name>
+    <Symbol>osc_1_volume</Symbol>
+    <Value>0.576923072338104</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>64</Index>
+    <Name>osc_1_waveform</Name>
+    <Symbol>osc_1_waveform</Symbol>
+    <Value>0.400000005960464</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>65</Index>
+    <Name>osc_2_transpose</Name>
+    <Symbol>osc_2_transpose</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>66</Index>
+    <Name>osc_2_tune</Name>
+    <Symbol>osc_2_tune</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>67</Index>
+    <Name>osc_2_unison_detune</Name>
+    <Symbol>osc_2_unison_detune</Symbol>
+    <Value>0.100000001490116</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>68</Index>
+    <Name>osc_2_unison_voices</Name>
+    <Symbol>osc_2_unison_voices</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>69</Index>
+    <Name>osc_2_volume</Name>
+    <Symbol>osc_2_volume</Symbol>
+    <Value>0.538461565971375</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>70</Index>
+    <Name>osc_2_waveform</Name>
+    <Symbol>osc_2_waveform</Symbol>
+    <Value>0.400000005960464</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>71</Index>
+    <Name>osc_feedback_amount</Name>
+    <Symbol>osc_feedback_amount</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>72</Index>
+    <Name>osc_feedback_transpose</Name>
+    <Symbol>osc_feedback_transpose</Symbol>
+    <Value>0.75</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>73</Index>
+    <Name>osc_feedback_tune</Name>
+    <Symbol>osc_feedback_tune</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>74</Index>
+    <Name>pitch_bend_range</Name>
+    <Symbol>pitch_bend_range</Symbol>
+    <Value>0.0833333358168602</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>75</Index>
+    <Name>poly_lfo_amplitude</Name>
+    <Symbol>poly_lfo_amplitude</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>76</Index>
+    <Name>poly_lfo_frequency</Name>
+    <Symbol>poly_lfo_frequency</Symbol>
+    <Value>0.615384638309479</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>77</Index>
+    <Name>poly_lfo_sync</Name>
+    <Symbol>poly_lfo_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>78</Index>
+    <Name>poly_lfo_tempo</Name>
+    <Symbol>poly_lfo_tempo</Symbol>
+    <Value>0.636363625526428</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>79</Index>
+    <Name>poly_lfo_waveform</Name>
+    <Symbol>poly_lfo_waveform</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>80</Index>
+    <Name>polyphony</Name>
+    <Symbol>polyphony</Symbol>
+    <Value>0.0967741906642914</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>81</Index>
+    <Name>portamento</Name>
+    <Symbol>portamento</Symbol>
+    <Value>0.25</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>82</Index>
+    <Name>portamento_type</Name>
+    <Symbol>portamento_type</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>83</Index>
+    <Name>resonance</Name>
+    <Symbol>resonance</Symbol>
+    <Value>0.53513514995575</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>84</Index>
+    <Name>reverb_damping</Name>
+    <Symbol>reverb_damping</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>85</Index>
+    <Name>reverb_dry_wet</Name>
+    <Symbol>reverb_dry_wet</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>86</Index>
+    <Name>reverb_feedback</Name>
+    <Symbol>reverb_feedback</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>87</Index>
+    <Name>reverb_on</Name>
+    <Symbol>reverb_on</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>88</Index>
+    <Name>step_frequency</Name>
+    <Symbol>step_frequency</Symbol>
+    <Value>0.636363625526428</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>89</Index>
+    <Name>step_seq_00</Name>
+    <Symbol>step_seq_00</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>90</Index>
+    <Name>step_seq_01</Name>
+    <Symbol>step_seq_01</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>91</Index>
+    <Name>step_seq_02</Name>
+    <Symbol>step_seq_02</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>92</Index>
+    <Name>step_seq_03</Name>
+    <Symbol>step_seq_03</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>93</Index>
+    <Name>step_seq_04</Name>
+    <Symbol>step_seq_04</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>94</Index>
+    <Name>step_seq_05</Name>
+    <Symbol>step_seq_05</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>95</Index>
+    <Name>step_seq_06</Name>
+    <Symbol>step_seq_06</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>96</Index>
+    <Name>step_seq_07</Name>
+    <Symbol>step_seq_07</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>97</Index>
+    <Name>step_seq_08</Name>
+    <Symbol>step_seq_08</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>98</Index>
+    <Name>step_seq_09</Name>
+    <Symbol>step_seq_09</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>99</Index>
+    <Name>step_seq_10</Name>
+    <Symbol>step_seq_10</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>100</Index>
+    <Name>step_seq_11</Name>
+    <Symbol>step_seq_11</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>101</Index>
+    <Name>step_seq_12</Name>
+    <Symbol>step_seq_12</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>102</Index>
+    <Name>step_seq_13</Name>
+    <Symbol>step_seq_13</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>103</Index>
+    <Name>step_seq_14</Name>
+    <Symbol>step_seq_14</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>104</Index>
+    <Name>step_seq_15</Name>
+    <Symbol>step_seq_15</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>105</Index>
+    <Name>step_seq_16</Name>
+    <Symbol>step_seq_16</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>106</Index>
+    <Name>step_seq_17</Name>
+    <Symbol>step_seq_17</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>107</Index>
+    <Name>step_seq_18</Name>
+    <Symbol>step_seq_18</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>108</Index>
+    <Name>step_seq_19</Name>
+    <Symbol>step_seq_19</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>109</Index>
+    <Name>step_seq_20</Name>
+    <Symbol>step_seq_20</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>110</Index>
+    <Name>step_seq_21</Name>
+    <Symbol>step_seq_21</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>111</Index>
+    <Name>step_seq_22</Name>
+    <Symbol>step_seq_22</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>112</Index>
+    <Name>step_seq_23</Name>
+    <Symbol>step_seq_23</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>113</Index>
+    <Name>step_seq_24</Name>
+    <Symbol>step_seq_24</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>114</Index>
+    <Name>step_seq_25</Name>
+    <Symbol>step_seq_25</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>115</Index>
+    <Name>step_seq_26</Name>
+    <Symbol>step_seq_26</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>116</Index>
+    <Name>step_seq_27</Name>
+    <Symbol>step_seq_27</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>117</Index>
+    <Name>step_seq_28</Name>
+    <Symbol>step_seq_28</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>118</Index>
+    <Name>step_seq_29</Name>
+    <Symbol>step_seq_29</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>119</Index>
+    <Name>step_seq_30</Name>
+    <Symbol>step_seq_30</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>120</Index>
+    <Name>step_seq_31</Name>
+    <Symbol>step_seq_31</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>121</Index>
+    <Name>step_sequencer_retrigger</Name>
+    <Symbol>step_sequencer_retrigger</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>122</Index>
+    <Name>step_sequencer_sync</Name>
+    <Symbol>step_sequencer_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>123</Index>
+    <Name>step_sequencer_tempo</Name>
+    <Symbol>step_sequencer_tempo</Symbol>
+    <Value>0.636363625526428</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>124</Index>
+    <Name>step_smoothing</Name>
+    <Symbol>step_smoothing</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>125</Index>
+    <Name>stutter_frequency</Name>
+    <Symbol>stutter_frequency</Symbol>
+    <Value>0.428571432828903</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>126</Index>
+    <Name>stutter_on</Name>
+    <Symbol>stutter_on</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>127</Index>
+    <Name>stutter_resample_frequency</Name>
+    <Symbol>stutter_resample_frequency</Symbol>
+    <Value>0.727272748947144</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>128</Index>
+    <Name>stutter_resample_sync</Name>
+    <Symbol>stutter_resample_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>129</Index>
+    <Name>stutter_resample_tempo</Name>
+    <Symbol>stutter_resample_tempo</Symbol>
+    <Value>0.545454561710358</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>130</Index>
+    <Name>stutter_softness</Name>
+    <Symbol>stutter_softness</Symbol>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>131</Index>
+    <Name>stutter_sync</Name>
+    <Symbol>stutter_sync</Symbol>
+    <Value>0.333333343267441</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>132</Index>
+    <Name>stutter_tempo</Name>
+    <Symbol>stutter_tempo</Symbol>
+    <Value>0.400000005960464</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>133</Index>
+    <Name>sub_octave</Name>
+    <Symbol>sub_octave</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>134</Index>
+    <Name>sub_shuffle</Name>
+    <Symbol>sub_shuffle</Symbol>
+    <Value>0.84799998998642</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>135</Index>
+    <Name>sub_volume</Name>
+    <Symbol>sub_volume</Symbol>
+    <Value>0.589743614196777</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>136</Index>
+    <Name>sub_waveform</Name>
+    <Symbol>sub_waveform</Symbol>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>137</Index>
+    <Name>unison_1_harmonize</Name>
+    <Symbol>unison_1_harmonize</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>138</Index>
+    <Name>unison_2_harmonize</Name>
+    <Symbol>unison_2_harmonize</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>139</Index>
+    <Name>velocity_track</Name>
+    <Symbol>velocity_track</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>140</Index>
+    <Name>volume</Name>
+    <Symbol>volume</Symbol>
+    <Value>0.624338626861572</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://lv2plug.in/ns/ext/atom#Chunk</Type>
+    <Key>urn:juce:stateBinary</Key>
+    <Value>
+ew0KICAibGljZW5zZSI6ICJQYXRjaCAoYykgYnkgLiAgVGhpcyBwYXRjaCBpcyBsaWNlbnNlZCB1bmRlciBhIENyZWF0aXZlIENvbW1vbnMgQXR0cmlidXRpb24gNC4wIEludGVybmF0aW9uYWwgTGljZW5zZS4gIFlvdSBzaG91bGQgaGF2ZSByZWNlaXZlZCBhIGNvcHkgb2YgdGhlIGxpY2Vuc2UgYWxvbmcgd2l0aCB0aGlzIHdvcmsuICBJZiBub3QsIHNlZSA8aHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbGljZW5zZXMvYnkvNC4wLz4uIiwNCiAgInN5bnRoX3ZlcnNpb24iOiAiMC45LjAiLA0KICAicGF0Y2hfbmFtZSI6ICJzeXN0ZW0iLA0KICAiZm9sZGVyX25hbWUiOiAiZmluYWwiLA0KICAiYXV0aG9yIjogIiIsDQogICJzZXR0aW5ncyI6IHsNCiAgICAiYW1wX2F0dGFjayI6IDAuMTA5NTQ1MDAwMDAwMDAwMDAzNDgsDQogICAgImFtcF9kZWNheSI6IDEuNSwNCiAgICAiYW1wX3JlbGVhc2UiOiAxLjI1MzAxMjA0ODE5Mjc3MTEyMTgsDQogICAgImFtcF9zdXN0YWluIjogMSwNCiAgICAiYXJwX2ZyZXF1ZW5jeSI6IDIsDQogICAgImFycF9nYXRlIjogMC41LA0KICAgICJhcnBfb2N0YXZlcyI6IDEsDQogICAgImFycF9vbiI6IDAsDQogICAgImFycF9wYXR0ZXJuIjogMCwNCiAgICAiYXJwX3N5bmMiOiAxLA0KICAgICJhcnBfdGVtcG8iOiA5LA0KICAgICJiZWF0c19wZXJfbWludXRlIjogMiwNCiAgICAiY3Jvc3NfbW9kdWxhdGlvbiI6IDAuMjcyMDAwMDAwMDAwMDAwMDE5NTQsDQogICAgImN1dG9mZiI6IDEwMy44NDQwNjc3OTY2MTAxNzU5NSwNCiAgICAiZGVsYXlfZHJ5X3dldCI6IDAuNSwNCiAgICAiZGVsYXlfZmVlZGJhY2siOiAwLjQwMDAwMDAwMDAwMDAwMDAyMjIsDQogICAgImRlbGF5X2ZyZXF1ZW5jeSI6IDIsDQogICAgImRlbGF5X29uIjogMCwNCiAgICAiZGVsYXlfc3luYyI6IDEsDQogICAgImRlbGF5X3RlbXBvIjogOSwNCiAgICAiZGlzdG9ydGlvbl9kcml2ZSI6IDAsDQogICAgImRpc3RvcnRpb25fbWl4IjogMSwNCiAgICAiZGlzdG9ydGlvbl9vbiI6IDAsDQogICAgImRpc3RvcnRpb25fdHlwZSI6IDAsDQogICAgImZpbF9hdHRhY2siOiAwLA0KICAgICJmaWxfZGVjYXkiOiAxLjU5MDM2MTQ0NTc4MzEzMjU0MzUsDQogICAgImZpbF9lbnZfZGVwdGgiOiA4Ny4wMzk5OTk5OTk5OTk5OTIwNDIsDQogICAgImZpbF9yZWxlYXNlIjogMC40MzM3MzQ5Mzk3NTkwMzYxNTMyNywNCiAgICAiZmlsX3N1c3RhaW4iOiAwLjAzNjE0NDU3ODMxMzI1MzAxMDQ2LA0KICAgICJmaWx0ZXJfYmxlbmQiOiAwLA0KICAgICJmaWx0ZXJfZHJpdmUiOiAwLA0KICAgICJmaWx0ZXJfb24iOiAxLA0KICAgICJmaWx0ZXJfc2hlbGYiOiAwLA0KICAgICJmaWx0ZXJfc3R5bGUiOiAxLA0KICAgICJmb3JtYW50X29uIjogMCwNCiAgICAiZm9ybWFudF94IjogMC41LA0KICAgICJmb3JtYW50X3kiOiAwLjUsDQogICAgImtleXRyYWNrIjogMCwNCiAgICAibGVnYXRvIjogMCwNCiAgICAibW9kX2F0dGFjayI6IDAsDQogICAgIm1vZF9kZWNheSI6IDEuNSwNCiAgICAibW9kX3JlbGVhc2UiOiAxLjUsDQogICAgIm1vZF9zdXN0YWluIjogMC41LA0KICAgICJtb25vX2xmb18xX2FtcGxpdHVkZSI6IDEsDQogICAgIm1vbm9fbGZvXzFfZnJlcXVlbmN5IjogMSwNCiAgICAibW9ub19sZm9fMV9yZXRyaWdnZXIiOiAyLA0KICAgICJtb25vX2xmb18xX3N5bmMiOiAxLA0KICAgICJtb25vX2xmb18xX3RlbXBvIjogNiwNCiAgICAibW9ub19sZm9fMV93YXZlZm9ybSI6IDAsDQogICAgIm1vbm9fbGZvXzJfYW1wbGl0dWRlIjogMSwNCiAgICAibW9ub19sZm9fMl9mcmVxdWVuY3kiOiAxLA0KICAgICJtb25vX2xmb18yX3JldHJpZ2dlciI6IDIsDQogICAgIm1vbm9fbGZvXzJfc3luYyI6IDEsDQogICAgIm1vbm9fbGZvXzJfdGVtcG8iOiA3LA0KICAgICJtb25vX2xmb18yX3dhdmVmb3JtIjogMCwNCiAgICAibm9pc2Vfdm9sdW1lIjogMCwNCiAgICAibnVtX3N0ZXBzIjogOCwNCiAgICAib3NjXzFfdHJhbnNwb3NlIjogMCwNCiAgICAib3NjXzFfdHVuZSI6IDAsDQogICAgIm9zY18xX3VuaXNvbl9kZXR1bmUiOiAxMCwNCiAgICAib3NjXzFfdW5pc29uX3ZvaWNlcyI6IDEsDQogICAgIm9zY18xX3ZvbHVtZSI6IDAuNTQ3NzIyNTU3NDk5OTk5OTg0NjQsDQogICAgIm9zY18xX3dhdmVmb3JtIjogNCwNCiAgICAib3NjXzJfdHJhbnNwb3NlIjogNywNCiAgICAib3NjXzJfdHVuZSI6IDAuMTIwMDAwMDAwMDAwMDAwMTIwNDYsDQogICAgIm9zY18yX3VuaXNvbl9kZXR1bmUiOiAxMCwNCiAgICAib3NjXzJfdW5pc29uX3ZvaWNlcyI6IDMsDQogICAgIm9zY18yX3ZvbHVtZSI6IDAuMzk3NDM1ODk3NDM1ODk3NDY3MjEsDQogICAgIm9zY18yX3dhdmVmb3JtIjogOCwNCiAgICAib3NjX2ZlZWRiYWNrX2Ftb3VudCI6IDAsDQogICAgIm9zY19mZWVkYmFja190cmFuc3Bvc2UiOiAwLA0KICAgICJvc2NfZmVlZGJhY2tfdHVuZSI6IDAsDQogICAgInBpdGNoX2JlbmRfcmFuZ2UiOiAwLA0KICAgICJwb2x5X2xmb19hbXBsaXR1ZGUiOiAxLA0KICAgICJwb2x5X2xmb19mcmVxdWVuY3kiOiAxLA0KICAgICJwb2x5X2xmb19zeW5jIjogMSwNCiAgICAicG9seV9sZm9fdGVtcG8iOiA3LA0KICAgICJwb2x5X2xmb193YXZlZm9ybSI6IDAsDQogICAgInBvbHlwaG9ueSI6IDQsDQogICAgInBvcnRhbWVudG8iOiAtNywNCiAgICAicG9ydGFtZW50b190eXBlIjogMCwNCiAgICAicmVzb25hbmNlIjogMC41OTQ1OTQ1OTQ1OTQ1OTQ1MTY1OCwNCiAgICAicmV2ZXJiX2RhbXBpbmciOiAwLjUsDQogICAgInJldmVyYl9kcnlfd2V0IjogMC41LA0KICAgICJyZXZlcmJfZmVlZGJhY2siOiAwLjkwMDAwMDAwMDAwMDAwMDAyMjIsDQogICAgInJldmVyYl9vbiI6IDEsDQogICAgInN0ZXBfZnJlcXVlbmN5IjogMiwNCiAgICAic3RlcF9zZXFfMDAiOiAwLA0KICAgICJzdGVwX3NlcV8wMSI6IDAsDQogICAgInN0ZXBfc2VxXzAyIjogMCwNCiAgICAic3RlcF9zZXFfMDMiOiAwLA0KICAgICJzdGVwX3NlcV8wNCI6IDAsDQogICAgInN0ZXBfc2VxXzA1IjogMCwNCiAgICAic3RlcF9zZXFfMDYiOiAwLA0KICAgICJzdGVwX3NlcV8wNyI6IDAsDQogICAgInN0ZXBfc2VxXzA4IjogMCwNCiAgICAic3RlcF9zZXFfMDkiOiAwLA0KICAgICJzdGVwX3NlcV8xMCI6IDAsDQogICAgInN0ZXBfc2VxXzExIjogMCwNCiAgICAic3RlcF9zZXFfMTIiOiAwLA0KICAgICJzdGVwX3NlcV8xMyI6IDAsDQogICAgInN0ZXBfc2VxXzE0IjogMCwNCiAgICAic3RlcF9zZXFfMTUiOiAwLA0KICAgICJzdGVwX3NlcV8xNiI6IDAsDQogICAgInN0ZXBfc2VxXzE3IjogMCwNCiAgICAic3RlcF9zZXFfMTgiOiAwLA0KICAgICJzdGVwX3NlcV8xOSI6IDAsDQogICAgInN0ZXBfc2VxXzIwIjogMCwNCiAgICAic3RlcF9zZXFfMjEiOiAwLA0KICAgICJzdGVwX3NlcV8yMiI6IDAsDQogICAgInN0ZXBfc2VxXzIzIjogMCwNCiAgICAic3RlcF9zZXFfMjQiOiAwLA0KICAgICJzdGVwX3NlcV8yNSI6IDAsDQogICAgInN0ZXBfc2VxXzI2IjogMCwNCiAgICAic3RlcF9zZXFfMjciOiAwLA0KICAgICJzdGVwX3NlcV8yOCI6IDAsDQogICAgInN0ZXBfc2VxXzI5IjogMCwNCiAgICAic3RlcF9zZXFfMzAiOiAwLA0KICAgICJzdGVwX3NlcV8zMSI6IDAsDQogICAgInN0ZXBfc2VxdWVuY2VyX3JldHJpZ2dlciI6IDIsDQogICAgInN0ZXBfc2VxdWVuY2VyX3N5bmMiOiAxLA0KICAgICJzdGVwX3NlcXVlbmNlcl90ZW1wbyI6IDcsDQogICAgInN0ZXBfc21vb3RoaW5nIjogMCwNCiAgICAic3R1dHRlcl9mcmVxdWVuY3kiOiAzLA0KICAgICJzdHV0dGVyX29uIjogMCwNCiAgICAic3R1dHRlcl9yZXNhbXBsZV9mcmVxdWVuY3kiOiAxLA0KICAgICJzdHV0dGVyX3Jlc2FtcGxlX3N5bmMiOiAxLA0KICAgICJzdHV0dGVyX3Jlc2FtcGxlX3RlbXBvIjogNiwNCiAgICAic3R1dHRlcl9zb2Z0bmVzcyI6IDAuMjAwMDAwMDAwMDAwMDAwMDExMSwNCiAgICAic3R1dHRlcl9zeW5jIjogMSwNCiAgICAic3R1dHRlcl90ZW1wbyI6IDgsDQogICAgInN1Yl9vY3RhdmUiOiAwLA0KICAgICJzdWJfc2h1ZmZsZSI6IDAuNTI0MDAwMDAwMDAwMDAwMDIxMzIsDQogICAgInN1Yl92b2x1bWUiOiAwLjcwNTEyODIwNTEyODIwNTA2NTU4LA0KICAgICJzdWJfd2F2ZWZvcm0iOiAyLA0KICAgICJ1bmlzb25fMV9oYXJtb25pemUiOiAwLA0KICAgICJ1bmlzb25fMl9oYXJtb25pemUiOiAwLA0KICAgICJ2ZWxvY2l0eV90cmFjayI6IDAsDQogICAgInZvbHVtZSI6IDAuNTY4NzEzMjI3NTEzMjI3MzkyODYsDQogICAgIm1vZHVsYXRpb25zIjogW10NCiAgfQ0KfQA=
+    </Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <Patchbay>
+  <Connection>
+   <Source>Helm:Audio Output 1</Source>
+   <Target>Audio Output:Left</Target>
+  </Connection>
+  <Connection>
+   <Source>Helm:Audio Output 2</Source>
+   <Target>Audio Output:Right</Target>
+  </Connection>
+  <Connection>
+   <Source>Midi Input:events-out</Source>
+   <Target>Helm:events-in</Target>
+  </Connection>
+ </Patchbay>
+
+ <ExternalPatchbay>
+  <Connection>
+   <Source>a2j:Midi Through [14] (capture): Midi Through Port-0</Source>
+   <Target>Carla:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:K-Board [20] (capture): K-Board MIDI 1</Source>
+   <Target>Carla:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>Carla:audio-out1</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Carla:audio-out2</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+ </ExternalPatchbay>
+</CARLA-PROJECT>

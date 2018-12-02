@@ -16,6 +16,7 @@ mod trigger;
 mod effects;
 
 mod config;
+mod carla_starter;
 mod midi_devices;
 mod midi_beat_tracker;
 mod midi_event;
@@ -45,6 +46,7 @@ use crate::pm::{PortMidi};
 use crate::watch::*;
 use crate::patch::Patch;
 use crate::virtual_midi::VirtualMidiOutput;
+use crate::carla_starter::CarlaStarter;
 
 use crate::load_patches::*;
 
@@ -72,9 +74,13 @@ fn main() {
 
     let mut patches = load_patches(&config);
     let mut selected_patch = patches.iter().position(|p| p.name() == config.selected_patch);
+    let mut carla_starter = config.carla_path.clone().map(|it| CarlaStarter::new(&it));
 
     if let Some(sp) = selected_patch {
         patches[sp].init(&virtual_midi_output);
+        if let Some(ref mut carla_starter) = carla_starter {
+            carla_starter.on_patch_change(&patches[sp].name())
+        }
     }
 
     const BUF_LEN: usize = 1024;
@@ -131,8 +137,13 @@ fn main() {
                                 patches[sp].stop_running_effects(&virtual_midi_output);
                             }
                             selected_patch = new_patch_i_option;
-                            patches[new_patch_i].init(&virtual_midi_output);
-                            println!("Selected Patch = {:?}", patches[new_patch_i].name());
+                            let patch = &mut patches[new_patch_i];
+                            patch.init(&virtual_midi_output);
+                            println!("Selected Patch = {:?}", patch.name());
+
+                            if let Some(ref mut carla_starter) = carla_starter {
+                                carla_starter.on_patch_change(patch.name())
+                            }
                         }
 
                     },

@@ -47,6 +47,11 @@ pub fn load_patches(config: &Config) -> Vec<Patch> {
 
     for path in paths {
         let patch_path = path.unwrap().path();
+
+        if patch_path.extension() == None {
+            continue;
+        }
+
         println!("Loading Patch {:?}", patch_path.display());
         let loading_start_time = Instant::now();
         match load_patch(&patch_path, config) {

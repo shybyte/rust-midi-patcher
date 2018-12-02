@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE CARLA-PROJECT>
+<CARLA-PROJECT VERSION='2.0'>
+ <EngineSettings>
+  <ForceStereo>false</ForceStereo>
+  <PreferPluginBridges>false</PreferPluginBridges>
+  <PreferUiBridges>true</PreferUiBridges>
+  <UIsAlwaysOnTop>false</UIsAlwaysOnTop>
+  <MaxParameters>200</MaxParameters>
+  <UIBridgesTimeout>4000</UIBridgesTimeout>
+ </EngineSettings>
+
+ <Transport>
+  <BeatsPerMinute>120</BeatsPerMinute>
+ </Transport>
+
+ <!-- OmegaGMGS2 -->
+ <Plugin>
+  <Info>
+   <Type>SF2</Type>
+   <Name>OmegaGMGS2</Name>
+   <Filename>/home/shybyte/.sounds/sf2/OmegaGMGS2.sf2</Filename>
+   <Label>OmegaGMGS2</Label>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1a4</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Reverb On/Off</Name>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Reverb Room Size</Name>
+    <Value>0.200000002980232</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>2</Index>
+    <Name>Reverb Damp</Name>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Reverb Level</Name>
+    <MidiCC>91</MidiCC>
+    <MidiChannel>1</MidiChannel>
+    <Value>0.899999976158142</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>Reverb Width</Name>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Chorus On/Off</Name>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Chorus Voice Count</Name>
+    <Value>3</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Chorus Level</Name>
+    <Value>2</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Chorus Speed</Name>
+    <Value>0.300000011920929</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Chorus Depth</Name>
+    <Value>8</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Chorus Type</Name>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Polyphony</Name>
+    <Value>256</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Interpolation</Name>
+    <Value>4</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/string</Type>
+    <Key>midiPrograms</Key>
+    <Value>16:0:0:0:0:0:0:0:0:461:0:0:0:0:0:0</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- Calf Reverb -->
+ <Plugin>
+  <Info>
+   <Type>LV2</Type>
+   <Name>Calf Reverb</Name>
+   <URI>http://calf.sourceforge.net/plugins/Reverb</URI>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1e1</Options>
+
+   <Parameter>
+    <Index>3</Index>
+    <Name>Decay time</Name>
+    <Symbol>decay_time</Symbol>
+    <Value>1.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>High Frq Damp</Name>
+    <Symbol>hf_damp</Symbol>
+    <Value>5000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Room size</Name>
+    <Symbol>room_size</Symbol>
+    <Value>2</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Diffusion</Name>
+    <Symbol>diffusion</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Wet Amount</Name>
+    <Symbol>amount</Symbol>
+    <Value>0.25</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Dry Amount</Name>
+    <Symbol>dry</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Pre Delay</Name>
+    <Symbol>predelay</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Bass Cut</Name>
+    <Symbol>bass_cut</Symbol>
+    <Value>300</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Treble Cut</Name>
+    <Symbol>treble_cut</Symbol>
+    <Value>5000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Active</Name>
+    <Symbol>on</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Input Gain</Name>
+    <Symbol>level_in</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>14</Index>
+    <Name>Output Gain</Name>
+    <Symbol>level_out</Symbol>
+    <Value>1</Value>
+   </Parameter>
+  </Data>
+ </Plugin>
+
+ <Patchbay>
+  <Connection>
+   <Source>Midi Input:events-out</Source>
+   <Target>OmegaGMGS2:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>Calf Reverb:Out L</Source>
+   <Target>Audio Output:Left</Target>
+  </Connection>
+  <Connection>
+   <Source>Calf Reverb:Out R</Source>
+   <Target>Audio Output:Right</Target>
+  </Connection>
+  <Connection>
+   <Source>OmegaGMGS2:out-left</Source>
+   <Target>Calf Reverb:In L</Target>
+  </Connection>
+  <Connection>
+   <Source>OmegaGMGS2:out-right</Source>
+   <Target>Calf Reverb:In R</Target>
+  </Connection>
+ </Patchbay>
+
+ <ExternalPatchbay>
+  <Connection>
+   <Source>a2j:Midi Through [14] (capture): Midi Through Port-0</Source>
+   <Target>Carla:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>a2j:K-Board [20] (capture): K-Board MIDI 1</Source>
+   <Target>Carla:events-in</Target>
+  </Connection>
+  <Connection>
+   <Source>Carla:audio-out1</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>Carla:audio-out2</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
+ </ExternalPatchbay>
+</CARLA-PROJECT>

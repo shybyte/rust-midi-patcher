@@ -409,6 +409,7 @@ version = "0.1.0"
 dependencies = [
  "chan 0.1.23 (registry+https://github.com/rust-lang/crates.io-index)",
  "chan-signal 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.43 (registry+https://github.com/rust-lang/crates.io-index)",
  "midi-message 0.1.0 (git+https://github.com/shybyte/midi-message-rs)",
  "midi2opc 0.1.0 (git+https://github.com/shybyte/midi2opc)",
  "notify 4.0.6 (registry+https://github.com/rust-lang/crates.io-index)",

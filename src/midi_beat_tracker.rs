@@ -34,7 +34,7 @@ impl MidiBeatTracker {
             eprintln!("min = {:?}", self.default_beat_duration / 2);
             eprintln!("last_beat_duration = {:?}", last_beat_duration);
             if (self.default_beat_duration * 2 / 3) < last_beat_duration &&
-                last_beat_duration < (3 / 2 * self.default_beat_duration) {
+                last_beat_duration < (self.default_beat_duration * 3 / 2) {
                 eprintln!(" ===> beat_duration = {:?}", last_beat_duration);
                 self.beat_duration = last_beat_duration;
             }

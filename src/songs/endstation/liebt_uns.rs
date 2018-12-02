@@ -18,7 +18,7 @@ static LARS_OUT: &str = "LARS_OUT";
 
 pub fn liebt_uns(_config: &Config) -> Patch {
     Patch::new_simple(
-        "liebt uns",
+        "liebt-uns",
         vec![
             // Pedal -> PEDAL_NOTE
             PedalMelody::new(EXPRESS_PEDAL, PEDAL_NOTE, &[C5, 0, 1]).boxit(),

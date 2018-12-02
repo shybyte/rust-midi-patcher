@@ -13,6 +13,7 @@ chan-signal = "^0.3.2"
 chan = "^0.1.23"
 risp = "^0.7.0"
 notify = "^4.0.6"
+libc = "0.2"
 
 [patch.crates-io]
 #"risp" = { path = '../risp' }
