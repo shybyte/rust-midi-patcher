@@ -7,6 +7,8 @@ use std::sync::{Arc, Mutex};
 use crate::trigger::Trigger;
 use crate::virtual_midi::{MidiLightPatch, VirtualMidiOutput};
 use crate::midi_beat_tracker::MidiBeatTracker;
+use crate::utils::program_change;
+use crate::midi_devices::HAND_SONIC;
 
 pub struct Patch {
     name: String,
@@ -15,6 +17,7 @@ pub struct Patch {
     program: u8,
     midi_light_patch: Option<MidiLightPatch>,
     beat_tracker: Option<MidiBeatTracker>,
+    drum_program: Option<u8>,
 }
 
 impl Patch {
@@ -27,6 +30,7 @@ impl Patch {
             program,
             midi_light_patch,
             beat_tracker: None,
+            drum_program: None,
         }
     }
 
@@ -38,6 +42,7 @@ impl Patch {
             program,
             midi_light_patch: None,
             beat_tracker: None,
+            drum_program: None,
         }
     }
 
@@ -46,10 +51,16 @@ impl Patch {
         self
     }
 
+    pub fn drum_program(mut self, drum_program: u8) -> Self {
+        self.drum_program = Some(drum_program);
+        self
+    }
+
     pub fn init(&mut self, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {
         if let Some(ref midi_light_patch) = self.midi_light_patch {
             virtual_midi_out.lock().unwrap().reconfigure(midi_light_patch);
         }
+        program_change(HAND_SONIC, virtual_midi_out, self.drum_program.unwrap_or(107));
     }
 
     pub fn update_from(&mut self, patch: Patch, virtual_midi_out: &Arc<Mutex<VirtualMidiOutput>>) {

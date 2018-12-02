@@ -43,6 +43,16 @@ pub fn control_change(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutp
     send_midi(output_name, midi_output, note_on);
 }
 
+pub fn program_change(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, program: u8) {
+    let program_change_command = MidiMessage {
+        status: 0xC0, //192
+        data1: program,
+        data2: 0,
+    };
+
+    send_midi(output_name, midi_output, program_change_command);
+}
+
 pub fn pitch_wheel(output_name: &str, midi_output: &Arc<Mutex<VirtualMidiOutput>>, data1: u8, data2: u8) {
     let message = MidiMessage {
         status: 224,

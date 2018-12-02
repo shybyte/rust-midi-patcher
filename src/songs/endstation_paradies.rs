@@ -139,6 +139,7 @@ pub fn young(_config: &Config) -> Patch {
                ],
                28, // a45
                None)
+        .drum_program(103)
 }
 
 pub fn enddzeit(_config: &Config) -> Patch {
@@ -246,4 +247,5 @@ pub fn system(_config: &Config) -> Patch {
                ],
                51, // A74
                None)
+        .drum_program(106)
 }

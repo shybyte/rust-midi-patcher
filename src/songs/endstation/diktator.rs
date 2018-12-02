@@ -11,10 +11,10 @@ use crate::midi_beat_tracker::MidiBeatTracker;
 use crate::utils::midi_filter::FilterType;
 use crate::utils::midi_filter::MidiFilter;
 use crate::effects::control_sequencer::NoteDuration;
-use crate::effects::control_to_pitch_forwarder::ControlToPitchForwarder;
+use crate::effects::control_multiplier::ControlMultiplier;
 
 
-static PITCH: &str = "PITCH";
+static DIKT_MOD: &str = "DIKT_MOD";
 
 
 pub fn diktator(_config: &Config) -> Patch {
@@ -35,22 +35,23 @@ pub fn diktator(_config: &Config) -> Patch {
                            NoteDuration::Relative(16), // Duration::from_millis(100)?,
                        ).boxit()
                    ),
-
                    (
                        Trigger::new(HAND_SONIC, 74).boxit(),
                        ControlSequencer::new(
-                           PITCH,
+                           DIKT_MOD,
                            OSC2_SEMITONE,
                            vec![126, 114, 96, 78],
-                           64,
+                           0,
                            NoteDuration::Relative(16), // Duration::from_millis(100)?,
                        ).boxit()
                    ),
-
                    (
-                       Box::new(Trigger::never()),
-                       Box::new(ControlToPitchForwarder::new(
-                           PITCH, THROUGH_PORT))
+                       Trigger::never().boxit(),
+                       ControlMultiplier::new(
+                           MidiFilter::control(DIKT_MOD, OSC2_SEMITONE),
+                           MidiFilter::control(USB_MIDI_ADAPTER, MOD),
+                           THROUGH_PORT, MOD
+                       ).boxit()
                    ),
                ],
                43, // A64

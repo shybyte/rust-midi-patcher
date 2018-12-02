@@ -1,5 +1,5 @@
 use crate::utils::range_mapper::ValueRange;
-use crate::pm::MidiMessage;
+use portmidi::MidiMessage;
 use crate::utils::is_note_on;
 use crate::utils::is_note_off;
 use crate::utils::is_control_change;
@@ -9,8 +9,7 @@ use crate::utils::range_mapper::ALL_REAL_NOTES;
 pub enum FilterType {
     Note,
     NoteOn,
-    #[allow(dead_code)]
-    Control,
+    Control(u8),
 }
 
 #[derive(Debug)]
@@ -45,6 +44,14 @@ impl MidiFilter {
         }
     }
 
+    pub fn control<S: Into<String>>(device: S, control: u8) -> Self {
+        MidiFilter {
+            device: device.into(),
+            range: (0, 127),
+            filter_type: FilterType::Control(control),
+        }
+    }
+
     pub fn matches(&self, device: &str, midi_message: MidiMessage) -> bool {
         if !device.contains(&self.device) {
             return false;
@@ -53,7 +60,7 @@ impl MidiFilter {
         let matches_type = match self.filter_type {
             FilterType::Note => is_note_on(midi_message) || is_note_off(midi_message),
             FilterType::NoteOn => is_note_on(midi_message),
-            FilterType::Control => is_control_change(midi_message)
+            FilterType::Control(control) => is_control_change(midi_message) && midi_message.data1 == control
         };
         if !matches_type {
             return false;
