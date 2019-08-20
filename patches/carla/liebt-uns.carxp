@@ -221,14 +221,6 @@
    <Target>OmegaGMGS2:events-in</Target>
   </Connection>
   <Connection>
-   <Source>Calf Reverb:Out L</Source>
-   <Target>Audio Output:Left</Target>
-  </Connection>
-  <Connection>
-   <Source>Calf Reverb:Out R</Source>
-   <Target>Audio Output:Right</Target>
-  </Connection>
-  <Connection>
    <Source>OmegaGMGS2:out-left</Source>
    <Target>Calf Reverb:In L</Target>
   </Connection>
@@ -236,15 +228,39 @@
    <Source>OmegaGMGS2:out-right</Source>
    <Target>Calf Reverb:In R</Target>
   </Connection>
+  <Connection>
+   <Source>Calf Reverb:Out L</Source>
+   <Target>Audio Output:Left</Target>
+  </Connection>
+  <Connection>
+   <Source>Calf Reverb:Out R</Source>
+   <Target>Audio Output:Right</Target>
+  </Connection>
  </Patchbay>
 
  <ExternalPatchbay>
+  <Connection>
+   <Source>system:capture_1</Source>
+   <Target>PulseAudio JACK Source:front-left</Target>
+  </Connection>
+  <Connection>
+   <Source>system:capture_2</Source>
+   <Target>PulseAudio JACK Source:front-right</Target>
+  </Connection>
+  <Connection>
+   <Source>PulseAudio JACK Sink:front-left</Source>
+   <Target>system:playback_1</Target>
+  </Connection>
+  <Connection>
+   <Source>PulseAudio JACK Sink:front-right</Source>
+   <Target>system:playback_2</Target>
+  </Connection>
   <Connection>
    <Source>a2j:Midi Through [14] (capture): Midi Through Port-0</Source>
    <Target>Carla:events-in</Target>
   </Connection>
   <Connection>
-   <Source>a2j:K-Board [20] (capture): K-Board MIDI 1</Source>
+   <Source>a2j:K-Board [32] (capture): K-Board MIDI 1</Source>
    <Target>Carla:events-in</Target>
   </Connection>
   <Connection>

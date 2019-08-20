@@ -1012,16 +1012,16 @@ ew0KICAibGljZW5zZSI6ICJQYXRjaCAoYykgYnkgLiAgVGhpcyBwYXRjaCBpcyBsaWNlbnNlZCB1bmRl
 
  <Patchbay>
   <Connection>
+   <Source>Midi Input:events-out</Source>
+   <Target>Helm:events-in</Target>
+  </Connection>
+  <Connection>
    <Source>Helm:Audio Output 1</Source>
    <Target>Audio Output:Left</Target>
   </Connection>
   <Connection>
    <Source>Helm:Audio Output 2</Source>
    <Target>Audio Output:Right</Target>
-  </Connection>
-  <Connection>
-   <Source>Midi Input:events-out</Source>
-   <Target>Helm:events-in</Target>
   </Connection>
  </Patchbay>
 

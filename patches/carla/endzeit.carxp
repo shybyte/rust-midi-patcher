@@ -14,19 +14,118 @@
   <BeatsPerMinute>120</BeatsPerMinute>
  </Transport>
 
- <!-- cello_solo -->
+ <!-- Calf Compressor -->
  <Plugin>
   <Info>
-   <Type>SF2</Type>
-   <Name>cello_solo</Name>
-   <Filename>/home/shybyte/.sounds/sf2/cello_solo.sf2</Filename>
-   <Label>cello_solo</Label>
+   <Type>LV2</Type>
+   <Name>Calf Compressor</Name>
+   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
   </Info>
 
   <Data>
    <Active>Yes</Active>
    <ControlChannel>1</ControlChannel>
-   <Options>0x1b0</Options>
+   <Options>0x1e1</Options>
+
+   <Parameter>
+    <Index>0</Index>
+    <Name>Bypass</Name>
+    <Symbol>bypass</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>1</Index>
+    <Name>Input</Name>
+    <Symbol>level_in</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Threshold</Name>
+    <Symbol>threshold</Symbol>
+    <Value>0.041234627366066</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Ratio</Name>
+    <Symbol>ratio</Symbol>
+    <Value>3.22607445716858</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Attack</Name>
+    <Symbol>attack</Symbol>
+    <Value>20</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Release</Name>
+    <Symbol>release</Symbol>
+    <Value>250</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>10</Index>
+    <Name>Makeup Gain</Name>
+    <Symbol>makeup</Symbol>
+    <Value>8.69387912750244</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Knee</Name>
+    <Symbol>knee</Symbol>
+    <Value>2.82842993736267</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Detection</Name>
+    <Symbol>detection</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Stereo Link</Name>
+    <Symbol>stereo_link</Symbol>
+    <Value>0</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>15</Index>
+    <Name>Mix</Name>
+    <Symbol>mix</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <CustomData>
+    <Type>http://kxstudio.sf.net/ns/carla/property</Type>
+    <Key>CarlaSkinIsCompacted</Key>
+    <Value>false</Value>
+   </CustomData>
+  </Data>
+ </Plugin>
+
+ <!-- cello-SEC-accent -->
+ <Plugin>
+  <Info>
+   <Type>SF2</Type>
+   <Name>cello-SEC-accent</Name>
+   <Filename>/home/shybyte/.sounds/sf2/cello-SEC-accent.sf2</Filename>
+   <Label>cello-SEC-accent</Label>
+  </Info>
+
+  <Data>
+   <Active>Yes</Active>
+   <Volume>1.27</Volume>
+   <ControlChannel>1</ControlChannel>
+   <Options>0x1a4</Options>
 
    <Parameter>
     <Index>0</Index>
@@ -37,13 +136,13 @@
    <Parameter>
     <Index>1</Index>
     <Name>Reverb Room Size</Name>
-    <Value>0.200000002980232</Value>
+    <Value>0.369550198316574</Value>
    </Parameter>
 
    <Parameter>
     <Index>2</Index>
     <Name>Reverb Damp</Name>
-    <Value>0</Value>
+    <Value>0.166089966893196</Value>
    </Parameter>
 
    <Parameter>
@@ -51,13 +150,13 @@
     <Name>Reverb Level</Name>
     <MidiCC>91</MidiCC>
     <MidiChannel>1</MidiChannel>
-    <Value>0.699999988079071</Value>
+    <Value>0.899999976158142</Value>
    </Parameter>
 
    <Parameter>
     <Index>4</Index>
     <Name>Reverb Width</Name>
-    <Value>0.5</Value>
+    <Value>6.25999975204468</Value>
    </Parameter>
 
    <Parameter>
@@ -116,12 +215,12 @@
   </Data>
  </Plugin>
 
- <!-- Calf Compressor -->
+ <!-- Calf Reverb -->
  <Plugin>
   <Info>
    <Type>LV2</Type>
-   <Name>Calf Compressor</Name>
-   <URI>http://calf.sourceforge.net/plugins/Compressor</URI>
+   <Name>Calf Reverb</Name>
+   <URI>http://calf.sourceforge.net/plugins/Reverb</URI>
   </Info>
 
   <Data>
@@ -130,217 +229,118 @@
    <Options>0x1e1</Options>
 
    <Parameter>
-    <Index>0</Index>
-    <Name>Bypass</Name>
-    <Symbol>bypass</Symbol>
+    <Index>3</Index>
+    <Name>Decay time</Name>
+    <Symbol>decay_time</Symbol>
+    <Value>1.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>4</Index>
+    <Name>High Frq Damp</Name>
+    <Symbol>hf_damp</Symbol>
+    <Value>5000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>5</Index>
+    <Name>Room size</Name>
+    <Symbol>room_size</Symbol>
+    <Value>2</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>6</Index>
+    <Name>Diffusion</Name>
+    <Symbol>diffusion</Symbol>
+    <Value>0.5</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>7</Index>
+    <Name>Wet Amount</Name>
+    <Symbol>amount</Symbol>
+    <Value>0.25</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>8</Index>
+    <Name>Dry Amount</Name>
+    <Symbol>dry</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>9</Index>
+    <Name>Pre Delay</Name>
+    <Symbol>predelay</Symbol>
     <Value>0</Value>
    </Parameter>
 
    <Parameter>
-    <Index>1</Index>
-    <Name>Input</Name>
+    <Index>10</Index>
+    <Name>Bass Cut</Name>
+    <Symbol>bass_cut</Symbol>
+    <Value>300</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>11</Index>
+    <Name>Treble Cut</Name>
+    <Symbol>treble_cut</Symbol>
+    <Value>5000</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>12</Index>
+    <Name>Active</Name>
+    <Symbol>on</Symbol>
+    <Value>1</Value>
+   </Parameter>
+
+   <Parameter>
+    <Index>13</Index>
+    <Name>Input Gain</Name>
     <Symbol>level_in</Symbol>
     <Value>1</Value>
    </Parameter>
 
    <Parameter>
-    <Index>6</Index>
-    <Name>Threshold</Name>
-    <Symbol>threshold</Symbol>
-    <Value>0.0200535319745541</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>7</Index>
-    <Name>Ratio</Name>
-    <Symbol>ratio</Symbol>
-    <Value>2</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>8</Index>
-    <Name>Attack</Name>
-    <Symbol>attack</Symbol>
-    <Value>20</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>9</Index>
-    <Name>Release</Name>
-    <Symbol>release</Symbol>
-    <Value>250</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>10</Index>
-    <Name>Makeup Gain</Name>
-    <Symbol>makeup</Symbol>
-    <Value>6.44419431686401</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>11</Index>
-    <Name>Knee</Name>
-    <Symbol>knee</Symbol>
-    <Value>2.82842993736267</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>12</Index>
-    <Name>Detection</Name>
-    <Symbol>detection</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>13</Index>
-    <Name>Stereo Link</Name>
-    <Symbol>stereo_link</Symbol>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>15</Index>
-    <Name>Mix</Name>
-    <Symbol>mix</Symbol>
+    <Index>14</Index>
+    <Name>Output Gain</Name>
+    <Symbol>level_out</Symbol>
     <Value>1</Value>
    </Parameter>
-  </Data>
- </Plugin>
-
- <!-- AegeanSymphonicOrchestra-v2_2 -->
- <Plugin>
-  <Info>
-   <Type>SF2</Type>
-   <Name>AegeanSymphonicOrchestra-v2_2</Name>
-   <Filename>/home/shybyte/.sounds/sf2/AegeanSymphonicOrchestra-v2_2.sf2</Filename>
-   <Label>AegeanSymphonicOrchestra-v2_2</Label>
-  </Info>
-
-  <Data>
-   <Active>Yes</Active>
-   <ControlChannel>1</ControlChannel>
-   <Options>0x1a4</Options>
-
-   <Parameter>
-    <Index>0</Index>
-    <Name>Reverb On/Off</Name>
-    <Value>1</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>1</Index>
-    <Name>Reverb Room Size</Name>
-    <Value>0.200000002980232</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>2</Index>
-    <Name>Reverb Damp</Name>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>3</Index>
-    <Name>Reverb Level</Name>
-    <MidiCC>91</MidiCC>
-    <MidiChannel>1</MidiChannel>
-    <Value>0.899999976158142</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>4</Index>
-    <Name>Reverb Width</Name>
-    <Value>0.5</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>5</Index>
-    <Name>Chorus On/Off</Name>
-    <Value>1</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>6</Index>
-    <Name>Chorus Voice Count</Name>
-    <Value>3</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>7</Index>
-    <Name>Chorus Level</Name>
-    <Value>2</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>8</Index>
-    <Name>Chorus Speed</Name>
-    <Value>0.300000011920929</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>9</Index>
-    <Name>Chorus Depth</Name>
-    <Value>8</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>10</Index>
-    <Name>Chorus Type</Name>
-    <Value>0</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>11</Index>
-    <Name>Polyphony</Name>
-    <Value>256</Value>
-   </Parameter>
-
-   <Parameter>
-    <Index>12</Index>
-    <Name>Interpolation</Name>
-    <Value>4</Value>
-   </Parameter>
-
-   <CustomData>
-    <Type>http://kxstudio.sf.net/ns/carla/string</Type>
-    <Key>midiPrograms</Key>
-    <Value>55:0:0:0:0:0:0:0:0:94:0:0:0:0:0:0</Value>
-   </CustomData>
   </Data>
  </Plugin>
 
  <Patchbay>
   <Connection>
    <Source>Midi Input:events-out</Source>
-   <Target>cello_solo:events-in</Target>
-  </Connection>
-  <Connection>
-   <Source>Midi Input:events-out</Source>
-   <Target>AegeanSymphonicOrchestra-v2_2:events-in</Target>
-  </Connection>
-  <Connection>
-   <Source>cello_solo:out-left</Source>
-   <Target>Calf Compressor:In L</Target>
-  </Connection>
-  <Connection>
-   <Source>cello_solo:out-right</Source>
-   <Target>Calf Compressor:In R</Target>
+   <Target>cello-SEC-accent:events-in</Target>
   </Connection>
   <Connection>
    <Source>Calf Compressor:Out L</Source>
-   <Target>Audio Output:Left</Target>
+   <Target>Calf Reverb:In L</Target>
   </Connection>
   <Connection>
    <Source>Calf Compressor:Out R</Source>
-   <Target>Audio Output:Right</Target>
+   <Target>Calf Reverb:In R</Target>
   </Connection>
   <Connection>
-   <Source>AegeanSymphonicOrchestra-v2_2:out-left</Source>
+   <Source>cello-SEC-accent:out-left</Source>
+   <Target>Calf Compressor:In L</Target>
+  </Connection>
+  <Connection>
+   <Source>cello-SEC-accent:out-right</Source>
+   <Target>Calf Compressor:In R</Target>
+  </Connection>
+  <Connection>
+   <Source>Calf Reverb:Out L</Source>
    <Target>Audio Output:Left</Target>
   </Connection>
   <Connection>
-   <Source>AegeanSymphonicOrchestra-v2_2:out-right</Source>
+   <Source>Calf Reverb:Out R</Source>
    <Target>Audio Output:Right</Target>
   </Connection>
  </Patchbay>

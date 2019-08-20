@@ -18,6 +18,8 @@ use crate::utils::midi_filter::FilterType;
 use crate::utils::range_mapper::RangeToRangeMapper;
 use crate::midi_devices::HAND_SONIC;
 use crate::utils::add_notes;
+use crate::effects::sweep_down::SweepDown;
+use crate::utils::Boxable;
 
 pub fn wahrheit(_config: &Config) -> Patch {
     Patch::new("wahrheit",
@@ -124,6 +126,10 @@ pub fn young(_config: &Config) -> Patch {
                            0.2,
                            Duration::from_secs(3600)))
                    ),
+//                   (
+//                       Trigger::new(HAND_SONIC, 74).boxit(),
+//                       SweepDown::new(THROUGH_PORT, 30, RESONANCE).boxit()
+//                   ),
                    (
                        Box::new(Trigger::never()),
                        Box::new(ControlForwarder::new_with_value_mapper(
@@ -155,7 +161,7 @@ pub fn enddzeit(_config: &Config) -> Patch {
 (
     Box::new(Trigger::new(HAND_SONIC, 64)),
     Box::new(HarmonyDrum::new(
-        USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C6), vec![7, 12, 19],
+        USB_MIDI_ADAPTER, USB_MIDI_ADAPTER, (C2, C4), vec![7, 12, 19],
         Duration::from_millis(100),
         0.2,
         Duration::from_secs(3600)))
@@ -176,7 +182,6 @@ pub fn enddzeit(_config: &Config) -> Patch {
                115, // b74
                None)
 }
-
 
 
 pub fn system(_config: &Config) -> Patch {

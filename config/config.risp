@@ -1,11 +1,18 @@
 {:view false
 ; :selected_patch "Amazon"
 ; :selected_patch "liebeslieder"
-; :selected_patch "liebt uns"
+ :selected_patch "liebt uns"
+; :selected_patch "endzeit"
+; :selected_patch "system"
+; :selected_patch "wahrheit"
+; :selected_patch "diktator"
 ; :selected_patch "young"
- :selected_patch "diktator"
+
+;  :patch_selection false
  :patch_selection true
-; :selected_patch "Bahnhof"
+ :carla_path "patches/carla"
+
+ ; :selected_patch "Bahnhof"
 ; :selected_patch "Unknown"
 ; :selected_patch "Polly"
 ; :default_in_device "VMPK"

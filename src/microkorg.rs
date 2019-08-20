@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+pub const VOLUME: u8= 7;
 pub const CUTOFF: u8= 74;
 pub const OSC2_SEMITONE: u8= 18;
 pub const MOD: u8= 1;
